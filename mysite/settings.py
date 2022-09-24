@@ -10,22 +10,25 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+# SHERRIFF: Added import os here for the django_heroku fix at the bottom.
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)_msouiushdkr90msfa-9z)r)ocv^b*#*2pz14aeoak$9ep5^b'
+SECRET_KEY = 'django-insecure-ocydeh5ofpnwv4de&+1&3(d#&!8f6kz8(fdf&zjzbt^ditd=&7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# SHERRIFF: Added both the local host and herokuapp.com here to handled the DisallowedHost error.
+ALLOWED_HOSTS = ['localhost','127.0.0.1','staff-build-example.herokuapp.com']
 
 
 # Application definition
@@ -49,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mysite.urls'
+ROOT_URLCONF = 'buildexample.urls'
 
 TEMPLATES = [
     {
@@ -67,11 +70,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'mysite.wsgi.application'
+WSGI_APPLICATION = 'buildexample.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -82,7 +85,7 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,7 +104,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -109,15 +112,30 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# SHERRIFF: Added the static_root variable here to fix an erorr with static files not being found
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# SHERRIFF
+# Activate Django-Heroku.
+# Use this code to avoid the psycopg2 / django-heroku error!
+# Do NOT import django-heroku above!
+try:
+    if 'HEROKU' in os.environ:
+        import django_heroku
+        django_heroku.settings(locals())
+except ImportError:
+    found = False
