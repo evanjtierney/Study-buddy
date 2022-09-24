@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-)_msouiushdkr90msfa-9z)r)ocv^b*#*2pz14aeoak$9ep5^b
 DEBUG = True
 
 # SHERRIFF: Added both the local host and herokuapp.com here to handled the DisallowedHost error.
-ALLOWED_HOSTS = ['localhost','127.0.0.1','mysite.herokuapp.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com']
 
 
 # Application definition
