@@ -30,7 +30,6 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    """ """,
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
