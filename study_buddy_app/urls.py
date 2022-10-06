@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import include, path
 
 from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
     path('sign_in/', views.sign_in, name='sign_in'),
+    path("accounts/", include("allauth.urls"))
     # ex: /polls/5/
     # path('<int:question_id>/', views.detail, name='detail'),
     # # ex: /polls/5/results/
