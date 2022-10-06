@@ -4,6 +4,9 @@ from django.http import HttpResponse
 def index(request):
     return HttpResponse("Home page")
 
+def sign_in(request):
+    return HttpResponse("Sign in")
+
 # def detail(request, question_id):
 #     return HttpResponse("You're looking at question %s." % question_id)
 
