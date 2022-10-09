@@ -2,7 +2,10 @@ from django.http import HttpResponse
 from django.template import loader
 
 def index(request):
-    return HttpResponse("Home page")
+    template = loader.get_template('study_buddy_app/home.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
 
 def sign_in(request):
     template = loader.get_template('study_buddy_app/google_login.html')

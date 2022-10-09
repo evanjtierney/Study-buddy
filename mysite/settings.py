@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-)_msouiushdkr90msfa-9z)r)ocv^b*#*2pz14aeoak$9ep5^b
 DEBUG = True
 
 # SHERRIFF: Added both the local host and herokuapp.com here to handled the DisallowedHost error.
-ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com', 'stormy-lowlands-74788.herokuapp.com']
 
 
 # Application definition
@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
-    # 'django.contrib.sites.models.Site',
+    #'django.contrib.sites.models.Site',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -63,7 +63,7 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
 LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
 
-SITE_ID = 3
+SITE_ID = 2
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -78,6 +78,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -86,7 +88,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
-        # 'DIRS': [],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -152,11 +154,17 @@ USE_TZ = True
 # SHERRIFF: Added the static_root variable here to fix an erorr with static files not being found
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+options = DATABASES['default'].get('OPTIONS', {})
+options.pop('sslmode', None)
 
 # SHERRIFF
 # Activate Django-Heroku.
