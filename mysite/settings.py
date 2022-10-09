@@ -36,8 +36,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.openid",
-    'study_buddy_app.apps.StudyBuddyAppConfig',
-    # 'study_buddy_app',
+    # 'study_buddy_app.apps.StudyBuddyAppConfig',
+    'study_buddy_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +55,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'email',
         ],
         'AUTH_PARAMS': {
-            'access_type': 'online',
+            'access_type': 'offline',
         }
     }
 }
@@ -63,7 +63,7 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
 LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
 
-SITE_ID = 4
+SITE_ID = 3
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
