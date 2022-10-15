@@ -14,12 +14,12 @@ def sign_in(request):
     context = {}
     return HttpResponse(template.render(context, request))
 def home(request):
-    return render(request, 'chat.html')
+    return render(request, 'study_buddy_app/chat.html')
 
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
-    return render(request, 'room.html', {
+    return render(request, 'study_buddy_app/room.html', {
         'username': username,
         'room': room,
         'room_details': room_details
