@@ -17,9 +17,6 @@ def home(request):
     return render(request, 'study_buddy_app/chat.html')
 
 def room(request, room):
-    print("2**************")
-    print("request", request)
-    print("room", room)
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
     return render(request, 'study_buddy_app/room.html', {
@@ -29,7 +26,6 @@ def room(request, room):
     })
 
 def checkview(request):
-    print("1**************")
     room = request.POST['room_name']
     username = request.POST['username']
 
