@@ -6,14 +6,14 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('home/', views.home, name='sign_in'),
+    path('home/', views.home, name='home'),
     path('sign_in/', views.sign_in, name='sign_in'),
     path("accounts/", include("allauth.urls")),
     path('logout', LogoutView.as_view()),
 
 
     path('home/<str:room>/', views.room, name='room'),
-    path('home/checkview', views.checkview, name='checkview'),
+    path('checkview/', views.checkview, name='checkview'),
     path('send', views.send, name='send'),
     path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
 
