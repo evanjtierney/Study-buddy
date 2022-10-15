@@ -16,7 +16,7 @@ def sign_in(request):
 
 def api(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'api.html', {'response':response})
+    return render(request, 'study_buddy_app/api.html', {'response':response})
 
 # def detail(request, question_id):
 #     return HttpResponse("You're looking at question %s." % question_id)
