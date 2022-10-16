@@ -30,11 +30,11 @@ def checkview(request):
     username = request.POST['username']
 
     if Room.objects.filter(name=room).exists():
-        return redirect('http://localhost:8000/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
     else:
         new_room = Room.objects.create(name=room)
         new_room.save()
-        return redirect('http://localhost:8000/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
 
 def send(request):
     message = request.POST['message']
@@ -46,6 +46,7 @@ def send(request):
     return HttpResponse('Message sent successfully')
 
 def getMessages(request, room):
+    print(room)
     room_details = Room.objects.get(name=room)
 
     messages = Message.objects.filter(room=room_details.id)
@@ -53,13 +54,3 @@ def getMessages(request, room):
 
 
 
-
-# def detail(request, question_id):
-#     return HttpResponse("You're looking at question %s." % question_id)
-
-# def results(request, question_id):
-#     response = "You're looking at the results of question %s."
-#     return HttpResponse(response % question_id)
-
-# def vote(request, question_id):
-#     return HttpResponse("You're voting on question %s." % question_id)

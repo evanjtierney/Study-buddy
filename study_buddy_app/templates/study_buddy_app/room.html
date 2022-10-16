@@ -73,7 +73,7 @@ $(document).ready(function(){
 setInterval(function(){
     $.ajax({
         type: 'GET',
-        url : "/getMessages/{{room}}/",
+        url : "/study_buddy_app/home/getMessages/{{room}}",
         success: function(response){
             console.log(response);
             $("#display").empty();
@@ -144,7 +144,7 @@ setInterval(function(){
 
     $.ajax({
       type:'POST',
-      url:'/send',
+      url:'/study_buddy_app/home/send',
       data:{
           username:$('#username').val(),
           room_id:$('#room_id').val(),

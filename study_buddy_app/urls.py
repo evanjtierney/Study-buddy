@@ -13,15 +13,8 @@ urlpatterns = [
 
 
     path('home/<str:room>/', views.room, name='room'),
-    path('checkview/', views.checkview, name='checkview'),
-    path('send', views.send, name='send'),
-    path('getMessages/<str:room>/', views.getMessages, name='getMessages'),
+    path('home/checkview', views.checkview, name='checkview'),
+    path('home/send', views.send, name='send'),
+    path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
 
-
-    # ex: /polls/5/
-    # path('<int:question_id>/', views.detail, name='detail'),
-    # # ex: /polls/5/results/
-    # path('<int:question_id>/results/', views.results, name='results'),
-    # # ex: /polls/5/vote/
-    # path('<int:question_id>/vote/', views.vote, name='vote'),
 ]
