@@ -1,0 +1,6 @@
+Chat Function Citation
+
+Title: django-chat-app
+Author: Tomi Tokko
+Date: 10/15/2022
+URL: https://github.com/tomitokko/django-chat-app
