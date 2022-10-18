@@ -1,3 +1,4 @@
+{% load socialaccount %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -96,10 +97,9 @@ body {
 
     <form id="post-form" method="POST" action="/study_buddy_app/home/checkview">
         {% csrf_token %}
-        <label>Room Name</label>
-        <input type="text" name="room_name" id="room_name" width="100px" />
-        <label>Username</label>
-        <input type="text" name="username" id="username" width="100px" />
+        <label> Welcome {{user.username}}</label>
+        <input type="hidden" name="room_name" id="room_name" width="100px" value="{{user.username}}"/>
+        <input type="hidden" name="username" id="username" width="100px" value="{{user.username}}"/>
         <input type="submit" value="Enter Room">
     </form>
 </div>
