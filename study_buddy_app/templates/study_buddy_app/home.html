@@ -1,3 +1,5 @@
+{% load socialaccount %}
+
 <html>
   <head>
     <title>Study Buddy Finder</title>
@@ -6,13 +8,18 @@
 
   <h1> Welcome to the Home Page</h1>
 
+
+  {% if user.is_authenticated %}
+  <p>Welcome, {{ user.username }} !</p>
+  <form action="/study_buddy_app/logout">
+    <input type="submit" value="Logout" />
+  </form>
+
+  {% else %}
   <form action="/study_buddy_app/sign_in/">
     <input type="submit" value="Sign In" />
   </form>
-
-   <form action="/study_buddy_app/logout">
-    <input type="submit" value="Logout" />
-  </form>
+  {% endif %}
 
 
   </body>
