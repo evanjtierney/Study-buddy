@@ -17,4 +17,5 @@ urlpatterns = [
     path('home/send', views.send, name='send'),
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
 
+    path('user/', views.user, name='user'),
 ]

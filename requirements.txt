@@ -15,3 +15,5 @@ django-bootstrap-v5
 dj-database-url
 psycopg2
 python-dotenv
+django-crispy-forms
+crispy-forms-semantic-ui
