@@ -36,7 +36,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.openid",
-    # 'study_buddy_app.apps.StudyBuddyAppConfig',
     'study_buddy_app',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
-    #'django.contrib.sites.models.Site',
+    'crispy_forms',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -88,7 +87,6 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates'],
-        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,6 +144,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ('bootstrap', 'uni_form', 'bootstrap3', 'foundation-5')
 
 
 # Static files (CSS, JavaScript, Images)
