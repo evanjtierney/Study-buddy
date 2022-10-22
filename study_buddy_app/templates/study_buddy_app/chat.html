@@ -125,14 +125,13 @@ body {
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             {% for user in users %}
-              <!-- <li>{{ athlete.name }}</li> -->
               <a class="dropdown-item" href="#">{{user}}</a>
             {% endfor %}
           </div>
         </div>
         <input type="hidden" name="room_name" id="room_name" width="100px" value="{{user.username}}"/>
         <input type="hidden" name="username" id="username" width="100px" value="{{user.username}}"/>
-        <input type="submit" value="Enter Room">
+        <!-- <input type="submit" value="Enter Room"> -->
     </form>
 </div>
 
