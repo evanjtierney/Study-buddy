@@ -2,8 +2,13 @@ from django.shortcuts import render, redirect
 from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+
+from django.shortcuts import render
+import requests
+
 from .models import Profile
 from .forms import UserForm
+
 
 def index(request):
     template = loader.get_template('study_buddy_app/home.html')
@@ -18,6 +23,15 @@ def sign_in(request):
 def home(request):
     return render(request, 'study_buddy_app/chat.html')
 
+
+def deptlist(request):
+    response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
+    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+
+def dept(request, dept_name):
+    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
+    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
+
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
@@ -26,6 +40,7 @@ def room(request, room):
         'room': room,
         'room_details': room_details
     })
+
 
 def checkview(request):
     room = request.POST['room_name']
@@ -55,16 +70,8 @@ def getMessages(request, room):
 
 
 def user(request):
-	#if request.method == "POST":
-	#	user_form = UserForm(request.POST, instance=request.user)
-	#	if user_form.is_valid():
-	#	    user_form.save()
-		    #messages.success(request,('Your profile was successfully updated!'))
-	#	else:
-		    #messages.error(request,('Unable to complete request'))
-                    #return redirect ("study_buddy_app:user")
-            user_form = UserForm(instance=request.user)
-            return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+    user_form = UserForm(instance=request.user)
+    return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
 
 
 def edituser(request):

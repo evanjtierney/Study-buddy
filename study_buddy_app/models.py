@@ -15,7 +15,6 @@ class Message(models.Model):
 class Profile(models.Model):  # add this class and the following fields
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
@@ -24,3 +23,4 @@ class Profile(models.Model):  # add this class and the following fields
     @receiver(post_save, sender=User)  # add this
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
+

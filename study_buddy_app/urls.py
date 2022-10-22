@@ -10,8 +10,9 @@ urlpatterns = [
     path('sign_in/', views.sign_in, name='sign_in'),
     path("accounts/", include("allauth.urls")),
     path('logout', LogoutView.as_view()),
-    path('user/edituser/', views.edituser, name='edituser'),
 
+    path('deptlist/', views.deptlist, name="deptlist"),
+    path('dept/<str:dept_name>/', views.dept, name="dept"),
 
     path('home/<str:room>/', views.room, name='room'),
     path('home/checkview', views.checkview, name='checkview'),
@@ -19,4 +20,6 @@ urlpatterns = [
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
 
     path('user/', views.user, name='user'),
+    path('user/edituser/', views.edituser, name='edituser'),
 ]
+
