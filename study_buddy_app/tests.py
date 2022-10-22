@@ -10,3 +10,17 @@ class UserModelTests(TestCase):
         user.last_name = 'Lennon'
         user.save()
         self.assertIs(User.objects.filter(username='john').exists(), True)
+
+class UserProfileTests(TestCase):
+    def test_profile_created(self):
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.assertIs(Profile.create_user_profile(user, instance, created, **kwarges).exists(), True)
+                     
+    def test_save_profile(self):
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        user.username='johnny'
+        Profile.save_user_profile(user, instance, **kwargs)
+        self.assertIs(Profile.objects.filter(username='johnny').exists(), True)
+        
+        
+
