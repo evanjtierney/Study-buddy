@@ -47,14 +47,17 @@ def room(request, room):
 
 def checkview(request):
     room = request.POST['room_name']
-    username = request.POST['username']
-    answer = request.POST['dropdown'] 
+    sender = request.POST['username']
+    sendee = request.POST['dropdown'] 
+    array = [sender, sendee]
+    array.sort()
+    room = "".join([array[0], array[1]])
     if Room.objects.filter(name=room).exists():
-        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
         new_room = Room.objects.create(name=room)
         new_room.save()
-        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
 
 def send(request):
     message = request.POST['message']
