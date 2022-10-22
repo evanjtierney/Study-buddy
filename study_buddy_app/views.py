@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from django.contrib.auth import get_user_model
 
 from django.shortcuts import render
 import requests
@@ -21,7 +22,9 @@ def sign_in(request):
     context = {}
     return HttpResponse(template.render(context, request))
 def home(request):
-    return render(request, 'study_buddy_app/chat.html')
+    User = get_user_model()
+    users = User.objects.all()
+    return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 
 def deptlist(request):
