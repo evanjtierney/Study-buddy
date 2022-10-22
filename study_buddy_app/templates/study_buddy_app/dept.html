@@ -4,6 +4,9 @@
 </head>
 <body>
     <h1>{{dept_name}} Classes</h1>
+    <form action="/study_buddy_app/deptlist">
+        <input type="submit" value="Departments" />
+    </form>
     {% for i in response %}
         <li>
             <strong>{{ dept_name }} {{ i.catalog_number }} -- {{ i.description }}</strong>
