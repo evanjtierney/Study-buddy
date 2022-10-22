@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 class UserModelTests(TestCase):
     def test_user_created(self):
+        #ejriejfoei
         """
         exists() returns True when a user was successfully created
         """
