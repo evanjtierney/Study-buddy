@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
+from django.contrib.auth import get_user_model
 
 from django.shortcuts import render
 import requests
@@ -21,7 +22,9 @@ def sign_in(request):
     context = {}
     return HttpResponse(template.render(context, request))
 def home(request):
-    return render(request, 'study_buddy_app/chat.html')
+    User = get_user_model()
+    users = User.objects.all()
+    return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 
 def deptlist(request):
@@ -44,14 +47,17 @@ def room(request, room):
 
 def checkview(request):
     room = request.POST['room_name']
-    username = request.POST['username']
-
+    sender = request.POST['username']
+    sendee = request.POST['dropdown'] 
+    array = [sender, sendee]
+    array.sort()
+    room = "".join([array[0], array[1]])
     if Room.objects.filter(name=room).exists():
-        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
         new_room = Room.objects.create(name=room)
         new_room.save()
-        return redirect('/study_buddy_app/home/'+room+'/?username='+username)
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
 
 def send(request):
     message = request.POST['message']
