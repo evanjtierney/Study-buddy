@@ -1,7 +1,5 @@
 {% load socialaccount %}
 {% load crispy_forms_tags %}
-{% crispy user_form %}
-
 <!--<html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +22,7 @@
 				  		<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 				  		<p>{{ user.email }} </p>
 						<div class="text-right">
-							<button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button>
+							<a href="/study_buddy_app/user/edituser/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button></a>
 						</div>
 			        </div>
 		    	</div>

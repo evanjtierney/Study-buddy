@@ -1,7 +1,7 @@
 
 {% load socialaccount %}
 {% load crispy_forms_tags %}
-{% crispy user_form %}
+
 
     <div class="modal fade" tabindex="-1" id="profileModal" role="dialog">
 	  	<div class="modal-dialog" role="document">
@@ -20,7 +20,7 @@
 		      	<div class="modal-footer">
 		        		<button type="submit" class="btn btn-primary">Save changes</button>
 		        	</form>
-		        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<a href="/study_buddy_app/user/"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></a>
 		        </div>
 		    </div>
 	  	</div>
