@@ -48,7 +48,7 @@ def room(request, room):
 def checkview(request):
     room = request.POST['room_name']
     username = request.POST['username']
-
+    answer = request.POST['dropdown'] 
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+username)
     else:
