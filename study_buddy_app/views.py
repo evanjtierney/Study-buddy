@@ -14,9 +14,13 @@ def sign_in(request):
     context = {}
     return HttpResponse(template.render(context, request))
 
-def api(request):
+def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/api.html', {'response':response})
+    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+
+def dept(request, dept_name):
+    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
+    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
 
 # def detail(request, question_id):
 #     return HttpResponse("You're looking at question %s." % question_id)

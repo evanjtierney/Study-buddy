@@ -1,0 +1,12 @@
+<html>
+<head>
+    <title>UVA Departments</title>
+</head>
+<body>
+    <h1>UVA Departments</h1>
+    {% for i in response %}
+        <li><a href = "/study_buddy_app/dept/{{ i.subject }}">{{i.subject}}</a></li>
+    <br>
+    {% endfor %}
+</body>
+</html>

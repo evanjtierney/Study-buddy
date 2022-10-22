@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>{{ dept_name }}</title>
+</head>
+<body>
+    <h1>{{dept_name}} Classes</h1>
+    {% for i in response %}
+        <li>
+            <strong>{{ dept_name }} {{ i.catalog_number }} -- {{ i.description }}</strong>
+            <p>Section: {{i.course_section}}</p>
+            <p>Instructor: {{ i.instructor.name }}</p>
+            <!-- <p>Times: {{i.meetings}} {{i.meetings.start_time}}-{{i.meetings.end_time}}</p> -->
+        </li>
+    <br>
+    {% endfor %}
+</body>
+</html>
