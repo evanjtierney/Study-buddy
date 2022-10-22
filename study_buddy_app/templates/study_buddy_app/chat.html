@@ -119,16 +119,6 @@ body {
     <form id="post-form" method="POST" action="/study_buddy_app/home/checkview">
         {% csrf_token %}
         <label> Welcome {{user.username}}</label>
-        <!-- <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown button
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% for user in users %}
-              <a class="dropdown-item" href="https://www.google.com">{{user}}</a>
-            {% endfor %}
-          </div>
-        </div> -->
         <select name="dropdown">
           <option selected="selected" disabled>Choose a user to chat with</option>
           {% for user in users %}
