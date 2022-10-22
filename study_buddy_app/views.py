@@ -55,14 +55,23 @@ def getMessages(request, room):
 
 
 def user(request):
+	#if request.method == "POST":
+	#	user_form = UserForm(request.POST, instance=request.user)
+	#	if user_form.is_valid():
+	#	    user_form.save()
+		    #messages.success(request,('Your profile was successfully updated!'))
+	#	else:
+		    #messages.error(request,('Unable to complete request'))
+                    #return redirect ("study_buddy_app:user")
+            user_form = UserForm(instance=request.user)
+            return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+
+
+def edituser(request):
 	if request.method == "POST":
 		user_form = UserForm(request.POST, instance=request.user)
 		if user_form.is_valid():
 		    user_form.save()
-		    #messages.success(request,('Your profile was successfully updated!'))
-		else:
-		    #messages.error(request,('Unable to complete request'))
-                    return redirect ("study_buddy_app:user")
 	user_form = UserForm(instance=request.user)
-	return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user,
+	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})

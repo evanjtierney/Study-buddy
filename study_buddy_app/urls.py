@@ -10,6 +10,7 @@ urlpatterns = [
     path('sign_in/', views.sign_in, name='sign_in'),
     path("accounts/", include("allauth.urls")),
     path('logout', LogoutView.as_view()),
+    path('user/edituser/', views.edituser, name='edituser'),
 
 
     path('home/<str:room>/', views.room, name='room'),
