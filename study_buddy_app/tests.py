@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.db import models
 from .forms import UserForm
 from .views import user
+from study_buddy_app.models import Room, Message
 
 
 
@@ -33,3 +34,23 @@ class UserProfileTests(TestCase):
         second_profile = Profile.objects.get(user=new_user)
         self.assertEqual(first_profile, second_profile)
         self.assertEqual(new_user.username, 'nat')
+
+class ChatTest(TestCase):
+    def test_room_created(self):
+        room = "this_is_a_test_room"
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        self.assertIs(Room.objects.filter(name=room).exists(), True)
+        
+    def test_message_sent(self):
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        user.last_name = 'Lennon'
+        user.save()
+
+        room = "this_is_a_test_room"
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+
+        new_message = Message.objects.create(value="hello world", user="john", room="this_is_a_test_room")
+        new_message.save()
+        self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
