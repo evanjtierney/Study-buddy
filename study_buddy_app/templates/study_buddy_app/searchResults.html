@@ -31,6 +31,11 @@
 <div class = "title">
     <h1>Users</h1>
 </div>
+
+<form class="d-flex" action="{% url 'search_results' %}"  method="get" role="search">
+    <input name="q" type="text" placeholder="Search...">
+    <button class="btn btn-outline-dark" type="submit">Search</button>
+  </form>
 <ul>
     {% for user in object_list %}
     <div class = "result">

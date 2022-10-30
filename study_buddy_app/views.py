@@ -17,8 +17,9 @@ class SearchResultsView(generic.ListView):
     # users = User.objects.all()
     def get_queryset(self):
         """Return all the users."""
+        query = self.request.GET.get("q")
         User = get_user_model()
-        return User.objects.filter(Q(username="admin") | Q(username="Bao"))
+        return User.objects.filter(Q(username=query) | Q(username=query))
 
 
 def index(request):
