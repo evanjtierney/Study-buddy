@@ -9,6 +9,17 @@ import requests
 
 from .models import Profile
 from .forms import UserForm
+from django.views import generic
+class SearchResultsView(generic.ListView):
+    template_name = 'study_buddy_app/searchResults.html'
+    context_object_name = 'search_results_list'
+    # User = get_user_model()
+    # users = User.objects.all()
+    def get_queryset(self):
+        """Return all the users."""
+        User = get_user_model()
+        users = User.objects.all()
+        return users
 
 
 def index(request):
