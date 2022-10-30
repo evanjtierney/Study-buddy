@@ -3,7 +3,7 @@ from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
-
+from django.db.models import Q # new
 from django.shortcuts import render
 import requests
 
@@ -18,8 +18,7 @@ class SearchResultsView(generic.ListView):
     def get_queryset(self):
         """Return all the users."""
         User = get_user_model()
-        users = User.objects.all()
-        return users
+        return User.objects.filter(Q(username="admin") | Q(username="Bao"))
 
 
 def index(request):
