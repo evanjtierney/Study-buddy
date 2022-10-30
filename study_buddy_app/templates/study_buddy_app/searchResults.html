@@ -11,6 +11,14 @@
     .title{
         text-align: center;
     }
+
+    .search_bar{
+        margin: auto;
+  width: 20%;
+        padding-bottom: 2%;
+  /* border: 3px solid green; */
+  /* padding: 10px; */
+    }
 </style>
 <head>
     <meta charset="utf-8">
@@ -31,11 +39,12 @@
 <div class = "title">
     <h1>Users</h1>
 </div>
-
+<div class = "search_bar">
 <form class="d-flex" action="{% url 'search_results' %}"  method="get" role="search">
     <input name="q" type="text" placeholder="Search...">
     <button class="btn btn-outline-dark" type="submit">Search</button>
   </form>
+</div>
 <ul>
     {% for user in object_list %}
     <div class = "result">

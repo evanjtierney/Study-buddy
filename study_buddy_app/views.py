@@ -20,6 +20,7 @@ class SearchResultsView(generic.ListView):
         query = self.request.GET.get("q")
         User = get_user_model()
         return User.objects.filter(Q(username=query) | Q(username=query))
+        # return User.objects.all()
 
 
 def index(request):
