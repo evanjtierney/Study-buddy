@@ -88,3 +88,10 @@ def edituser(request):
 	user_form = UserForm(instance=request.user)
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
+    
+def publicProfile(request):
+    user_form = UserForm(instance=request.user)
+    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+
+
+    
