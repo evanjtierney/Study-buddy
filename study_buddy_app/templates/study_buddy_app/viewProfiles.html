@@ -1,0 +1,44 @@
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+{% load ratings %}
+<!--User-->
+
+   <!-- <meta charset="UTF-8">
+    <title>Title</title>
+
+    <h1>{{ question.question_text }}</h1>-->
+
+
+    {% for deepthought in profile_list %}
+        </p>Title : {{  deepthought }}<p>
+      <!--  </p>Text : {{  deepthought.user.username }}<p>-->
+    <br><br>
+        <div class="container mx-auto">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-3 pb-4">
+                    <div class="card p-4">
+                        <hr>
+                        <div class="card-text">
+                            <p class="text-muted mb-0" style="font-size: 12px">Username:</p>
+                            <p>{{ deepthought.user.username }}</p>
+                            <p class="text-muted mb-0" style="font-size: 12px">Name:</p>
+                            <p>{{ deepthought.user.first_name }} {{ deepthought.user.last_name }}</p>
+                            <p class="text-muted mb-0" style="font-size: 12px">Email:</p>
+                            <p>{{ deepthought.user.email }} </p>
+                            {% load static %}
+                            <p> Rate me as a Study Buddy!</p>
+                            {% ratings user %}
+                            <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                            <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
+                </div>
+            </div>
+        </div>
+
+
+    {% endfor %}
+
+
