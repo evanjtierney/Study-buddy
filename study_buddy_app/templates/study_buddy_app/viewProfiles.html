@@ -27,7 +27,7 @@
                             <p>{{ deepthought.user.email }} </p>
                             {% load static %}
                             <p> Rate me as a Study Buddy!</p>
-                            {% ratings user %}
+                            {% ratings deepthought.user %}
                             <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
                             <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
                         </div>
