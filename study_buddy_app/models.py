@@ -11,10 +11,18 @@ class Message(models.Model):
     user = models.CharField(max_length=1000000)
     room = models.CharField(max_length=1000000)
 
+class Class(models.Model):
+    subject = models.CharField(max_length=4)
+    catalog_number = models.CharField(max_length=4)
+    course_section = models.CharField(max_length=3)
+
+class ClassList(models.Model):
+    class_list = models.ForeignKey(Class, on_delete=models.CASCADE)
 
 class Profile(models.Model):  # add this class and the following fields
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    class_list = models.ForeignKey(ClassList, on_delete=models.CASCADE)
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

@@ -21,5 +21,7 @@ urlpatterns = [
 
     path('user/', views.user, name='user'),
     path('user/edituser/', views.edituser, name='edituser'),
+    path('user/edituser/deptlist/', views.deptlist, name="deptlist"),
+    # path('user/editprofile/dept/<str:dept_name>/', views.dept, name="dept"),
 ]
 

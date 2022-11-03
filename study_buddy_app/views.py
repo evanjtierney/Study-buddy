@@ -29,11 +29,14 @@ def home(request):
 
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
+    # departments = []
+    # for i in response:
+    #     departments.append(i.subject)
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
 def dept(request, dept_name):
     response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
-    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
+    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
