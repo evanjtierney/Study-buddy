@@ -9,6 +9,7 @@ import requests
 
 from .models import Profile
 from .forms import UserForm
+from .models import Class
 
 
 def index(request):
@@ -36,6 +37,9 @@ def deptlist(request):
 
 def dept(request, dept_name):
     response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
+    for i in response:
+        tmp = Class(subject=i.subject, catalog_number=i.catalog_number, course_section=i.course_section)
+        tmp.save()
     return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
 
 def room(request, room):

@@ -22,12 +22,11 @@ class Profile(models.Model):  # add this class and the following fields
     @receiver(post_save, sender=User)  # add this
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
-
-class ClassList(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-
+    
 class Class(models.Model):
     subject = models.CharField(max_length=4)
     catalog_number = models.CharField(max_length=4)
     course_section = models.CharField(max_length=3)
-    class_list = models.ForeignKey(ClassList, on_delete=models.CASCADE)
+    #profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # def __str__(self):
+    #     return self.catalog_number
