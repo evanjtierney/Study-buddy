@@ -11,15 +11,6 @@ class Message(models.Model):
     user = models.CharField(max_length=1000000)
     room = models.CharField(max_length=1000000)
 
-class Class(models.Model):
-    subject = models.CharField(max_length=4)
-    catalog_number = models.CharField(max_length=4)
-    course_section = models.CharField(max_length=3)
-    class_list = models.ForeignKey(Class, on_delete=models.CASCADE)
-
-class ClassList(models.Model):
-    profile = models.ForeignKey(Class, on_delete=models.CASCADE)
-
 class Profile(models.Model):  # add this class and the following fields
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -32,3 +23,11 @@ class Profile(models.Model):  # add this class and the following fields
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
 
+class ClassList(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+class Class(models.Model):
+    subject = models.CharField(max_length=4)
+    catalog_number = models.CharField(max_length=4)
+    course_section = models.CharField(max_length=3)
+    class_list = models.ForeignKey(ClassList, on_delete=models.CASCADE)
