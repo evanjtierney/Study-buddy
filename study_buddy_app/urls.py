@@ -18,7 +18,8 @@ urlpatterns = [
     path('home/checkview', views.checkview, name='checkview'),
     path('home/send', views.send, name='send'),
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
-
+    path('publicProfile/', views.publicProfile, name='publicProfile'),
+    path('publicProfile/viewAll', views.viewProfiles.as_view(), name='viewAll'),
     path('user/', views.user, name='user'),
     path('user/edituser/', views.edituser, name='edituser'),
 ]
