@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.openid",
-    'study_buddy_app'#.app.StudyBuddyAppConfig',
+    'study_buddy_app',#.app.StudyBuddyAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
