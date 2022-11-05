@@ -122,7 +122,21 @@ def user_redirect(request):
 
     return redirect('/study_buddy_app/publicProfile/'+user)
 
+def addclass(request):
 
+
+    profile = request.user
+    try:
+        selected_class = Class.objects.get(pk=request.POST['class'])
+        profile.classes.add(selected_class)
+        profile.save()
+        return render(request, 'study_buddy_app/edituser.html')
+
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/dept.html', {
+            'profile': profile,
+            'error_message': "You didn't select a class.",
+        })
 
 
 
