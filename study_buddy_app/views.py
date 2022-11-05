@@ -10,6 +10,8 @@ import requests
 
 from .models import Profile
 from .forms import UserForm
+from .models import Friends1
+from .models import FriendRequest
 
 
 def index(request):
@@ -94,10 +96,83 @@ def publicProfile(request):
     user_form = UserForm(instance=request.user)
     return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
 
+##class viewProfiles(generic.ListView):
+##    template_name = 'study_buddy_app/viewProfiles.html'
+##    context_object_name = 'profile_list'
+##    def get_queryset(self):
+##        return Profile.objects.all()
+    
+def send_friend_request(request,pk):
+    sender = request.user
+    recipient = User.objects.get(id=pk)
+    model = FriendRequest.objects.get_or_create(sender=request.user,receivers=recipient)
+    return HttpResponse('friend request sent or already sent')
+    #return redirect ('/study_buddy_app/user')
+
+def delete_request(request, operation, pk):
+    client1 = User.objects.get(id=pk)
+    print(client1)
+    if operation == 'Sender_deleting':
+        model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
+        model1.delete()
+    elif operation == 'Reviever_deleting':
+        model2 = FriendRequest.objects.get(sender=client1,receivers=request.user)
+        model2.delete()
+        return redirect('/studdy_buddy_app/user')
+    return redirect('/study_buddy_app/user')
+
+##def add_or_remove_friend(request,operation,pk):
+##    new_friend = User.objects.get(id=pk)
+##    if operation == 'add':
+##        fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
+##        Friends1.make_friend(request.user, new_friend)
+##        Friends1.make_friend(new_friend, request.user)
+##        fq.delete()
+##    elif operation == 'remove':
+##        Friends1.lose_friend(request.user, new_friend)
+##        Friends1.lose_friend(new_friend, request.user)
+##    return redirect('/studdy_buddy_app/user')
+
+def add_or_remove_friend(request,pk):
+    new_friend = User.objects.get(id=pk)
+    fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
+    Friends1.make_friend(request.user, new_friend)
+    Friends1.make_friend(new_friend, request.user)
+    fq.delete()
+    #return redirect('/studdy_buddy_app/user')
+    return('friend request accepted')
+
+#new stuff
+def publicProfile(request):
+    user_form = UserForm(instance=request.user)
+    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+
 class viewProfiles(generic.ListView):
     template_name = 'study_buddy_app/viewProfiles.html'
     context_object_name = 'profile_list'
     def get_queryset(self):
         return Profile.objects.all()
+
+class listProfiles(generic.ListView):
+    template_name = 'study_buddy_app/listProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
     
+
+class seeProfile(generic.DetailView):
+    template_name = 'study_buddy_app/userProfile.html'
+    context_object_name = 'profile_list'
+
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+
     
+def user_redirect(request):
+    user = request.POST['username']
+
+    return redirect('/study_buddy_app/publicProfile/'+user)
+

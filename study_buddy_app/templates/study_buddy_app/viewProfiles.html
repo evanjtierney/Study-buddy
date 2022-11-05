@@ -5,13 +5,12 @@
 
    <!-- <meta charset="UTF-8">
     <title>Title</title>
-
     <h1>{{ question.question_text }}</h1>-->
 
-
+{% if user.is_authenticated %}
     {% for deepthought in profile_list %}
-        </p>Title : {{  deepthought }}<p>
       <!--  </p>Text : {{  deepthought.user.username }}<p>-->
+
     <br><br>
         <div class="container mx-auto">
             <div class="row">
@@ -26,8 +25,12 @@
                             <p class="text-muted mb-0" style="font-size: 12px">Email:</p>
                             <p>{{ deepthought.user.email }} </p>
                             {% load static %}
+
+                            <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                            <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+
                             <p> Rate me as a Study Buddy!</p>
-                            {% ratings user %}
+                            {% ratings deepthought.user %}
                             <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
                             <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
                         </div>
@@ -40,5 +43,13 @@
 
 
     {% endfor %}
+
+{% else %}
+    <p>Not logged in</p>
+
+    <form action="/study_buddy_app/sign_in/">
+      <input type="submit" value="Sign In" />
+    </form>
+{% endif %}
 
 
