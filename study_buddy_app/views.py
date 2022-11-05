@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from study_buddy_app.models import Room, Message
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from django.shortcuts import render
 import requests
@@ -96,3 +97,18 @@ def edituser(request):
 	user_form = UserForm(instance=request.user)
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
+
+def addclass(request, profile_id):
+    profile = get_object_or_404(Profile, pk=profile_id)
+    try:
+        selected_class = Class.objects.get(pk=request.POST['class'])
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/dept.html', {
+            'profile': profile,
+            'error_message': "You didn't select a choice.",
+        })
+    else:
+        profile.classes.add(selected_class)
+        profile.save()
+        return HttpResponseRedirect(reverse('study_buddy_app/dept.html', args=(profile.id,)))
+

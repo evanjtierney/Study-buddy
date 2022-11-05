@@ -11,9 +11,18 @@ class Message(models.Model):
     user = models.CharField(max_length=1000000)
     room = models.CharField(max_length=1000000)
 
+class Class(models.Model):
+    subject = models.CharField(max_length=4)
+    catalog_number = models.CharField(max_length=4)
+    course_section = models.CharField(max_length=3)
+    #profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    # def __str__(self):
+    #     return self.catalog_number
+
 class Profile(models.Model):  # add this class and the following fields
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    classes = models.ManyToManyField(Class)
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
@@ -23,10 +32,3 @@ class Profile(models.Model):  # add this class and the following fields
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
     
-class Class(models.Model):
-    subject = models.CharField(max_length=4)
-    catalog_number = models.CharField(max_length=4)
-    course_section = models.CharField(max_length=3)
-    #profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    # def __str__(self):
-    #     return self.catalog_number
