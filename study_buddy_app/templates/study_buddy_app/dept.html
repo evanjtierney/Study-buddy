@@ -4,15 +4,15 @@
 </head>
 <body>
     <h1>{{dept_name}} Classes</h1>
-    <form action="/study_buddy_app/deptlist">
+    <form action="/study_buddy_app/user/edituser/deptlist">
         <input type="submit" value="Departments" />
     </form>
-    <form action="{/study_buddy_app/user/edituser/dept/dept_name/addclass" method="post">
+    <form action="/study_buddy_app/user/edituser/dept/{{ dept_name }}/addclass" method="post">
     {% csrf_token %}
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         {% for class in response %}
             <input type="radio" name="class" id="class{{ forloop.counter }}" value="{{ class.id }}">
-            <label for="class{{ forloop.counter }}">{{ dept_name }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
+            <label for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
             <br>
             <!-- <strong>{{ dept_name }} {{ i.catalog_number }} -- {{ i.description }}</strong>
             <p>Section: {{i.course_section}}</p>
@@ -21,5 +21,6 @@
         {% endfor %}
         <br>
         <input type="submit" value="Add Class">
+    </form>
 </body>
 </html>
