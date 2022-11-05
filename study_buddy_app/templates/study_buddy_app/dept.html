@@ -14,7 +14,7 @@
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         {% for class in response %}
             <input type="hidden" name="username" id="username" width="100px" value="{{user.id}}"/>
-            <input type="radio" name="class" id="class{{ forloop.counter }}" value="{{ class.id }}">
+            <input type="radio" name="class" id="class{{ forloop.counter }}" value="{{class.id}}">
             <label for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
             <br>
             <!-- <strong>{{ dept_name }} {{ i.catalog_number }} -- {{ i.description }}</strong>
