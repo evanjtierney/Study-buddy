@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from study_buddy_app.models import Room, Message
+from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
@@ -99,5 +99,30 @@ class viewProfiles(generic.ListView):
     context_object_name = 'profile_list'
     def get_queryset(self):
         return Profile.objects.all()
+
+class listProfiles(generic.ListView):
+    template_name = 'study_buddy_app/listProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
     
-    
+
+class seeProfile(generic.DetailView):
+    template_name = 'study_buddy_app/userProfile.html'
+    context_object_name = 'profile_list'
+
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+def user_redirect(request):
+    user = request.POST['username']
+
+    return redirect('/study_buddy_app/publicProfile/'+user)
+
+
+
+
+
