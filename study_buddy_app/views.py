@@ -98,19 +98,21 @@ def edituser(request):
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
 
-def addclass(request): #profile_id
-    # profile = get_object_or_404(Profile, pk=profile_id)
+def addclass(request):
+
+
     profile = request.user
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
+        profile.classes.add(selected_class)
+        profile.save()
+        return render(request, 'study_buddy_app/edituser.html')
+
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {
             'profile': profile,
             'error_message': "You didn't select a class.",
         })
-    else:
-        profile.classes.add(selected_class)
-        profile.save()
-        #return HttpResponseRedirect(reverse('study_buddy_app/edituser.html', args=(request.user.id,))) #profile.id
-        return render(request, 'study_buddy_app/edituser.html')
+
+
 
