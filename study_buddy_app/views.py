@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from study_buddy_app.models import Room, Message, Profile
+from study_buddy_app.models import Room, Message, Profile, Class
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
@@ -8,7 +8,6 @@ from django.views import generic
 from django.shortcuts import render
 import requests
 
-from .models import Profile
 from .forms import UserForm
 
 
@@ -122,15 +121,14 @@ def user_redirect(request):
 
     return redirect('/study_buddy_app/publicProfile/'+user)
 
-def addclass(request):
-
-
-    profile = request.user
+def addclass(request, dept_name):
+    profile = Profile.objects.get(id=request.POST['username'])
+    print(profile)
     try:
-        selected_class = Class.objects.get(pk=request.POST['class'])
+        selected_class = Class.objects.get(id=request.POST['class'])
         profile.classes.add(selected_class)
         profile.save()
-        return render(request, 'study_buddy_app/edituser.html')
+        return render(request, 'study_buddy_app/user/edituser.html')
 
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {

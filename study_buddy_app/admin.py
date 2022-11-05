@@ -8,7 +8,8 @@ from django.utils.text import slugify
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ("user", "slug")
-
+class ClassAdmin(admin.ModelAdmin):
+    list_display = ("subject", "catalog_number", "course_section")
 
 
 
@@ -18,4 +19,4 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Room)
 admin.site.register(Message)
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Class)
+admin.site.register(Class, ClassAdmin)
