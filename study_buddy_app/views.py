@@ -163,7 +163,7 @@ class viewRequest(generic.ListView):
     template_name = 'study_buddy_app/friendRequest.html'
     context_object_name = 'request_list'
     def get_queryset(self):
-        return FriendRequest.objects.all()
+        return FriendRequest.objects.filter(receiver = self.request.user)
     
 class viewFriends(generic.ListView):
     template_name = 'study_buddy_app/friends.html'

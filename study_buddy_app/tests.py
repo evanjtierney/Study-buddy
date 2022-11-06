@@ -56,3 +56,4 @@ class ChatTest(TestCase):
         self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
 
 
+        
