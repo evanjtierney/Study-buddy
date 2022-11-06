@@ -48,13 +48,16 @@
 <ul>
     {% for user in object_list %}
     <div class = "result">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ user.username }}</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk
-                    of the card's content.</p>
+        <a href ="{% url 'publicProfile' %}">
+            <div class="card">
+                <div class="card-body">
+                    <!-- <a href="#">{{ user.username }}</a> -->
+                    <h5  class="card-title">{{ user.username }}</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                        of the card's content.</p>
+                </div>
             </div>
-        </div>
+        </a>
     </div>
     {% empty %}
     <li>No users yet.</li>
