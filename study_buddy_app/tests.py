@@ -7,7 +7,8 @@ from django.db import models
 from .forms import UserForm
 from .views import user
 from study_buddy_app.models import Room, Message
-
+from .models import Friends1
+from .models import FriendRequest
 
 
 class UserModelTests(TestCase):
@@ -56,4 +57,20 @@ class ChatTest(TestCase):
         self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
 
 
+class FriendRequestTest(TestCase):
+    def test_send_request(self):
+        first_user = User.objects.create_user('me', 'me@example.com','mepassword')
+        second_user = User.objects.create_user('you', 'you@example.com', 'youpassword')
+        model = FriendRequest.objects.create(sender=first_user, receiver=second_user)
+        self.assertIs(FriendRequest.objects.filter(sender=first_user,receiver=second_user).exists(), True)
+    def test_friends(self):
+        first_user = User.objects.create_user('me', 'me@example.com','mepassword')
+        second_user = User.objects.create_user('you', 'you@example.com', 'youpassword')
+        Friends1.make_friend(first_user, second_user)
+        Friends1.make_friend(second_user, first_user)
+        self.assertIs(Friends1.objects.filter(users1=first_user, current_user=second_user).exists(), True)
+        self.assertIs(Friends1.objects.filter(users1=second_user, current_user=first_user).exists(), True)
+
+
+        
         
