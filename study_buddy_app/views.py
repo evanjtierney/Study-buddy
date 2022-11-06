@@ -39,10 +39,12 @@ def deptlist(request):
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
+    cur_classes = []
     for i in response:
         tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
         tmp.save()
-    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
+        cur_classes.append(tmp)
+    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name}) # 'response':Class.objects.all().filter(subject=dept_name)
 
 def room(request, room):
     username = request.GET.get('username')
@@ -98,10 +100,10 @@ def edituser(request):
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
 
-def addclass(request):
+def addclass(request): #, class
 
 
-    profile = request.user
+    profile = request.user # social user, need to change to get a profile object
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
         profile.classes.add(selected_class)
