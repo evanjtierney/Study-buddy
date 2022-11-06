@@ -3,6 +3,8 @@ from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+
 from django.views import generic
 
 from django.shortcuts import render
@@ -12,6 +14,7 @@ from .models import Profile
 from .forms import UserForm
 from .models import Friends1
 from .models import FriendRequest
+from .models import Class
 
 
 def index(request):
@@ -34,9 +37,17 @@ def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
+##def dept(request, dept_name):
+##    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
+##    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
+
 def dept(request, dept_name):
-    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
-    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
+    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+    response = classes.json()
+    for i in response:
+        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
+        tmp.save()
+    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
@@ -102,12 +113,12 @@ def publicProfile(request):
 ##    def get_queryset(self):
 ##        return Profile.objects.all()
     
-def send_friend_request(request,pk):
+def send_friend_request(request,slug):
     sender = request.user
-    recipient = User.objects.get(id=pk)
-    model = FriendRequest.objects.get_or_create(sender=request.user,receivers=recipient)
+    recipient = User.objects.get(username = slug)
+    model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
     return HttpResponse('friend request sent or already sent')
-    #return redirect ('/study_buddy_app/user')
+    #return redirect ('/study_buddy_app/publicProfile/'+user)
 
 def delete_request(request, operation, pk):
     client1 = User.objects.get(id=pk)
@@ -133,20 +144,34 @@ def delete_request(request, operation, pk):
 ##        Friends1.lose_friend(new_friend, request.user)
 ##    return redirect('/studdy_buddy_app/user')
 
-def add_or_remove_friend(request,pk):
-    new_friend = User.objects.get(id=pk)
-    fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
+def accept_friend_request(request,pk):
+    new_friend = User.objects.get(username = pk)
+    fq = FriendRequest.objects.get(sender=new_friend, receiver=request.user)
     Friends1.make_friend(request.user, new_friend)
     Friends1.make_friend(new_friend, request.user)
     fq.delete()
     #return redirect('/studdy_buddy_app/user')
-    return('friend request accepted')
+    return HttpResponse('friend request accepted')
+##
+##class viewProfiles(generic.ListView):
+##    template_name = 'study_buddy_app/viewProfiles.html'
+##    context_object_name = 'profile_list'
+##    def get_queryset(self):
+##        return Profile.objects.all()
 
+class viewRequest(generic.ListView):
+    template_name = 'study_buddy_app/friendRequest.html'
+    context_object_name = 'request_list'
+    def get_queryset(self):
+        return FriendRequest.objects.all()
+    
+class viewFriends(generic.ListView):
+    template_name = 'study_buddy_app/friends.html'
+    context_object_name = 'friend_list'
+    def get_queryset(self):
+        return Friends1.objects.filter(users1 = self.request.user)
+    
 #new stuff
-def publicProfile(request):
-    user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
-
 class viewProfiles(generic.ListView):
     template_name = 'study_buddy_app/viewProfiles.html'
     context_object_name = 'profile_list'
@@ -169,7 +194,6 @@ class seeProfile(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
-
     
 def user_redirect(request):
     user = request.POST['username']
