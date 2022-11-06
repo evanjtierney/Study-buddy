@@ -48,8 +48,10 @@
 <ul>
     {% for user in object_list %}
     <div class = "result">
-        <a href ="{% url 'publicProfile' %}">
-            <div class="card">
+        <form id="post-form" method="POST" action="/study_buddy_app/publicProfile/user_redirect/">
+            {% csrf_token %}
+            <input type="hidden" name="username" id="username" value="{{user.username}}"/>
+            <div onclick="javascript:document.forms[1].submit();" class="card">
                 <div class="card-body">
                     <!-- <a href="#">{{ user.username }}</a> -->
                     <h5  class="card-title">{{ user.username }}</h5>
@@ -57,7 +59,7 @@
                         of the card's content.</p>
                 </div>
             </div>
-        </a>
+        </form>
     </div>
     {% empty %}
     <li>No users yet.</li>
