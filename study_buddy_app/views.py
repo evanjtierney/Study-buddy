@@ -21,6 +21,7 @@ class SearchResultsView(generic.ListView):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
+        print(User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query)))
         return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
         # return User.objects.all()
 
@@ -132,7 +133,7 @@ class seeProfile(generic.DetailView):
         return context
 def user_redirect(request):
     user = request.POST['username']
-
+    print(user)
     return redirect('/study_buddy_app/publicProfile/'+user)
 
 
