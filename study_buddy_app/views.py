@@ -123,7 +123,6 @@ def user_redirect(request):
 
 def addclass(request, dept_name):
     profile = Profile.objects.get(id=request.POST['username'])
-    print(profile)
     try:
         selected_class = Class.objects.get(id=request.POST['class'])
         profile.classes.add(selected_class)
