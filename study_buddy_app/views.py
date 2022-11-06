@@ -21,7 +21,7 @@ class SearchResultsView(generic.ListView):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        return User.objects.filter(Q(username=query) | Q(username=query))
+        return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
         # return User.objects.all()
 
 
