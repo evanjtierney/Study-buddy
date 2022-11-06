@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
-from study_buddy_app.models import Room, Message
+from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.db.models import Q # new
+from django.views import generic
+
 from django.shortcuts import render
 import requests
 
@@ -100,3 +102,40 @@ def edituser(request):
 	user_form = UserForm(instance=request.user)
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
+    
+def publicProfile(request):
+    user_form = UserForm(instance=request.user)
+    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+
+class viewProfiles(generic.ListView):
+    template_name = 'study_buddy_app/viewProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
+
+class listProfiles(generic.ListView):
+    template_name = 'study_buddy_app/listProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
+    
+
+class seeProfile(generic.DetailView):
+    template_name = 'study_buddy_app/userProfile.html'
+    context_object_name = 'profile_list'
+
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+def user_redirect(request):
+    user = request.POST['username']
+
+    return redirect('/study_buddy_app/publicProfile/'+user)
+
+
+
+
+

@@ -20,6 +20,16 @@ urlpatterns = [
     path('home/send', views.send, name='send'),
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
 
+    path('publicProfile/', views.publicProfile, name='publicProfile'),
+
+    path('publicProfile/viewAll', views.viewProfiles.as_view(), name='viewAll'),
+    
+    path('publicProfile/listProfiles', views.listProfiles.as_view(), name='listProfiles'),
+
+    path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
+
+    path('publicProfile/<slug:slug>/', views.seeProfile.as_view(), name='profile-detail'),
+
     path('user/', views.user, name='user'),
     path('user/edituser/', views.edituser, name='edituser'),
 ]
