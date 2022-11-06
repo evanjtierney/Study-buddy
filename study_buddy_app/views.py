@@ -14,7 +14,7 @@ from .models import Profile
 from .forms import UserForm
 from .models import Friends1
 from .models import FriendRequest
-from .models import Class
+#from .models import Class
 
 
 def index(request):
@@ -37,18 +37,18 @@ def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
-##def dept(request, dept_name):
-##    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
-##    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
-
 def dept(request, dept_name):
-    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
-    response = classes.json()
-    for i in response:
-        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
-        tmp.save()
-    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
+    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
+    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
 
+##def dept(request, dept_name):
+##    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+##    response = classes.json()
+##    for i in response:
+##        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
+##        tmp.save()
+##    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
+##
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)

@@ -62,8 +62,8 @@ class FriendRequest(models.Model):
 ##    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
 ##    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
 ##
-class Class(models.Model):
-    subject = models.CharField(max_length=4)
-    catalog_number = models.CharField(max_length=4)
-    course_section = models.CharField(max_length=3)
+##class Class(models.Model):
+##    subject = models.CharField(max_length=4)
+##    catalog_number = models.CharField(max_length=4)
+##    course_section = models.CharField(max_length=3)
 
