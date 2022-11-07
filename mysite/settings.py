@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'crispy_forms',
+    'star_ratings'
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -181,3 +182,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
+
+STAR_RATINGS_RERATE = False
+STAR_RATINGS_RERATE_SAME_DELETE = False
+STAR_RATINGS_CLEARABLE = True
+STAR_RATINGS_ANONYMOUS = False

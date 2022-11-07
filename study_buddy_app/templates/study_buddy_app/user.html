@@ -1,5 +1,8 @@
 {% load socialaccount %}
 {% load crispy_forms_tags %}
+{% load ratings %}
+
+
 <!--<html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,10 +24,19 @@
 				  		<p>{{ user.first_name }} {{ user.last_name }}</p>
 				  		<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 				  		<p>{{ user.email }} </p>
+						<p class="text-muted mb-0" style="font-size: 12px">ComputingID:</p>
+						{% load static %}
+						<p> Rate me as a Study Buddy!</p>
+						{% ratings user %}
+						<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+						<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
 						<div class="text-right">
 							<a href="/study_buddy_app/user/edituser/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button></a>
 							<a href="/study_buddy_app/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Back</button></a>
 						</div>
+						<!--<p> Friend Requests</p>-->
+						<a href="/study_buddy_app/user/friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Friend Requests</button></a>
+						<a href="/study_buddy_app/user/friends"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Friends</button></a>
 			        </div>
 		    	</div>
 		  	</div>
