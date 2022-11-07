@@ -1,0 +1,15 @@
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+{% load ratings %}
+
+{% for deepthought in profile_list %}
+
+<p>{{ deepthought.user }}</p>
+
+    <form id="post-form" method="POST" action="/study_buddy_app/publicProfile/user_redirect/">
+        {% csrf_token %}
+        <input type="hidden" name="username" id="username" value="{{deepthought.user}}"/>
+        <input type="submit" value="Send">
+    </form>
+
+{% endfor %}

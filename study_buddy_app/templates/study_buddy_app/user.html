@@ -3,6 +3,9 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load ratings %}
+
+
 <!--<html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -71,9 +74,16 @@
 					<div class="text-right">
 						<a href="/study_buddy_app/user/edituser/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button></a>
 						<a href="/study_buddy_app/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Back</button></a>
-					</div>
-				</div>
-			</div>
+					
+	
+						<!--<p> Friend Requests</p>-->
+						<a href="/study_buddy_app/user/friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Friend Requests</button></a>
+						<a href="/study_buddy_app/user/friends"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Friends</button></a>
+			        </div>
+		    	</div>
+		  	</div>
+		    <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
+		    </div>
 		</div>
 	</div>
     </body>
