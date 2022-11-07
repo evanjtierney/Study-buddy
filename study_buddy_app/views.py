@@ -31,9 +31,6 @@ def home(request):
 
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    # departments = []
-    # for i in response:
-    #     departments.append(i.subject)
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
 def dept(request, dept_name):
@@ -44,7 +41,7 @@ def dept(request, dept_name):
         tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
         tmp.save()
         cur_classes.append(tmp)
-    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name}) # 'response':Class.objects.all().filter(subject=dept_name)
+    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
@@ -100,7 +97,7 @@ def edituser(request):
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
 
-def addclass(request): #, class
+def addclass(request):
 
 
     profile = request.user # social user, need to change to get a profile object

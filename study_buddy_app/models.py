@@ -15,9 +15,6 @@ class Class(models.Model):
     subject = models.CharField(max_length=4)
     catalog_number = models.CharField(max_length=4)
     course_section = models.CharField(max_length=3)
-    #profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    # def __str__(self):
-    #     return self.catalog_number
 
 class Profile(models.Model):  # add this class and the following fields
 
