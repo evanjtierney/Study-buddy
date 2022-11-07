@@ -54,3 +54,5 @@ class ChatTest(TestCase):
         new_message = Message.objects.create(value="hello world", user="john", room="this_is_a_test_room")
         new_message.save()
         self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
+
+        #TODO: messages between two people, can someone else view the message
