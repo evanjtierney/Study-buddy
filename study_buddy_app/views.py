@@ -1,18 +1,15 @@
-<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.views import generic
-=======
 from django.shortcuts import render, redirect, get_object_or_404
 from study_buddy_app.models import Room, Message
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.urls import reverse
->>>>>>> add_classes_to_profile
 
 from django.shortcuts import render
 import requests
