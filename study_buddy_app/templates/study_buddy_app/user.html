@@ -23,6 +23,10 @@
 				  		<p>{{ user.first_name }} {{ user.last_name }}</p>
 				  		<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 				  		<p>{{ user.email }} </p>
+						<p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
+						<p>{{ user.classes }} </p>
+
+
 						{% load static %}
 						<p> Rate me as a Study Buddy!</p>
 						{% ratings user %}

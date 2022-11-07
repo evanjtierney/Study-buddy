@@ -1,15 +1,25 @@
+<<<<<<< HEAD
 from django.shortcuts import render, redirect
 from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.views import generic
+=======
+from django.shortcuts import render, redirect, get_object_or_404
+from study_buddy_app.models import Room, Message
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.template import loader
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+>>>>>>> add_classes_to_profile
 
 from django.shortcuts import render
 import requests
 
 from .models import Profile
 from .forms import UserForm
+from .models import Class
 
 
 def index(request):
@@ -33,8 +43,14 @@ def deptlist(request):
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
 def dept(request, dept_name):
-    response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
-    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
+    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+    response = classes.json()
+    cur_classes = []
+    for i in response:
+        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
+        tmp.save()
+        cur_classes.append(tmp)
+    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
@@ -89,6 +105,7 @@ def edituser(request):
 	user_form = UserForm(instance=request.user)
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
+
     
 def publicProfile(request):
     user_form = UserForm(instance=request.user)
@@ -122,6 +139,23 @@ def user_redirect(request):
 
     return redirect('/study_buddy_app/publicProfile/'+user)
 
+
+
+def addclass(request):
+
+
+    profile = Profile.objects.get(user=request.user) # not 100% sure this works
+    try:
+        selected_class = Class.objects.get(pk=request.POST['class'])
+        profile.classes.add(selected_class)
+        profile.save()
+        return edituser(request)
+
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/dept.html', {
+            'profile': profile,
+            'error_message': "You didn't select a class.",
+        })
 
 
 

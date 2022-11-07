@@ -10,6 +10,7 @@
 			        <h5 class="modal-title">Edit Profile</h5>
 		        </div>
 		        <div class="modal-body">
+					<a href="/study_buddy_app/user/edituser/deptlist"><button>Add a Class</button></a>
 			        <form method="post">
 			          	{% csrf_token %}
 			          	{{ user_form|crispy }}

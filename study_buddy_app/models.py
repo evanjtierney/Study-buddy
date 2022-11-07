@@ -13,24 +13,27 @@ class Message(models.Model):
     user = models.CharField(max_length=1000000)
     room = models.CharField(max_length=1000000)
 
+class Class(models.Model):
+    subject = models.CharField(max_length=4)
+    catalog_number = models.CharField(max_length=4)
+    course_section = models.CharField(max_length=3)
 
 class Profile(models.Model):  # add this class and the following fields
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True, null=True)
+    classes = models.ManyToManyField(Class)
 
     def save(self, *args, **kwargs):
         self.slug = self.user.username
         super(Profile, self).save(*args, **kwargs)
-
 
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
 
-
     @receiver(post_save, sender=User)  # add this
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
-
+    
