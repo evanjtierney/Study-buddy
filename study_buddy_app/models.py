@@ -5,10 +5,6 @@ from django.dispatch import receiver #add this
 from django.db.models.signals import post_save #add this
 from django.template.defaultfilters import slugify  # new
 
-<<<<<<< HEAD
-
-=======
->>>>>>> search-bar
 class Room(models.Model):
     name = models.CharField(max_length=1000)
 class Message(models.Model):
