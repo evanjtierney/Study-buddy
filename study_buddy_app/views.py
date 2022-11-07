@@ -100,12 +100,12 @@ def edituser(request):
 def addclass(request):
 
 
-    profile = request.user # social user, need to change to get a profile object
+    profile = Profile.objects.get(user=request.user) # not 100% sure this works
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
         profile.classes.add(selected_class)
         profile.save()
-        return render(request, 'study_buddy_app/edituser.html')
+        return edituser(request)
 
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {
