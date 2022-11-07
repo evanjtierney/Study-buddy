@@ -1,14 +1,34 @@
 from django.shortcuts import render, redirect
-from study_buddy_app.models import Room, Message
+from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+
+from django.db.models import Q # new
+from django.views import generic
 
 from django.shortcuts import render
 import requests
 
 from .models import Profile
 from .forms import UserForm
+from .models import Friends1
+from .models import FriendRequest
+#from .models import Class
+from django.views import generic
+class SearchResultsView(generic.ListView):
+    template_name = 'study_buddy_app/searchResults.html'
+    context_object_name = 'search_results_list'
+    # User = get_user_model()
+    # users = User.objects.all()
+    def get_queryset(self):
+        """Return all the users."""
+        query = self.request.GET.get("q")
+        User = get_user_model()
+        print(User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query)))
+        return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        # return User.objects.all()
 
 
 def index(request):
@@ -35,6 +55,14 @@ def dept(request, dept_name):
     response = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name).json()
     return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})  # , {'dept_name':dept_name}
 
+##def dept(request, dept_name):
+##    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+##    response = classes.json()
+##    for i in response:
+##        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
+##        tmp.save()
+##    return render(request, 'study_buddy_app/dept.html', {'response':response, 'dept_name':dept_name})
+##
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
@@ -88,3 +116,101 @@ def edituser(request):
 	user_form = UserForm(instance=request.user)
 	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
 		"user_form": user_form})
+    
+def publicProfile(request):
+    user_form = UserForm(instance=request.user)
+    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+
+##class viewProfiles(generic.ListView):
+##    template_name = 'study_buddy_app/viewProfiles.html'
+##    context_object_name = 'profile_list'
+##    def get_queryset(self):
+##        return Profile.objects.all()
+    
+def send_friend_request(request,slug):
+    sender = request.user
+    recipient = User.objects.get(username = slug)
+    model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
+    return HttpResponse('friend request sent or already sent')
+    #return redirect ('/study_buddy_app/publicProfile/'+user)
+
+def delete_request(request, operation, pk):
+    client1 = User.objects.get(id=pk)
+    print(client1)
+    if operation == 'Sender_deleting':
+        model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
+        model1.delete()
+    elif operation == 'Reviever_deleting':
+        model2 = FriendRequest.objects.get(sender=client1,receivers=request.user)
+        model2.delete()
+        return redirect('/studdy_buddy_app/user')
+    return redirect('/study_buddy_app/user')
+
+##def add_or_remove_friend(request,operation,pk):
+##    new_friend = User.objects.get(id=pk)
+##    if operation == 'add':
+##        fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
+##        Friends1.make_friend(request.user, new_friend)
+##        Friends1.make_friend(new_friend, request.user)
+##        fq.delete()
+##    elif operation == 'remove':
+##        Friends1.lose_friend(request.user, new_friend)
+##        Friends1.lose_friend(new_friend, request.user)
+##    return redirect('/studdy_buddy_app/user')
+
+def accept_friend_request(request,pk):
+    new_friend = User.objects.get(username = pk)
+    fq = FriendRequest.objects.get(sender=new_friend, receiver=request.user)
+    Friends1.make_friend(request.user, new_friend)
+    Friends1.make_friend(new_friend, request.user)
+    fq.delete()
+    #return redirect('/studdy_buddy_app/user')
+    return HttpResponse('friend request accepted')
+##
+##class viewProfiles(generic.ListView):
+##    template_name = 'study_buddy_app/viewProfiles.html'
+##    context_object_name = 'profile_list'
+##    def get_queryset(self):
+##        return Profile.objects.all()
+
+class viewRequest(generic.ListView):
+    template_name = 'study_buddy_app/friendRequest.html'
+    context_object_name = 'request_list'
+    def get_queryset(self):
+        return FriendRequest.objects.filter(receiver = self.request.user)
+    
+class viewFriends(generic.ListView):
+    template_name = 'study_buddy_app/friends.html'
+    context_object_name = 'friend_list'
+    def get_queryset(self):
+        return Friends1.objects.filter(users1 = self.request.user)
+    
+#new stuff
+class viewProfiles(generic.ListView):
+    template_name = 'study_buddy_app/viewProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
+
+class listProfiles(generic.ListView):
+    template_name = 'study_buddy_app/listProfiles.html'
+    context_object_name = 'profile_list'
+    def get_queryset(self):
+        return Profile.objects.all()
+    
+
+class seeProfile(generic.DetailView):
+    template_name = 'study_buddy_app/userProfile.html'
+    context_object_name = 'profile_list'
+
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
+    
+def user_redirect(request):
+    user = request.POST['username']
+
+    return redirect('/study_buddy_app/publicProfile/'+user)
+

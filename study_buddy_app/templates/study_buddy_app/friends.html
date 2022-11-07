@@ -1,0 +1,15 @@
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+{% load ratings %}
+
+{% if friend_list %}
+    {% for each in friend_list %}
+        {% if each.current_user != user %}
+            <p>{{ each.current_user }}</p>
+        {% endif %}
+    {% endfor %}
+
+{% else %}
+    <p> No Friends </p>
+
+{% endif %}
