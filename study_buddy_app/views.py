@@ -89,29 +89,33 @@ def user(request):
 
 
 def edituser(request):
-	if request.method == "POST":
-		user_form = UserForm(request.POST, instance=request.user)
-		if user_form.is_valid():
-		    user_form.save()
-	user_form = UserForm(instance=request.user)
-	return render(request = request, template_name ="study_buddy_app/edituser.html", context = {"user":request.user,
-		"user_form": user_form})
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+    user_form = UserForm(instance=request.user)
+
+    profile = Profile.objects.get(user=request.user)
+    classes = profile.classes.all()
+    return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
 
 def addclass(request):
-
-
     profile = Profile.objects.get(user=request.user) # not 100% sure this works
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
-        profile.classes.add(selected_class)
-        profile.save()
-        return edituser(request)
 
+        # only add class to profile if it's not already there
+        already_exists = False
+        for c in profile.classes.all():
+            if selected_class.subject == c.subject and selected_class.catalog_number == c.catalog_number and selected_class.course_section == c.course_section:
+                already_exists = True
+        if not already_exists:
+            profile.classes.add(selected_class)
+            profile.save()
+
+        return edituser(request)
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {
             'profile': profile,
             'error_message': "You didn't select a class.",
         })
-
-
-
