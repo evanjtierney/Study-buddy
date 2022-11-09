@@ -24,6 +24,13 @@
 			        <h5 class="modal-title">Edit Profile</h5>
 		        </div>
 		        <div class="modal-body">
+					<h4>My Classes:</h4>
+					<a href="/study_buddy_app/user/edituser/deptlist"><button>Add a Class</button></a>
+					{% for c in classes %}
+						<!-- <li>{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</li> -->
+						<li>{{ c }}</li>
+					{% endfor %}
+					<br>
 			        <form method="post">
 			          	{% csrf_token %}
 			          	{{ user_form|crispy }}

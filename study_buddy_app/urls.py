@@ -54,5 +54,8 @@ urlpatterns = [
     path('user/friend_request/accept_friend_request/<str:pk>/', views.accept_friend_request, name='accept friend request'),
 
 
+    path('user/edituser/deptlist/', views.deptlist, name="deptlist"),
+    path('user/edituser/dept/<str:dept_name>/', views.dept, name="dept"),
+    path('user/edituser/addclass', views.addclass, name="addclass"),
 ]
 
