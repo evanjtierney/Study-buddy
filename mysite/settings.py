@@ -9,9 +9,15 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 # SHERRIFF: Added import os here for the django_heroku fix at the bottom.
 from pathlib import Path
 import os
+import dj_database_url
+import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,13 +36,13 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "allauth.socialaccount.providers.openid",
-    'study_buddy_app',
+    # 'study_buddy_app',
+    'study_buddy_app.apps.StudyBuddyAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -63,7 +69,7 @@ SOCIALACCOUNT_PROVIDERS = {
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
 LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
 
-SITE_ID = 2
+SITE_ID = 3
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -108,10 +114,18 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd8kpiaugum37u7',
+        'USER': 'qtcrmpvjombrww',
+        'PASSWORD': 'fa1897cadc92ee07e7583bed4be97174003b6d04a248506f7b7edc01f9901109',
+        'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
+        'PORT': '',
     }
 }
+
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation

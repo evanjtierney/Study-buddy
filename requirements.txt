@@ -13,9 +13,11 @@ django-allauth
 
 django-bootstrap-v5
 dj-database-url
-psycopg2
+psycopg2==2.9.5
 python-dotenv
 django-crispy-forms
 crispy-forms-semantic-ui
 
 django-star-ratings
+
+requests
