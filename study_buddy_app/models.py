@@ -5,7 +5,6 @@ from django.dispatch import receiver #add this
 from django.db.models.signals import post_save #add this
 from django.template.defaultfilters import slugify  # new
 
-
 class Room(models.Model):
     name = models.CharField(max_length=1000)
 class Message(models.Model):
@@ -18,7 +17,6 @@ class Message(models.Model):
 class Profile(models.Model):  # add this class and the following fields
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     slug = models.SlugField(unique=True, null=True)
-
 
     def save(self, *args, **kwargs):
         self.slug = self.user.username

@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
-from study_buddy_app.models import Room, Message
+from study_buddy_app.models import Room, Message, Profile
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
+from django.db.models import Q # new
 from django.views import generic
 
 from django.shortcuts import render
@@ -15,6 +16,19 @@ from .forms import UserForm
 from .models import Friends1
 from .models import FriendRequest
 #from .models import Class
+from django.views import generic
+class SearchResultsView(generic.ListView):
+    template_name = 'study_buddy_app/searchResults.html'
+    context_object_name = 'search_results_list'
+    # User = get_user_model()
+    # users = User.objects.all()
+    def get_queryset(self):
+        """Return all the users."""
+        query = self.request.GET.get("q")
+        User = get_user_model()
+        print(User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query)))
+        return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        # return User.objects.all()
 
 
 def index(request):

@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('searchResults/', views.SearchResultsView.as_view(), name='search_results'),
     path('home/', views.home, name='home'),
     path('sign_in/', views.sign_in, name='sign_in'),
     path("accounts/", include("allauth.urls")),
@@ -20,6 +21,17 @@ urlpatterns = [
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
     #path('publicProfile/', views.publicProfile, name='publicProfile'),
     #path('publicProfile/viewAll', views.viewProfiles.as_view(), name='viewAll'),
+
+    path('publicProfile/', views.publicProfile, name='publicProfile'),
+
+    path('publicProfile/viewAll', views.viewProfiles.as_view(), name='viewAll'),
+    
+    path('publicProfile/listProfiles', views.listProfiles.as_view(), name='listProfiles'),
+
+    path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
+
+    path('publicProfile/<slug:slug>/', views.seeProfile.as_view(), name='profile-detail'),
+
     path('user/', views.user, name='user'),
     path('user/edituser/', views.edituser, name='edituser'),
     #path('/publicProfile/viewAll/send_friend_request/<int:userID>/',views.send_friend_request,name='send friend request'),
