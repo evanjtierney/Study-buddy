@@ -71,6 +71,17 @@ class FriendRequestTest(TestCase):
         self.assertIs(Friends1.objects.filter(users1=first_user, current_user=second_user).exists(), True)
         self.assertIs(Friends1.objects.filter(users1=second_user, current_user=first_user).exists(), True)
 
+class PublicProfileTests(TestCase):
+    def test_public_profile(self):
+        new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+        profile = Profile.objects.get(user=new_user)
+        self.assertEqual(new_user.username, profile.slug)
 
+    def test_public_profile_change_username(self):
+        new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+        new_user.username = 'CHANGEEEEEE'
+        new_user.save()
+        profile = Profile.objects.get(user=new_user)
+        self.assertEqual(new_user.username, profile.slug)
         
         
