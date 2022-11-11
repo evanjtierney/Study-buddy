@@ -11,6 +11,8 @@ from pathlib import Path
 import os
 import dj_database_url
 import dotenv
+import sys
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -111,17 +113,34 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd8kpiaugum37u7',
-        'USER': 'qtcrmpvjombrww',
-        'PASSWORD': 'fa1897cadc92ee07e7583bed4be97174003b6d04a248506f7b7edc01f9901109',
-        'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
-        'PORT': '',
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'd8kpiaugum37u7',
+            'USER': 'qtcrmpvjombrww',
+            'PASSWORD': 'fa1897cadc92ee07e7583bed4be97174003b6d04a248506f7b7edc01f9901109',
+            'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
+            'PORT': '',
+            'TEST':{
+                'NAME': 'd8kpiaugum37u7',
+            }
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'd562rg4gao8vd8',
+            'USER': 'vgbkuqbpwdxpbi',
+            'PASSWORD': '6bd45f08c93cd5218f458ba4d70d5b26dbba468267f6811a956bb24b7dc9d81f',
+            'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
+            'PORT': '',
+            'TEST':{
+                'NAME': 'd562rg4gao8vd8',
+            }
+        }
+    }
 
 
 db_from_env = dj_database_url.config(conn_max_age=600)
