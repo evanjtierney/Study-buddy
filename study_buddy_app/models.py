@@ -30,7 +30,7 @@ class Profile(models.Model):  # add this class and the following fields
         super(Profile, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
