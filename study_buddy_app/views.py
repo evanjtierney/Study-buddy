@@ -225,7 +225,8 @@ class listProfiles(generic.ListView):
         return Profile.objects.all()
     
 class DateForm(forms.Form):
-    date = forms.CharField()
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
+    time = forms.DateTimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
 
 class seeProfile(generic.DetailView):
 
@@ -241,11 +242,15 @@ class ProfileMeeting(SingleObjectMixin, FormView):
     form_class = DateForm
     model = Profile
 
-    def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return HttpResponseForbidden()
-        self.object = self.get_object()
-        return super(ProfileMeeting, self).post(request, *args, **kwargs)
+    def form_valid(self, form):
+        self.process_user_input(form.cleaned_data)
+        return super(ProfileMeeting, self).form_valid(form)
+    
+    def process_user_input(self, valid_data):
+        # TODO: add to google calendar
+        # TODO: add this meeting time to the model
+        print(valid_data['date'])
+        pass
 
     def get_success_url(self):
         self.object = self.get_object()
