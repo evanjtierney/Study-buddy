@@ -27,22 +27,28 @@ class SearchResultsView(generic.ListView):
         query = self.request.GET.get("q")
         User = get_user_model()
         users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
-
+        cardResults = []
         def has_numbers(inputString):
             return any(char.isdigit() for char in inputString)
+        flag1 = not query is None and not has_numbers(query)
+        flag2 = not query is None and has_numbers(query)
+        
 
-        if not query is None and not has_numbers(query):
+        if flag1:
             users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
 
-        if not query is None and has_numbers(query):
+        if flag2:
             arr = query.split()
             if len(arr) == 2:
                 users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
-        
         users = users.distinct()
         
-        # for user in users: 
-        #     print("******************",user.profile.classes)
+        for user in users: 
+            if flag1:
+                cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=query)))
+            if flag2:
+                cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=arr[0]) & Q(catalog_number__iexact=arr[1])))
+        print ("cardResults", cardResults)
         return users
     
     
