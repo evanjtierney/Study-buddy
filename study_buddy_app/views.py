@@ -89,6 +89,8 @@ def checkview(request):
 
 def send(request):
     message = request.POST['message']
+    if not message:
+        return
     username = request.POST['username']
     room_id = request.POST['room_id']
 

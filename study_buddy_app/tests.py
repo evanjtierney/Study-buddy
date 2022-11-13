@@ -56,6 +56,23 @@ class ChatTest(TestCase):
         new_message.save()
         self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
 
+    def test_blank_message(self):
+        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        user.last_name = 'Lennon'
+        user.save()
+
+        room = "this_is_a_test_room"
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+
+        fakeMessage = ""
+        #this is what i do in view
+        if fakeMessage:    
+            new_message = Message.objects.create(value=fakeMessage, user="john", room="this_is_a_test_room")
+            new_message.save()
+        self.assertIs(Message.objects.filter(value="", user="john", room="this_is_a_test_room").exists(), False)
+        self.assertIs(len(Message.objects.all()) == 0, True)
+
 
 class FriendRequestTest(TestCase):
     def test_send_request(self):
