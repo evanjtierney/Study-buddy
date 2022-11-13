@@ -6,6 +6,7 @@
     {% for each in request_list %}
         <p>{{ each.sender.username }}<p>
             <a href="accept_friend_request/{{ each.sender.username }}/"> accept friend request</a>
+            <a href="delete_request/{{ each.sender.username }}/"> delete friend request</a>
     {% endfor %}
 {% else %}
     <p> No Friend Requests </p>

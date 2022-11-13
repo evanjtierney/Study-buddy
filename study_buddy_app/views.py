@@ -132,20 +132,28 @@ def send_friend_request(request,slug):
     recipient = User.objects.get(username = slug)
     model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
     return HttpResponse('friend request sent or already sent')
-    #return redirect ('/study_buddy_app/publicProfile/'+user)
+    return redirect ('/study_buddy_app/publicProfile/'+user)
+    #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
 
-def delete_request(request, operation, pk):
-    client1 = User.objects.get(id=pk)
-    print(client1)
-    if operation == 'Sender_deleting':
-        model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
-        model1.delete()
-    elif operation == 'Reviever_deleting':
-        model2 = FriendRequest.objects.get(sender=client1,receivers=request.user)
-        model2.delete()
-        return redirect('/studdy_buddy_app/user')
-    return redirect('/study_buddy_app/user')
+def delete_request(request, pk):
+    client1 = User.objects.get(username=pk)
+    #print(client1)
+    #if operation == 'Sender_deleting':
+    #    model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
+     #   model1.delete()
+    #elif operation == 'Reviever_deleting':
+    model2 = FriendRequest.objects.get(sender=client1,receiver=request.user)
+    model2.delete()
+    #return HttpResponse('Request Deleted')
+    return redirect('/study_buddy_app/user/friend_request/')
 
+
+def remove_friend(request, pk):
+    new_friend = User.objects.get(username=pk)
+    Friends1.lose_friend(request.user, new_friend)
+    Friends1.lose_friend(new_friend, request.user)
+    #return HttpResponse('friend removed')
+    return redirect('/study_buddy_app/user/friends/')
 ##def add_or_remove_friend(request,operation,pk):
 ##    new_friend = User.objects.get(id=pk)
 ##    if operation == 'add':
@@ -165,7 +173,9 @@ def accept_friend_request(request,pk):
     Friends1.make_friend(new_friend, request.user)
     fq.delete()
     #return redirect('/studdy_buddy_app/user')
-    return HttpResponse('friend request accepted')
+    #return HttpResponse('friend request accepted')
+    return redirect('/study_buddy_app/user/friend_request/')
+
 ##
 ##class viewProfiles(generic.ListView):
 ##    template_name = 'study_buddy_app/viewProfiles.html'
