@@ -22,13 +22,10 @@ from django.views import generic
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
-    # User = get_user_model()
-    # users = User.objects.all()
     def get_queryset(self):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        # print(User.objects.filter(profile__classes__subject=query))
         users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
 
         def has_numbers(inputString):
