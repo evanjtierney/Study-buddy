@@ -36,8 +36,13 @@ class SearchResultsView(generic.ListView):
 
         if not query is None and has_numbers(query):
             arr = query.split()
-            if len(arr) is 2:
+            if len(arr) == 2:
                 users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
+        
+        users = users.distinct()
+        
+        # for user in users: 
+        #     print("******************",user.profile.classes)
         return users
     
     
