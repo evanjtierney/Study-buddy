@@ -8,13 +8,16 @@ from django.contrib.auth.models import User
 from django.db.models import Q # new
 from django.views import generic
 from django.urls import reverse
-
+from django.views.generic import FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.views import View
 
 from django.shortcuts import render
 import requests
 
 from .models import Profile, Class
 from .forms import UserForm
+from django import forms
 from .models import Friends1
 from .models import FriendRequest
 #from .models import Class
@@ -221,17 +224,43 @@ class listProfiles(generic.ListView):
     def get_queryset(self):
         return Profile.objects.all()
     
+class DateForm(forms.Form):
+    date = forms.CharField()
 
 class seeProfile(generic.DetailView):
-    template_name = 'study_buddy_app/userProfile.html'
-    context_object_name = 'profile_list'
 
     model = Profile
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super(seeProfile, self).get_context_data(**kwargs)
+        context['form'] = DateForm()
         return context
-    
+
+class ProfileMeeting(SingleObjectMixin, FormView):
+    template_name = 'study_buddy_app/profile_detail.html'
+    form_class = DateForm
+    model = Profile
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return HttpResponseForbidden()
+        self.object = self.get_object()
+        return super(ProfileMeeting, self).post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        self.object = self.get_object()
+        return reverse('profile-detail', kwargs={'slug': self.object.slug})
+
+class ProfileDetail(View):
+    template_name = 'study_buddy_app/profile_detail.html'
+    def get(self, request, *args, **kwargs):
+        view = seeProfile.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ProfileMeeting.as_view()
+        return view(request, *args, **kwargs)
+
 def user_redirect(request):
     user = request.POST['username']
 
