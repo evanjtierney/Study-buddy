@@ -58,7 +58,7 @@
   </form>
 </div>
 <ul>
-  {% for user in search_results_list.users %}
+  {% for user, queryset in search_results_list.combination %}
   <div class="result">
     <form
       id="post-form"
@@ -78,10 +78,15 @@
       >
         <div class="card-body">
           <h5 class="card-title">{{ user.username }}</h5>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the
-            bulk of the card's content.
-          </p>
+          <b class="card-text">
+            Related classes: 
+          </b>
+          {% for class in queryset %}
+          <a>{{class}}</a>
+          {% empty %}
+          <a>No related classes to your query</a>
+          {% endfor %}
+          <a></a>
         </div>
       </div>
     </form>
