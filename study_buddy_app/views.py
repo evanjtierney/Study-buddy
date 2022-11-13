@@ -28,9 +28,15 @@ class SearchResultsView(generic.ListView):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        print(User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query)))
-        return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
-        # return User.objects.all()
+        if not query is None: 
+            Profiles = Profile.objects.filter(Q(classes__subject__icontains=query))
+            print("Profiles", Profiles)
+
+        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        users |= User.objects.filter(Q(profile__classes__subject__icontains=query))
+
+        print(users)
+        return users
 
 
 def index(request):
