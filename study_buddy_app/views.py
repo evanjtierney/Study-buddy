@@ -225,7 +225,8 @@ class listProfiles(generic.ListView):
         return Profile.objects.all()
     
 class DateForm(forms.Form):
-    date = forms.CharField()
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
+    time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
 
 class seeProfile(generic.DetailView):
 
