@@ -89,9 +89,8 @@
  </div>
   {% else %}
   <div class="text-center">
-    <form action="/study_buddy_app/sign_in/">
-      <input type="submit" value="Sign In" />
-    </form>
+      <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    
   </div>
   {% endif %}
   </body>
