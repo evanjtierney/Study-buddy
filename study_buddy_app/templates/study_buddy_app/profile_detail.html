@@ -21,7 +21,18 @@
 						{% ratings object.user %}
 						<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
 						<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-			        </div>
+						<form method="post" >
+							{% csrf_token %}
+							{{ form.as_p }}
+							<!-- <input
+								type="hidden"
+								name="username"
+								id="username"
+								value="{{object.user.username}}"
+							/> -->
+							<input type="submit" value="Send message">
+						</form>
+					</div>
 		    	</div>
 		  	</div>
 		    <div class="col-sm-12 col-md-12 col-lg-9 pb-4">
