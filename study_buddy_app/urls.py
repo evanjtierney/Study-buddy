@@ -30,7 +30,7 @@ urlpatterns = [
 
     path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
 
-    path('publicProfile/<slug:slug>/', views.seeProfile.as_view(), name='profile-detail'),
+    path('publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
 
     path('user/', views.user, name='user'),
     path('user/edituser/', views.edituser, name='edituser'),
@@ -43,7 +43,7 @@ urlpatterns = [
 
     path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
 
-    path('publicProfile/<slug:slug>/', views.seeProfile.as_view(), name='profile-detail'),
+    path('publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
 
     path('publicProfile/<slug:slug>/study_buddy_app/send_friend_request/', views.send_friend_request,name='send friend request'),
     
