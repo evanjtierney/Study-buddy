@@ -31,10 +31,19 @@ class SearchResultsView(generic.ListView):
         # print(User.objects.filter(profile__classes__subject=query))
         users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
 
-        if not query is None:
+        def has_numbers(inputString):
+            return any(char.isdigit() for char in inputString)
+
+        if not query is None and not has_numbers(query):
             users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
 
+        if not query is None and has_numbers(query):
+            arr = query.split()
+            if len(arr) is 2:
+                users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
         return users
+    
+    
 
 
 def index(request):
