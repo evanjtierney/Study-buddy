@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com',
 
 INSTALLED_APPS = [
     'django.contrib.sites',
+    "allauth_ui",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -62,7 +63,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
-LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
+LOGOUT_REDIRECT_URL = '/study_buddy_app/'
 
 SITE_ID = 3
 
