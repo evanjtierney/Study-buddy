@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
-from .models import Profile
+from .models import Profile, Class
 from django.dispatch import receiver 
 from django.db.models.signals import post_save
 from django.db import models
@@ -9,7 +9,8 @@ from .views import user
 from study_buddy_app.models import Room, Message
 from .models import Friends1
 from .models import FriendRequest
-
+from django.contrib.auth import get_user_model
+from django.db.models import Q # new
 
 class UserModelTests(TestCase):
     def test_user_created(self):
@@ -85,3 +86,37 @@ class PublicProfileTests(TestCase):
         self.assertEqual(new_user.username, profile.slug)
         
         
+class SearchFeatureTest(TestCase):
+    def test_search_name1(self):
+        new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+        self.assertIs(len(User.objects.filter(Q(username__iexact="Michael")))==1, True)
+    
+    def test_search_name_none(self):
+        self.assertIs(len(User.objects.filter(Q(username__iexact="John Doe")))==0, True)
+        
+    # def test_search_class_subject(self):
+    #     new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+    #     new_user.save()
+    #     class_set = Class.objects.filter(Q(subject="ARAB") & Q(catalog_number="8993"))
+    #     print(class_set)
+    #     new_user.profile.classes.add(class_new)
+        
+    #     # self.assertIs(len(User.objects.filter(Q(username__iexact="Michael")))==1, True)
+    #     # self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
+
+    # # def test_search_class_subject_and_catalog(self):
+    # #     user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+    # #     user.last_name = 'Lennon'
+    # #     user.save()
+
+    # #     room = "this_is_a_test_room"
+    # #     new_room = Room.objects.create(name=room)
+    # #     new_room.save()
+
+    # #     fakeMessage = ""
+    # #     #this is what i do in view
+    # #     if fakeMessage:    
+    # #         new_message = Message.objects.create(value=fakeMessage, user="john", room="this_is_a_test_room")
+    # #         new_message.save()
+    # #     self.assertIs(Message.objects.filter(value="", user="john", room="this_is_a_test_room").exists(), False)
+    # #     self.assertIs(len(Message.objects.all()) == 0, True)
