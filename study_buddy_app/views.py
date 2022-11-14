@@ -22,15 +22,37 @@ from django.views import generic
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
-    # User = get_user_model()
-    # users = User.objects.all()
     def get_queryset(self):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        print(User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query)))
-        return User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
-        # return User.objects.all()
+        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        cardResults = []
+        def has_numbers(inputString):
+            return any(char.isdigit() for char in inputString)
+        flag1 = not query is None and not has_numbers(query)
+        flag2 = not query is None and has_numbers(query)
+        
+
+        if flag1:
+            users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
+
+        if flag2:
+            arr = query.split()
+            if len(arr) == 2:
+                users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
+        users = users.distinct()
+        
+        for user in users: 
+            if flag1:
+                cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=query)))
+            if flag2:
+                cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=arr[0]) & Q(catalog_number__iexact=arr[1])))
+        print ("cardResults", cardResults)
+        combination = zip(users, cardResults)
+        return {'combination': combination}
+    
+    
 
 
 def index(request):
@@ -89,6 +111,8 @@ def checkview(request):
 
 def send(request):
     message = request.POST['message']
+    if not message:
+        return
     username = request.POST['username']
     room_id = request.POST['room_id']
 
@@ -120,7 +144,7 @@ def edituser(request):
     return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
 
 def addclass(request):
-    profile = Profile.objects.get(user=request.user) # not 100% sure this works
+    profile = Profile.objects.get(user=request.user)
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
 
@@ -155,20 +179,28 @@ def send_friend_request(request,slug):
     recipient = User.objects.get(username = slug)
     model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
     return HttpResponse('friend request sent or already sent')
-    #return redirect ('/study_buddy_app/publicProfile/'+user)
+    return redirect ('/study_buddy_app/publicProfile/'+user)
+    #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
 
-def delete_request(request, operation, pk):
-    client1 = User.objects.get(id=pk)
-    print(client1)
-    if operation == 'Sender_deleting':
-        model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
-        model1.delete()
-    elif operation == 'Reviever_deleting':
-        model2 = FriendRequest.objects.get(sender=client1,receivers=request.user)
-        model2.delete()
-        return redirect('/studdy_buddy_app/user')
-    return redirect('/study_buddy_app/user')
+def delete_request(request, pk):
+    client1 = User.objects.get(username=pk)
+    #print(client1)
+    #if operation == 'Sender_deleting':
+    #    model1 = FriendRequest.objects.get(sender=request.user, recievers=client1)
+     #   model1.delete()
+    #elif operation == 'Reviever_deleting':
+    model2 = FriendRequest.objects.get(sender=client1,receiver=request.user)
+    model2.delete()
+    #return HttpResponse('Request Deleted')
+    return redirect('/study_buddy_app/user/friend_request/')
 
+
+def remove_friend(request, pk):
+    new_friend = User.objects.get(username=pk)
+    Friends1.lose_friend(request.user, new_friend)
+    Friends1.lose_friend(new_friend, request.user)
+    #return HttpResponse('friend removed')
+    return redirect('/study_buddy_app/user/friends/')
 ##def add_or_remove_friend(request,operation,pk):
 ##    new_friend = User.objects.get(id=pk)
 ##    if operation == 'add':
@@ -188,7 +220,9 @@ def accept_friend_request(request,pk):
     Friends1.make_friend(new_friend, request.user)
     fq.delete()
     #return redirect('/studdy_buddy_app/user')
-    return HttpResponse('friend request accepted')
+    #return HttpResponse('friend request accepted')
+    return redirect('/study_buddy_app/user/friend_request/')
+
 ##
 ##class viewProfiles(generic.ListView):
 ##    template_name = 'study_buddy_app/viewProfiles.html'
@@ -229,7 +263,7 @@ class seeProfile(generic.DetailView):
     model = Profile
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs) 
         return context
     
 def user_redirect(request):
