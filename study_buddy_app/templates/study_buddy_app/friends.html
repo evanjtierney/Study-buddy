@@ -48,6 +48,8 @@
     {% for each in friend_list %}
         {% if each.current_user != user %}
             <p class="text-center" style="margin-top: 2%;">{{ each.current_user }}</p>
+            <p>{{ each.current_user }}</p>
+                <a href="remove_friend/{{ each.current_user.username }}/"> remove friend</a>
         {% endif %}
     {% endfor %}
 
