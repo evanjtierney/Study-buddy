@@ -142,7 +142,7 @@ def edituser(request):
     return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
 
 def addclass(request):
-    profile = Profile.objects.get(user=request.user) # not 100% sure this works
+    profile = Profile.objects.get(user=request.user)
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
 
@@ -251,7 +251,7 @@ class seeProfile(generic.DetailView):
     model = Profile
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs) 
         return context
     
 def user_redirect(request):

@@ -36,6 +36,10 @@ class UserProfileTests(TestCase):
         second_profile = Profile.objects.get(user=new_user)
         self.assertEqual(first_profile, second_profile)
         self.assertEqual(new_user.username, 'nat')
+    def test_profile_str(self):
+        new_user = User.objects.create_user('john', 'john@example.com', 'password123')
+        john_profile = Profile.objects.get(user=new_user)
+        self.assertEqual(str(john_profile), 'john')
 
 class ChatTest(TestCase):
     def test_room_created(self):
@@ -84,6 +88,24 @@ class PublicProfileTests(TestCase):
         new_user.save()
         profile = Profile.objects.get(user=new_user)
         self.assertEqual(new_user.username, profile.slug)
+
+class ClassModelTests(TestCase):
+    def test_class_created(self):
+        new_class = Class(subject='CS', catalog_number='3240', course_section='002')
+        new_class.save()
+        self.assertIs(Class.objects.filter(catalog_number='3240').exists(), True)
+
+    def test_class_str(self):
+        new_class = Class(subject='CS', catalog_number='3240', course_section='002')
+        new_class.save()
+        self.assertEqual(str(new_class), 'CS 3240 -- Section 002')
+
+# class ClassesInProfileTests(TestCase):
+#     def test_adding_class(self):
+#         my_user = User.objects.create_user('John', 'john@example.com', 'password123')
+#         my_user.save()
+#         my_profile = Profile.objects.get(user=my_user)
+#         new_class = Class.objects.create('CS', '3240', '002')
         
         
 class SearchFeatureTest(TestCase):

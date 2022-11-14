@@ -54,6 +54,10 @@
 				<p>{{ object.user.first_name }} {{ object.last_name }}</p>
 				<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 				<p>{{ object.user.email }} </p>
+        <p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
+						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
+							<p><li>{{ c }}</li></p>
+						{% endfor %}
                 <p> request friend</p>
                 <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
 				{% load static %}
