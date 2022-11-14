@@ -116,21 +116,21 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 if 'test' in sys.argv:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'd8kpiaugum37u7',
             'USER': 'qtcrmpvjombrww',
             'PASSWORD': 'fa1897cadc92ee07e7583bed4be97174003b6d04a248506f7b7edc01f9901109',
             'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
             'PORT': '5432',
-            'TEST':{
-                'NAME': 'd562rg4gao8vd8',
+            'TEST': {
+                'NAME': 'd8kpiaugum37u7',
             }
         }
     }
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'd562rg4gao8vd8',
             'USER': 'vgbkuqbpwdxpbi',
             'PASSWORD': '6bd45f08c93cd5218f458ba4d70d5b26dbba468267f6811a956bb24b7dc9d81f',
