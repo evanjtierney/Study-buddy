@@ -250,6 +250,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
         print(valid_data['date'])
+        print(valid_data['time'])
         pass
 
     def get_success_url(self):
