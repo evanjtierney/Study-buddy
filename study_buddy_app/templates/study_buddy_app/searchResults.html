@@ -126,7 +126,8 @@
             Related classes: 
           </b>
           {% for class in queryset %}
-          <a>{{class}}</a>
+          <a>{{class}}{%if not forloop.last%},{%endif%}</a>
+          
           {% empty %}
           <a>No related classes to your query</a>
           {% endfor %}
