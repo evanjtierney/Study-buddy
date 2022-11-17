@@ -74,3 +74,6 @@ class Event(models.Model):
     description = models.TextField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    users = models.ManyToManyField(User)
+    def __str__(self):
+        return str(self.title)+" "+str(self.start_time)+" "+str(self.end_time)

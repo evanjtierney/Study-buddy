@@ -36,6 +36,8 @@ import calendar
 
 from .models import *
 from .utils import Calendar
+from datetime import datetime
+from pytz import timezone
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -261,10 +263,6 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         self.process_user_input(form.cleaned_data)
         return super(ProfileMeeting, self).form_valid(form)
     
-    
-
-    
-
     def process_user_input(self, valid_data):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
@@ -309,16 +307,37 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 },
             }
             event = service.events().insert(calendarId='primary', body=event).execute()
+        
+        def add_event_to_calendar(date, start_time, end_time, profile_user):
+            eastern = timezone('US/Eastern')
+            start_datetime = datetime.combine(date, start_time, eastern)
+            end_datetime = datetime.combine(date, end_time, eastern)
+
+            event = Event(title="Meeting w/"+profile_user.username,
+                            description="Meeting with "+profile_user.first_name+" "+profile_user.last_name,
+                            start_time=start_datetime,
+                            end_time=end_datetime)
+            event.save()
+
+            self.request.user.event_set.add(event)
+            print("self.request.user events", self.request.user.event_set.all())
+           
+            copy = Event(title="Meeting w/"+self.request.user.username,
+                            description="Meeting with "+self.request.user.first_name+" "+self.request.user.last_name,
+                            start_time=start_datetime,
+                            end_time=end_datetime)
+            copy.save()
+            
+            profile_user.event_set.add(copy)
+            print("profile_user events", profile_user.event_set.all())
         service = generate_credentials()
 
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
-        # print (dir(profile_user))
-        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
+        # create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+
+        add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
     
-        print(valid_data['date'])
-        print(valid_data['start_time'])
-        print(valid_data['end_time'])
         pass
 
     def get_success_url(self):
