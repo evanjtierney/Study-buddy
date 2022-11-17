@@ -258,9 +258,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
     def process_user_input(self, valid_data):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
-        # request is the HttpRequest object
-        # HELFUL url: https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
-
+        
         def generate_credentials():
             token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
 
@@ -271,19 +269,16 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
                 client_secret='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') # replace with yours 
             service = build('calendar', 'v3', credentials=credentials)
-            # Refer to the Python quickstart on how to setup the environment:
-            # https://developers.google.com/calendar/quickstart/python
-            # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
-            # stored credentials.
+        
             return service
         
-        def create_google_calendar_event(date, start_time, end_time):
+        def create_google_calendar_event(date, start_time, end_time, profile_user):
             event = {
                 'summary': 'Study buddy meeting',
                 # TODO: generate zoom meeting
                 'location': 'Zoom link: ',
                 # TODO: put person's name in the profile and the class
-                'description': 'You have a study meeting with ________ and ____________',
+                'description': 'You have a study meeting with '+str(profile_user.username),
                 'start': {
                     'dateTime': str(date)+"T"+str(start_time),
                     'timeZone': 'America/New_York',
@@ -294,8 +289,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 },
                 # TODO: change the attendee
                 'attendees': [
-                    {'email': 'lpage@example.com'},
-                    {'email': 'sbrin@example.com'},
+                    {'email': profile_user.email},
                 ],
                 # TODO: change and TEST the reminders
                 'reminders': {
@@ -309,7 +303,9 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             event = service.events().insert(calendarId='primary', body=event).execute()
         service = generate_credentials()
 
-        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'])
+        profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
+
+        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
     
         print(valid_data['date'])
