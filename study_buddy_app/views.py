@@ -22,6 +22,10 @@ from .models import Friends1
 from .models import FriendRequest
 #from .models import Class
 from django.views import generic
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from allauth.socialaccount.models import SocialToken, SocialApp, SocialAccount
+
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -249,6 +253,17 @@ class ProfileMeeting(SingleObjectMixin, FormView):
     def process_user_input(self, valid_data):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
+        # request is the HttpRequest object
+        # url: https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
+        token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
+
+        credentials = Credentials(
+            token=token.token,
+            refresh_token=token.token_secret,
+            token_uri='https://oauth2.googleapis.com/token',
+            client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
+            client_secret='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') # replace with yours 
+        
         print(valid_data['date'])
         print(valid_data['time'])
         pass
