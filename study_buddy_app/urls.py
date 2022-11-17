@@ -57,5 +57,6 @@ urlpatterns = [
     path('user/edituser/deptlist/', views.deptlist, name="deptlist"),
     path('user/edituser/dept/<str:dept_name>/', views.dept, name="dept"),
     path('user/edituser/addclass', views.addclass, name="addclass"),
+    path('calendar/', views.CalendarView.as_view(), name='calendar'),
 ]
 

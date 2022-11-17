@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Room, Message, Profile, Class
+from .models import Room, Message, Profile, Class, Event
 from django.utils.text import slugify
 
 
