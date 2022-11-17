@@ -31,4 +31,4 @@ jobs:
       #     pytest
       - name: Test with Django
         run: |
-          python3 manage.py test study_buddy_app
+          python3 manage.py test study_buddy_app --keepdb

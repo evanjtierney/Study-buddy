@@ -38,6 +38,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -89,9 +92,8 @@
  </div>
   {% else %}
   <div class="text-center">
-    <form action="/study_buddy_app/sign_in/">
-      <input type="submit" value="Sign In" />
-    </form>
+      <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    
   </div>
   {% endif %}
   </body>
