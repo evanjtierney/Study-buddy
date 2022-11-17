@@ -284,12 +284,10 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 'location': 'Zoom link: ',
                 # TODO: put person's name in the profile and the class
                 'description': 'You have a study meeting with ________ and ____________',
-                # TODO: change the start date
                 'start': {
                     'dateTime': str(date)+"T"+str(start_time),
                     'timeZone': 'America/New_York',
                 },
-                # TODO: change the end date
                 'end': {
                     'dateTime': str(date)+"T"+str(end_time),
                     'timeZone': 'America/New_York',
