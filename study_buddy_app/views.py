@@ -25,7 +25,7 @@ from django.views import generic
 from googleapiclient.discovery import build
 from google.oauth2.credentials import Credentials
 from allauth.socialaccount.models import SocialToken, SocialApp, SocialAccount
-
+import datetime
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -254,7 +254,8 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
         # request is the HttpRequest object
-        # url: https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
+        # HELFUL url: https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
+
         token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
 
         credentials = Credentials(
@@ -263,7 +264,23 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             token_uri='https://oauth2.googleapis.com/token',
             client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
             client_secret='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') # replace with yours 
-        
+        service = build('calendar', 'v3', credentials=credentials)
+        # Call the Calendar API
+        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
+        print('Getting the upcoming 10 events')
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                              maxResults=10, singleEvents=True,
+                                              orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+        if not events:
+            print('No upcoming events found.')
+            return
+
+        # Prints the start and name of the next 10 events
+        for event in events:
+            start = event['start'].get('dateTime', event['start'].get('date'))
+            print(start, event['summary'])
         print(valid_data['date'])
         print(valid_data['time'])
         pass
