@@ -250,37 +250,69 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         self.process_user_input(form.cleaned_data)
         return super(ProfileMeeting, self).form_valid(form)
     
+    
+
+    
+
     def process_user_input(self, valid_data):
         # TODO: add to google calendar
         # TODO: add this meeting time to the model
         # request is the HttpRequest object
         # HELFUL url: https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
 
-        token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
+        def generate_credentials():
+            token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
 
-        credentials = Credentials(
-            token=token.token,
-            refresh_token=token.token_secret,
-            token_uri='https://oauth2.googleapis.com/token',
-            client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
-            client_secret='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') # replace with yours 
-        service = build('calendar', 'v3', credentials=credentials)
-        # Call the Calendar API
-        now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                              maxResults=10, singleEvents=True,
-                                              orderBy='startTime').execute()
-        events = events_result.get('items', [])
+            credentials = Credentials(
+                token=token.token,
+                refresh_token=token.token_secret,
+                token_uri='https://oauth2.googleapis.com/token',
+                client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
+                client_secret='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') # replace with yours 
+            service = build('calendar', 'v3', credentials=credentials)
+            # Refer to the Python quickstart on how to setup the environment:
+            # https://developers.google.com/calendar/quickstart/python
+            # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
+            # stored credentials.
+            return service
+        
+        def create_google_calendar_event():
+            event = {
+                'summary': 'Study buddy meeting',
+                # TODO: generate zoom meeting
+                'location': 'Zoom link: ',
+                # TODO: put person's name in the profile and the class
+                'description': 'You have a study meeting with ________ and ____________',
+                # TODO: change the start date
+                'start': {
+                    'dateTime': '2022-11-16T09:00:00-07:00',
+                    'timeZone': 'America/Los_Angeles',
+                },
+                # TODO: change the end date
+                'end': {
+                    'dateTime': '2022-11-16T09:00:00-08:00',
+                    'timeZone': 'America/Los_Angeles',
+                },
+                # TODO: change the attendee
+                'attendees': [
+                    {'email': 'lpage@example.com'},
+                    {'email': 'sbrin@example.com'},
+                ],
+                # TODO: change and TEST the reminders
+                'reminders': {
+                    'useDefault': False,
+                    'overrides': [
+                    {'method': 'email', 'minutes': 24 * 60},
+                    {'method': 'popup', 'minutes': 10},
+                    ],
+                },
+            }
+            event = service.events().insert(calendarId='primary', body=event).execute()
+        service = generate_credentials()
 
-        if not events:
-            print('No upcoming events found.')
-            return
+        create_google_calendar_event()
 
-        # Prints the start and name of the next 10 events
-        for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            print(start, event['summary'])
+    
         print(valid_data['date'])
         print(valid_data['time'])
         pass
