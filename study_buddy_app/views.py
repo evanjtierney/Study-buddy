@@ -231,6 +231,8 @@ class listProfiles(generic.ListView):
 class DateForm(forms.Form):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
     time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
+    end_date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
+    end_time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
 
 class seeProfile(generic.DetailView):
 
@@ -276,7 +278,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             # stored credentials.
             return service
         
-        def create_google_calendar_event(date, time):
+        def create_google_calendar_event(date, time, end_date, end_time):
             event = {
                 'summary': 'Study buddy meeting',
                 # TODO: generate zoom meeting
@@ -290,7 +292,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 },
                 # TODO: change the end date
                 'end': {
-                    'dateTime': str(date)+"T"+str(time),
+                    'dateTime': str(end_date)+"T"+str(end_time),
                     'timeZone': 'America/New_York',
                 },
                 # TODO: change the attendee
@@ -310,11 +312,13 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             event = service.events().insert(calendarId='primary', body=event).execute()
         service = generate_credentials()
 
-        create_google_calendar_event(valid_data['date'], valid_data['time'])
+        create_google_calendar_event(valid_data['date'], valid_data['time'], valid_data['end_date'], valid_data['end_time'])
 
     
         print(valid_data['date'])
         print(valid_data['time'])
+        print(valid_data['end_date'])
+        print(valid_data['end_time'])
         pass
 
     def get_success_url(self):
