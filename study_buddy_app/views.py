@@ -278,7 +278,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 # TODO: generate zoom meeting
                 'location': 'Zoom link: ',
                 # TODO: put person's name in the profile and the class
-                'description': 'You have a study meeting with '+str(profile_user.username),
+                'description': 'You have a study meeting with '+str(profile_user.first_name) + " "+str(profile_user.last_name),
                 'start': {
                     'dateTime': str(date)+"T"+str(start_time),
                     'timeZone': 'America/New_York',
@@ -287,11 +287,9 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                     'dateTime': str(date)+"T"+str(end_time),
                     'timeZone': 'America/New_York',
                 },
-                # TODO: change the attendee
                 'attendees': [
                     {'email': profile_user.email},
                 ],
-                # TODO: change and TEST the reminders
                 'reminders': {
                     'useDefault': False,
                     'overrides': [
@@ -304,7 +302,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         service = generate_credentials()
 
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
-
+        # print (dir(profile_user))
         create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
     
