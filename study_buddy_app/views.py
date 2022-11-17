@@ -230,8 +230,7 @@ class listProfiles(generic.ListView):
     
 class DateForm(forms.Form):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
-    time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
-    end_date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
+    start_time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
     end_time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
 
 class seeProfile(generic.DetailView):
@@ -278,7 +277,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             # stored credentials.
             return service
         
-        def create_google_calendar_event(date, time, end_date, end_time):
+        def create_google_calendar_event(date, start_time, end_time):
             event = {
                 'summary': 'Study buddy meeting',
                 # TODO: generate zoom meeting
@@ -287,12 +286,12 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 'description': 'You have a study meeting with ________ and ____________',
                 # TODO: change the start date
                 'start': {
-                    'dateTime': str(date)+"T"+str(time),
+                    'dateTime': str(date)+"T"+str(start_time),
                     'timeZone': 'America/New_York',
                 },
                 # TODO: change the end date
                 'end': {
-                    'dateTime': str(end_date)+"T"+str(end_time),
+                    'dateTime': str(date)+"T"+str(end_time),
                     'timeZone': 'America/New_York',
                 },
                 # TODO: change the attendee
@@ -312,12 +311,11 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             event = service.events().insert(calendarId='primary', body=event).execute()
         service = generate_credentials()
 
-        create_google_calendar_event(valid_data['date'], valid_data['time'], valid_data['end_date'], valid_data['end_time'])
+        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'])
 
     
         print(valid_data['date'])
-        print(valid_data['time'])
-        print(valid_data['end_date'])
+        print(valid_data['start_time'])
         print(valid_data['end_time'])
         pass
 
