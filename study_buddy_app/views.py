@@ -276,7 +276,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             # stored credentials.
             return service
         
-        def create_google_calendar_event():
+        def create_google_calendar_event(date, time):
             event = {
                 'summary': 'Study buddy meeting',
                 # TODO: generate zoom meeting
@@ -285,13 +285,13 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 'description': 'You have a study meeting with ________ and ____________',
                 # TODO: change the start date
                 'start': {
-                    'dateTime': '2022-11-16T09:00:00-07:00',
-                    'timeZone': 'America/Los_Angeles',
+                    'dateTime': str(date)+"T"+str(time),
+                    'timeZone': 'America/New_York',
                 },
                 # TODO: change the end date
                 'end': {
-                    'dateTime': '2022-11-16T09:00:00-08:00',
-                    'timeZone': 'America/Los_Angeles',
+                    'dateTime': str(date)+"T"+str(time),
+                    'timeZone': 'America/New_York',
                 },
                 # TODO: change the attendee
                 'attendees': [
@@ -310,7 +310,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             event = service.events().insert(calendarId='primary', body=event).execute()
         service = generate_credentials()
 
-        create_google_calendar_event()
+        create_google_calendar_event(valid_data['date'], valid_data['time'])
 
     
         print(valid_data['date'])
