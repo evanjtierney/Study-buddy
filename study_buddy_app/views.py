@@ -334,7 +334,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
 
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
 
-        # create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
         add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
     
