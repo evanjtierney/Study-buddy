@@ -38,12 +38,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
-    "allauth_ui",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.openid",
+    # "allauth_ui",
     # 'study_buddy_app',
     'study_buddy_app.apps.StudyBuddyAppConfig',
     'django.contrib.admin',
@@ -54,7 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'crispy_forms',
-    'star_ratings'
+    'star_ratings',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.openid",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -96,7 +96,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'accounts')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
