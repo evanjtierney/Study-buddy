@@ -1,97 +1,118 @@
-{% load socialaccount %}
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% load socialaccount %} {% load bootstrap5 %} {% bootstrap_css %} {%
+bootstrap_javascript %}
 
 <html>
-
-<head>
-  <title>Study Buddy Finder</title>
-</head>
-
-{% if user.is_authenticated %}
-<header>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarExample01">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/">Home</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/home/">Chat</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-{% else %}
-<header>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarExample01"
-        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarExample01">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/">Home</a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-</header>
-{% endif %}
-
-
-
-<body class="d-flex flex-column min-vh-100">
-
-  <h1 class="text-center"> Welcome to the Home Page</h1>
+  <head>
+    <title>Study Buddy Finder</title>
+  </head>
 
   {% if user.is_authenticated %}
-  <p class="text-center">Welcome, {{ user.username }} !</p>
-  <div class="text-center">
-    <form action="/study_buddy_app/logout">
-      <input type="submit" value="Logout" />
-    </form>
-  </div>
+  <header>
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: rgba(0, 0, 0, 0.1)"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarExample01"
+          aria-controls="navbarExample01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarExample01">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/home/">Chat</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/deptlist/"
+                >Course List</a
+              >
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/searchResults/"
+                >Search Users</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
   {% else %}
-  <div class="text-center">
-    <a href="{% provider_login_url 'google' %}">Login with Google</a>
-
-  </div>
+  <header>
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: rgba(0, 0, 0, 0.1)"
+    >
+      <div class="container-fluid">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-mdb-toggle="collapse"
+          data-mdb-target="#navbarExample01"
+          aria-controls="navbarExample01"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarExample01">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/deptlist/"
+                >Course List</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
   {% endif %}
-</body>
 
-<footer class="text-center text-lg-start bg-light text-muted mt-auto">
-  <div class="text-center p-3 me-5 d-none d-lg-block">
-    <span>Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and Holden Present</span>
-  </div>
-  <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
-    © 2022 Copyright: None
-  </div>
-</footer>
+  <body class="d-flex flex-column min-vh-100">
+    <h1 class="text-center">Welcome to the Home Page</h1>
 
+    {% if user.is_authenticated %}
+    <p class="text-center">Welcome, {{ user.username }} !</p>
+    <div class="text-center">
+      <form action="/study_buddy_app/logout">
+        <input type="submit" value="Logout" />
+      </form>
+    </div>
+    {% else %}
+    <div class="text-center">
+      <a href="{% provider_login_url 'google' %}">Login with Google</a>
+    </div>
+    {% endif %}
+  </body>
+
+  <footer class="text-center text-lg-start bg-light text-muted mt-auto">
+    <div class="text-center p-3 me-5 d-none d-lg-block">
+      <span
+        >Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and
+        Holden Present</span
+      >
+    </div>
+    <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05)">
+      © 2022 Copyright: None
+    </div>
+  </footer>
 </html>
