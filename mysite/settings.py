@@ -70,7 +70,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
-LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
+LOGOUT_REDIRECT_URL = '/study_buddy_app/'
 
 SITE_ID = 3
 
