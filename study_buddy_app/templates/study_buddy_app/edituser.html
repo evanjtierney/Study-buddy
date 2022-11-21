@@ -3,7 +3,7 @@
 {% load bootstrap5 %}
 {% bootstrap_javascript %}
 
-
+{% if user.is_authenticated %}
 <style>
 	.page_style{
 		width: 300px;
@@ -24,6 +24,13 @@
 			        <h5 class="modal-title">Edit Profile</h5>
 		        </div>
 		        <div class="modal-body">
+					<h4>My Classes:</h4>
+					<a href="/study_buddy_app/user/edituser/deptlist"><button>Add a Class</button></a>
+					{% for c in classes %}
+						<!-- <li>{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</li> -->
+						<li>{{ c }}</li>
+					{% endfor %}
+					<br>
 			        <form method="post">
 			          	{% csrf_token %}
 			          	{{ user_form|crispy }}
@@ -37,3 +44,13 @@
 	  	</div>
 	</div>
 </div>
+
+{% else %}
+<div class="text-center" style="margin-top: 2%;">
+    <p>Not logged in</p>
+
+    <form action="/study_buddy_app/sign_in/">
+      <input type="submit" value="Sign In" />
+    </form>
+</div>
+{% endif %}

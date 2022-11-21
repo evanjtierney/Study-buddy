@@ -13,21 +13,29 @@ class Message(models.Model):
     user = models.CharField(max_length=1000000)
     room = models.CharField(max_length=1000000)
 
+class Class(models.Model):
+    subject = models.CharField(max_length=4)
+    catalog_number = models.CharField(max_length=4)
+    course_section = models.CharField(max_length=3)
+    def __str__(self):
+        return self.subject + " " + self.catalog_number + " -- Section " + self.course_section
 
 class Profile(models.Model):  # add this class and the following fields
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    classes = models.ManyToManyField(Class)
     slug = models.SlugField(unique=True, null=True)
 
     def save(self, *args, **kwargs):
         self.slug = self.user.username
         super(Profile, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return str(self.user)
 
     @receiver(post_save, sender=User)  # add this
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(user=instance)
-
 
     @receiver(post_save, sender=User)  # add this
     def save_user_profile(sender, instance, **kwargs):
@@ -60,8 +68,12 @@ class FriendRequest(models.Model):
 ##    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
 ##    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
 ##
-##class Class(models.Model):
-##    subject = models.CharField(max_length=4)
-##    catalog_number = models.CharField(max_length=4)
-##    course_section = models.CharField(max_length=3)
 
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    users = models.ManyToManyField(User)
+    def __str__(self):
+        return str(self.title)+" "+str(self.start_time)+" "+str(self.end_time)

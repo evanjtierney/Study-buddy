@@ -13,6 +13,7 @@
 </head>
 <body>-->
 	<!--User-->
+{% if user.is_authenticated %}
 <style>
 	.user_info{
 		margin-top: 5%;
@@ -50,6 +51,12 @@
 				<li class="nav-item active">
 				  <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
 				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
+				</li>
+				<li class="nav-item active">
+					<a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
+				  </li>
 			  </ul>
 			</div>
 		  </div>
@@ -95,3 +102,13 @@
 		© 2022 Copyright: None
 	  </div>
 	</footer>
+
+{% else %}
+<div class="text-center" style="margin-top: 2%;">
+	<p>Not logged in</p>
+	
+	<form action="/study_buddy_app/sign_in/">
+		<input type="submit" value="Sign In" />
+	</form>
+</div>
+{% endif %}

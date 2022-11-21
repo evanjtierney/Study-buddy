@@ -5,7 +5,7 @@
 <head>
     <title>{{ dept_name }}</title>
 </head>
-
+{% if user.is_authenticated %}
 <header>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
@@ -35,24 +35,69 @@
             <li class="nav-item active">
               <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
+            </li>
           </ul>
         </div>
       </div>
     </nav>
-  </header>
+</header>
 
+{% else %}
+<header>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <div class="container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarExample01">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+{% endif %}
+  
 
 <body class="d-flex flex-column min-vh-100">
-    <h1 class="text-center">{{dept_name}} Classes</h1>
-    {% for i in response %}
-        <li class="text-center">
-            <strong>{{ dept_name }} {{ i.catalog_number }} -- {{ i.description }}</strong>
-            <p>Section: {{i.course_section}}</p>
-            <p>Instructor: {{ i.instructor.name }}</p>
-            <!-- <p>Times: {{i.meetings}} {{i.meetings.start_time}}-{{i.meetings.end_time}}</p> -->
-        </li>
-    <br>
-    {% endfor %}
+  <h1 class="text-center">{{dept_name}} Classes</h1>
+  <form action="/study_buddy_app/user/edituser/addclass" method="post">
+    {% csrf_token %}
+    <fieldset>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      {% for class in response %}
+          <li class="text-center">
+            <input type="radio" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
+            <label for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
+            <br>
+          </li>
+      <br>
+      {% endfor %}
+    </fieldset>
+    {% if user.is_authenticated %}
+    <input type="submit" value="Add Class">
+    {% endif %}
+  </form>
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">

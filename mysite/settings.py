@@ -9,9 +9,17 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 # SHERRIFF: Added import os here for the django_heroku fix at the bottom.
 from pathlib import Path
 import os
+import dj_database_url
+import dotenv
+import sys
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,13 +38,9 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.openid",
-    'study_buddy_app',
+    # "allauth_ui",
+    # 'study_buddy_app',
+    'study_buddy_app.apps.StudyBuddyAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'crispy_forms',
-    'star_ratings'
+    'star_ratings',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.openid",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -53,6 +62,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
+            'https://www.googleapis.com/auth/calendar',
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
@@ -61,9 +71,9 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
-LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
+LOGOUT_REDIRECT_URL = '/study_buddy_app/'
 
-SITE_ID = 2
+SITE_ID = 3
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -87,7 +97,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'accounts')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,17 +111,42 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
+SOCIALACCOUNT_STORE_TOKENS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if 'test' in sys.argv:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd8kpiaugum37u7',
+            'USER': 'qtcrmpvjombrww',
+            'PASSWORD': 'fa1897cadc92ee07e7583bed4be97174003b6d04a248506f7b7edc01f9901109',
+            'HOST': 'ec2-34-239-241-121.compute-1.amazonaws.com',
+            'PORT': '5432',
+            'TEST': {
+                'NAME': 'd8kpiaugum37u7',
+            }
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd562rg4gao8vd8',
+            'USER': 'vgbkuqbpwdxpbi',
+            'PASSWORD': '6bd45f08c93cd5218f458ba4d70d5b26dbba468267f6811a956bb24b7dc9d81f',
+            'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
+            'PORT': '5432',
+            'TEST':{
+                'NAME': 'd562rg4gao8vd8',
+            }
+        }
+    }
+
+
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 
 # Password validation
