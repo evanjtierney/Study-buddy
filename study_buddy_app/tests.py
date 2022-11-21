@@ -219,6 +219,47 @@ class SearchFeatureTest(TestCase):
         new_user1.delete()
         new_user2.delete()
         new_class.delete()
+    
+    def test_class_without_catalog_number_non_existant(self):
+        """Return all the users."""
+        User = get_user_model()
+        new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+        new_user.save()
+        new_user1 = User.objects.create_user('John', 'John@hehe.com', 'password1234')
+        new_user1.save()
+        new_user2 = User.objects.create_user('Jane', 'Jane@hehe.com', 'password12345')
+        new_user2.save()
+        new_class = Class()
+        new_class.subject = "ITAL"
+        new_class.catalog_number = "1000"
+        new_class.course_section = "2"
+        new_class.save()
+        new_user.profile.classes.add(new_class)
+        new_user1.profile.classes.add(new_class)
+        new_user2.profile.classes.add(new_class)
+
+        query = "itaz"
+        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        def has_numbers(inputString):
+            return any(char.isdigit() for char in inputString)
+        flag1 = not query is None and not has_numbers(query)
+        flag2 = not query is None and has_numbers(query)
+        
+
+        if flag1:
+            users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
+
+        if flag2:
+            arr = query.split()
+            if len(arr) == 2:
+                users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
+        users = users.distinct()
+        
+        self.assertIs((len(users))==0, True)
+        new_user.delete()
+        new_user1.delete()
+        new_user2.delete()
+        new_class.delete()
 
     def test_class_with_catalog_number(self):
         """Return all the users."""
@@ -296,6 +337,47 @@ class SearchFeatureTest(TestCase):
         users = users.distinct()
         
         self.assertIs((len(users))==3, True)
+        new_user.delete()
+        new_user1.delete()
+        new_user2.delete()
+        new_class.delete()
+    
+    def test_class_with_catalog_number_non_existant(self):
+        """Return all the users."""
+        User = get_user_model()
+        new_user = User.objects.create_user('Michael', 'Jackson@hehe.com', 'password123')
+        new_user.save()
+        new_user1 = User.objects.create_user('John', 'John@hehe.com', 'password1234')
+        new_user1.save()
+        new_user2 = User.objects.create_user('Jane', 'Jane@hehe.com', 'password12345')
+        new_user2.save()
+        new_class = Class()
+        new_class.subject = "ITAL"
+        new_class.catalog_number = "1000"
+        new_class.course_section = "2"
+        new_class.save()
+        new_user.profile.classes.add(new_class)
+        new_user1.profile.classes.add(new_class)
+        new_user2.profile.classes.add(new_class)
+
+        query = "itaz 1000"
+        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        def has_numbers(inputString):
+            return any(char.isdigit() for char in inputString)
+        flag1 = not query is None and not has_numbers(query)
+        flag2 = not query is None and has_numbers(query)
+        
+
+        if flag1:
+            users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
+
+        if flag2:
+            arr = query.split()
+            if len(arr) == 2:
+                users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
+        users = users.distinct()
+        
+        self.assertIs((len(users))==0, True)
         new_user.delete()
         new_user1.delete()
         new_user2.delete()
