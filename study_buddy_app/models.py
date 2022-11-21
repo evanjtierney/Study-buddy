@@ -68,3 +68,12 @@ class FriendRequest(models.Model):
 ##    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
 ##    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
 ##
+
+class Event(models.Model):
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    users = models.ManyToManyField(User)
+    def __str__(self):
+        return str(self.title)+" "+str(self.start_time)+" "+str(self.end_time)

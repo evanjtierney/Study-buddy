@@ -38,12 +38,7 @@ ALLOWED_HOSTS = ['localhost','127.0.0.1','study-buddy-finder-b11.herokuapp.com',
 # Application definition
 
 INSTALLED_APPS = [
-    "allauth_ui",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-    "allauth.socialaccount.providers.openid",
+    # "allauth_ui",
     # 'study_buddy_app',
     'study_buddy_app.apps.StudyBuddyAppConfig',
     'django.contrib.admin',
@@ -54,7 +49,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bootstrap5',
     'crispy_forms',
-    'star_ratings'
+    'star_ratings',
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.openid",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -62,6 +62,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
+            'https://www.googleapis.com/auth/calendar',
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
@@ -70,7 +71,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/study_buddy_app/'
-LOGOUT_REDIRECT_URL = '/study_buddy_app/sign_in/'
+LOGOUT_REDIRECT_URL = '/study_buddy_app/'
 
 SITE_ID = 3
 
@@ -96,7 +97,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates', 'accounts')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -110,7 +111,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
+SOCIALACCOUNT_STORE_TOKENS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

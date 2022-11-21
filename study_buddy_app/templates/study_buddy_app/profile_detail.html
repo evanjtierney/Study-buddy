@@ -37,6 +37,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
             </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
+            </li>
           </ul>
         </div>
       </div>
@@ -65,7 +68,18 @@
 				{% ratings object.user %}
 				<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
 				<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-			</div>
+        <form method="post" >
+          {% csrf_token %}
+          {{ form.as_p }}
+          <!-- <input
+            type="hidden"
+            name="username"
+            id="username"
+            value="{{object.user.username}}"
+          /> -->
+          <input type="submit" value="Send message">
+        </form>
+      </div>
 		</div>
 	</div>
 </body>

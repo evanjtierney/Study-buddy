@@ -1,7 +1,5 @@
-{% load socialaccount %}
-{% load bootstrap5 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+
+{% load socialaccount %} {% load bootstrap5 %} {% bootstrap_css %} {%bootstrap_javascript %}
 
 <html>
   <head>
@@ -11,7 +9,10 @@
   {% if user.is_authenticated %}
   <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: rgba(0, 0, 0, 0.1)"
+    >
       <div class="container-fluid">
         <button
           class="navbar-toggler"
@@ -33,13 +34,20 @@
               <a class="nav-link" href="/study_buddy_app/home/">Chat</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
+              <a class="nav-link" href="/study_buddy_app/deptlist/"
+                >Course List</a
+              >
             </li>
             <li class="nav-item active">
               <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
+              <a class="nav-link" href="/study_buddy_app/searchResults/"
+                >Search Users</a
+              >
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
             </li>
           </ul>
         </div>
@@ -49,7 +57,10 @@
   {% else %}
   <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <nav
+      class="navbar navbar-expand-lg navbar-light"
+      style="background-color: rgba(0, 0, 0, 0.1)"
+    >
       <div class="container-fluid">
         <button
           class="navbar-toggler"
@@ -68,7 +79,9 @@
               <a class="nav-link" href="/study_buddy_app/">Home</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
+              <a class="nav-link" href="/study_buddy_app/deptlist/"
+                >Course List</a
+              >
             </li>
           </ul>
         </div>
@@ -77,33 +90,32 @@
   </header>
   {% endif %}
 
-
-
   <body class="d-flex flex-column min-vh-100">
+    <h1 class="text-center">Welcome to the Home Page</h1>
 
-  <h1 class="text-center"> Welcome to the Home Page</h1>
-
-  {% if user.is_authenticated %}
-  <p class="text-center">Welcome, {{ user.username }} !</p>
-  <div class="text-center">
-    <form action="/study_buddy_app/logout">
-      <input type="submit" value="Logout" />
-    </form>
- </div>
-  {% else %}
-  <div class="text-center">
+    {% if user.is_authenticated %}
+    <p class="text-center">Welcome, {{ user.username }} !</p>
+    <div class="text-center">
+      <form action="/study_buddy_app/logout">
+        <input type="submit" value="Logout" />
+      </form>
+    </div>
+    {% else %}
+    <div class="text-center">
       <a href="{% provider_login_url 'google' %}">Login with Google</a>
-    
-  </div>
-  {% endif %}
+    </div>
+    {% endif %}
   </body>
 
   <footer class="text-center text-lg-start bg-light text-muted mt-auto">
     <div class="text-center p-3 me-5 d-none d-lg-block">
-      <span>Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and Holden Present</span>
+      <span
+        >Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and
+        Holden Present</span
+      >
     </div>
-  <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05);">
-    © 2022 Copyright: None
-  </div>
-</footer>
+    <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05)">
+      © 2022 Copyright: None
+    </div>
+  </footer>
 </html>

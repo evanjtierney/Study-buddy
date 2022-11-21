@@ -1,0 +1,91 @@
+<!-- cal/templates/cal/calendar.html -->
+<style>
+    /* cal/static/cal/css/styles.css */
+
+.calendar {
+  width: 98%;
+  margin: auto;
+  font-size: 13px;
+}
+
+.calendar tr, .calendar td {
+  border: 1px solid black;
+}
+
+.calendar th {
+  padding: 10px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.calendar td {
+  width: 200px;
+  height: 150px;
+  padding: 20px 0px 0px 5px;
+}
+
+.month {
+  font-size: 25px;
+}
+
+.date {
+  font-size: 16px;
+}
+
+ul {
+  height: 100%;
+  padding: 0px 5px 0px 20px;
+}
+
+a {
+  color: #17a2b8;
+}
+
+</style>
+{% extends 'study_buddy_app/base.html' %}
+
+{% block content %}
+<div class="clearfix">
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <div class="container-fluid">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-mdb-toggle="collapse"
+        data-mdb-target="#navbarExample01"
+        aria-controls="navbarExample01"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarExample01">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/home/">Chat</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/deptlist/">Course List</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/searchResults/">Search Users</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+	<a class="btn btn-info left" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
+	<a class="btn btn-info right" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
+</div>
+{{ calendar }}
+{% endblock %}
