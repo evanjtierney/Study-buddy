@@ -8,17 +8,36 @@ from django.contrib.auth.models import User
 from django.db.models import Q # new
 from django.views import generic
 from django.urls import reverse
-
+from django.views.generic import FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.views import View
 
 from django.shortcuts import render
 import requests
 
 from .models import Profile, Class
 from .forms import UserForm
+from django import forms
 from .models import Friends1
 from .models import FriendRequest
 #from .models import Class
 from django.views import generic
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from allauth.socialaccount.models import SocialToken, SocialApp, SocialAccount
+
+from datetime import datetime, timedelta, date
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect
+from django.views import generic
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+import calendar
+
+from .models import *
+from .utils import Calendar
+from datetime import datetime
+from pytz import timezone
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -255,18 +274,154 @@ class listProfiles(generic.ListView):
     def get_queryset(self):
         return Profile.objects.all()
     
+class DateForm(forms.Form):
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'date'}))
+    start_time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
+    end_time = forms.TimeField(widget=forms.TextInput(attrs={'class': 'form-control', 'type':'time'}))
 
 class seeProfile(generic.DetailView):
-    template_name = 'study_buddy_app/userProfile.html'
-    context_object_name = 'profile_list'
 
     model = Profile
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs) 
+        context = super(seeProfile, self).get_context_data(**kwargs)
+        context['form'] = DateForm()
         return context
+
+class ProfileMeeting(SingleObjectMixin, FormView):
+    template_name = 'study_buddy_app/profile_detail.html'
+    form_class = DateForm
+    model = Profile
+
+    def form_valid(self, form):
+        self.process_user_input(form.cleaned_data)
+        return super(ProfileMeeting, self).form_valid(form)
     
+    def process_user_input(self, valid_data):
+        # TODO: add to google calendar
+        # TODO: add this meeting time to the model
+        
+        def generate_credentials():
+            token = SocialToken.objects.get(account__user__username=self.request.user.username, app__provider="google")
+
+            credentials = Credentials(
+                token=token.token,
+                refresh_token=token.token_secret,
+                token_uri='https://oauth2.googleapis.com/token',
+                client_id='562188647966-r0odsb07scpsnj3jr8hfcu7912jeke61.apps.googleusercontent.com', # replace with yours 
+                client_secret='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') # replace with yours 
+            service = build('calendar', 'v3', credentials=credentials)
+        
+            return service
+        
+        def create_google_calendar_event(date, start_time, end_time, profile_user):
+            event = {
+                'summary': 'Study buddy meeting',
+                # TODO: generate zoom meeting
+                'location': 'Zoom link: ',
+                # TODO: put person's name in the profile and the class
+                'description': 'You have a study meeting with '+str(profile_user.first_name) + " "+str(profile_user.last_name),
+                'start': {
+                    'dateTime': str(date)+"T"+str(start_time),
+                    'timeZone': 'America/New_York',
+                },
+                'end': {
+                    'dateTime': str(date)+"T"+str(end_time),
+                    'timeZone': 'America/New_York',
+                },
+                'attendees': [
+                    {'email': profile_user.email},
+                ],
+                'reminders': {
+                    'useDefault': False,
+                    'overrides': [
+                    {'method': 'email', 'minutes': 24 * 60},
+                    {'method': 'popup', 'minutes': 10},
+                    ],
+                },
+            }
+            event = service.events().insert(calendarId='primary', body=event).execute()
+        
+        def add_event_to_calendar(date, start_time, end_time, profile_user):
+            eastern = timezone('US/Eastern')
+            start_datetime = datetime.combine(date, start_time, eastern)
+            end_datetime = datetime.combine(date, end_time, eastern)
+
+            event = Event(title="Meeting w/"+profile_user.username,
+                            description="Meeting with "+profile_user.first_name+" "+profile_user.last_name,
+                            start_time=start_datetime,
+                            end_time=end_datetime)
+            event.save()
+
+            self.request.user.event_set.add(event)
+            print("self.request.user events", self.request.user.event_set.all())
+           
+            copy = Event(title="Meeting w/"+self.request.user.username,
+                            description="Meeting with "+self.request.user.first_name+" "+self.request.user.last_name,
+                            start_time=start_datetime,
+                            end_time=end_datetime)
+            copy.save()
+            
+            profile_user.event_set.add(copy)
+            print("profile_user events", profile_user.event_set.all())
+        service = generate_credentials()
+
+        profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
+
+        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+
+        add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+    
+        pass
+
+    def get_success_url(self):
+        self.object = self.get_object()
+        return reverse('profile-detail', kwargs={'slug': self.object.slug})
+
+class ProfileDetail(View):
+    template_name = 'study_buddy_app/profile_detail.html'
+    def get(self, request, *args, **kwargs):
+        view = seeProfile.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ProfileMeeting.as_view()
+        return view(request, *args, **kwargs)
+
 def user_redirect(request):
     user = request.POST['username']
 
     return redirect('/study_buddy_app/publicProfile/'+user)
+
+class CalendarView(generic.ListView):
+    model = Event
+    template_name = 'study_buddy_app/calendar.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        d = get_date(self.request.GET.get('month', None))
+        cal = Calendar(d.year, d.month)
+        html_cal = cal.formatmonth(self.request.user, withyear=True)
+        context['calendar'] = mark_safe(html_cal)
+        context['prev_month'] = prev_month(d)
+        context['next_month'] = next_month(d)
+        return context
+
+def get_date(req_month):
+    if req_month:
+        year, month = (int(x) for x in req_month.split('-'))
+        return date(year, month, day=1)
+    return datetime.today()
+
+def prev_month(d):
+    first = d.replace(day=1)
+    prev_month = first - timedelta(days=1)
+    month = 'month=' + str(prev_month.year) + '-' + str(prev_month.month)
+    return month
+
+def next_month(d):
+    days_in_month = calendar.monthrange(d.year, d.month)[1]
+    last = d.replace(day=days_in_month)
+    next_month = last + timedelta(days=1)
+    month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
+    return month

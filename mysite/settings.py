@@ -62,6 +62,7 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'profile',
             'email',
+            'https://www.googleapis.com/auth/calendar',
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
@@ -110,7 +111,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
+SOCIALACCOUNT_STORE_TOKENS = True
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

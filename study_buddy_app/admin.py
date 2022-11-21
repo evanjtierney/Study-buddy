@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Room, Message, Profile, Class
+from .models import Room, Message, Profile, Class, Event
 from django.utils.text import slugify
 
 
@@ -38,3 +38,4 @@ admin.site.register(Room)
 admin.site.register(Message)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Class)
+admin.site.register(Event)
