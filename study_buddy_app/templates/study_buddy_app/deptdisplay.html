@@ -3,9 +3,8 @@
 {% bootstrap_javascript %}
 <html>
 <head>
-    <title>UVA Departments</title>
+    <title>{{ dept_name }}</title>
 </head>
-
 {% if user.is_authenticated %}
 <header>
     <!-- Navbar -->
@@ -46,7 +45,7 @@
         </div>
       </div>
     </nav>
-  </header>
+</header>
 
 {% else %}
 <header>
@@ -78,14 +77,23 @@
   </nav>
 </header>
 {% endif %}
+  
 
 <body class="d-flex flex-column min-vh-100">
-    <h1 class="text-center">UVA Departments</h1>
-    {% for i in response %}
-        <li class="text-center"><a href = "/study_buddy_app/deptdisplay/{{ i.subject }}">{{i.subject}}</a></li>
-    <br>
-    {% endfor %}
+  <h1 class="text-center">{{dept_name}} Classes</h1>
+    {% csrf_token %}
+    <fieldset>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      {% for class in response %}
+          <li class="text-center">
+            {{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}
+            <br>
+          </li>
+      <br>
+      {% endfor %}
+    </fieldset>
 </body>
+
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
     <div class="text-center p-3 me-5 d-none d-lg-block">
       <span>Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and Holden Present</span>
@@ -94,6 +102,4 @@
     © 2022 Copyright: None
   </div>
 </footer>
-
-
 </html>
