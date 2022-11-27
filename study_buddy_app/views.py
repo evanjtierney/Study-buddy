@@ -406,7 +406,9 @@ class ProfileDetail(View):
 
 def user_redirect(request):
     user = request.POST['username']
-
+    user_obj = User.objects.get(username=user)
+    if user_obj.username == request.user.username:
+        return redirect('/study_buddy_app/user/')
     return redirect('/study_buddy_app/publicProfile/'+user)
 
 class CalendarView(generic.ListView):
