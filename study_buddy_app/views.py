@@ -38,6 +38,7 @@ from .models import *
 from .utils import Calendar
 from datetime import datetime
 from pytz import timezone
+from allauth.socialaccount.models import SocialAccount
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -373,11 +374,23 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             
             profile_user.event_set.add(copy)
             print("profile_user events", profile_user.event_set.all())
-        service = generate_credentials()
+        # idea: go through the social accounts and filter based on if profile_user is there and if self.request.user is there
+        # service = generate_credentials()
 
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
+        # # print(dir(SocialAccount.objects.all()))
+        # for socialaccount in SocialAccount.objects.all():
+        #     print(dir(socialaccount))
+        googleSet = SocialAccount.objects.filter(provider="google")
+        requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
+        # print("requestUser_isGoogle", requestUser_isGoogle)
 
-        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
+        # print("profileUser_isGoogle", profileUser_isGoogle)
+
+        if requestUser_isGoogle and profileUser_isGoogle:
+            service = generate_credentials()
+            create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
         add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
     
