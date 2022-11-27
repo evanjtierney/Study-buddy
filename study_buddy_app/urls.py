@@ -13,7 +13,7 @@ urlpatterns = [
     path('logout', LogoutView.as_view()),
 
     path('deptlist/', views.deptlist, name="deptlist"),
-    path('dept/<str:dept_name>/', views.dept, name="dept"),
+    path('deptdisplay/<str:dept_name>/', views.dept_display_only, name="deptdisplay"),
 
     path('home/<str:room>/', views.room, name='room'),
     path('home/checkview', views.checkview, name='checkview'),
@@ -40,7 +40,7 @@ urlpatterns = [
     path('user/friend_request/accept_friend_request/<str:pk>/', views.accept_friend_request, name='accept friend request'),
 
 
-    path('user/edituser/deptlist/', views.deptlist, name="deptlist"),
+    path('user/edituser/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
     path('user/edituser/dept/<str:dept_name>/', views.dept, name="dept"),
     path('user/edituser/addclass', views.addclass, name="addclass"),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),

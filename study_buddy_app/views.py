@@ -90,9 +90,9 @@ def home(request):
     return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 
-def deptlist(request):
+def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response})
 
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
@@ -103,6 +103,15 @@ def dept(request, dept_name):
         tmp.save()
         cur_classes.append(tmp)
     return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
+
+def deptlist(request):
+    response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
+    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+
+def dept_display_only(request, dept_name):
+    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+    response = classes.json()
+    return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
