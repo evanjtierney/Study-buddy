@@ -79,7 +79,13 @@
           /> -->
           <input type="submit" value="Send message">
         </form>
-        <form method="post" action="/study_buddy_app/">
+        <form method="post" action="/study_buddy_app/home/go_to_chat">
+          <input
+            type="hidden"
+            name="username"
+            id="username"
+            value="{{object.user.username}}"
+          />
           <button type="submit" class="btn btn-primary" >
             {% csrf_token %}
             Chat  

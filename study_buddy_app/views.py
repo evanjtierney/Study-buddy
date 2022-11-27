@@ -123,6 +123,20 @@ def room(request, room):
         'room_details': room_details
     })
 
+def go_to_chat(request):
+    print('here!')
+    # sender = self.request.user.username
+    # sendee = request.POST['username'] 
+    # array = [sender, sendee]
+    # array.sort()
+    # room = "".join([array[0], array[1]])
+    # if Room.objects.filter(name=room).exists():
+    #     return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
+    # else:
+    #     new_room = Room.objects.create(name=room)
+    #     new_room.save()
+    #     return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
+    return redirect('/study_buddy_app/')
 
 def checkview(request):
     room = request.POST['room_name']

@@ -14,8 +14,9 @@ urlpatterns = [
 
     path('deptlist/', views.deptlist, name="deptlist"),
     path('deptdisplay/<str:dept_name>/', views.dept_display_only, name="deptdisplay"),
-
+    
     path('home/<str:room>/', views.room, name='room'),
+    path('home/go_to_chat', views.go_to_chat, name='go_to_chat'),
     path('home/checkview', views.checkview, name='checkview'),
     path('home/send', views.send, name='send'),
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
