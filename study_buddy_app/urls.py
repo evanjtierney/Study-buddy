@@ -14,8 +14,9 @@ urlpatterns = [
 
     path('deptlist/', views.deptlist, name="deptlist"),
     path('deptdisplay/<str:dept_name>/', views.dept_display_only, name="deptdisplay"),
-
+    
     path('home/<str:room>/', views.room, name='room'),
+    path('home/go_to_chat', views.go_to_chat, name='go_to_chat'),
     path('home/checkview', views.checkview, name='checkview'),
     path('home/send', views.send, name='send'),
     path('home/getMessages/<str:room>', views.getMessages, name='getMessages'),
@@ -31,18 +32,20 @@ urlpatterns = [
 
     path('publicProfile/<slug:slug>/study_buddy_app/send_friend_request/', views.send_friend_request,name='send friend request'),
     
-    path('user/friends/', views.viewFriends.as_view(), name='new_friends'),
+    #path('user/friends/', views.viewFriends.as_view(), name='new_friends'),
+    path('user/friends/', views.viewFriends, name='new_friends'),
     path('user/friends/remove_friend/<str:pk>/', views.remove_friend, name='remove_friend'),
 
-    path('user/friend_request/', views.viewRequest.as_view(), name='requests'),
+    #path('user/friend_request/', views.viewRequest.as_view(), name='requests'),
+    path('user/friend_request/', views.viewRequest, name='requests'),
     path('user/friend_request/delete_request/<str:pk>/', views.delete_request, name='delete_request'),
 
     path('user/friend_request/accept_friend_request/<str:pk>/', views.accept_friend_request, name='accept friend request'),
 
 
-    path('user/edituser/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
-    path('user/edituser/dept/<str:dept_name>/', views.dept, name="dept"),
-    path('user/edituser/addclass', views.addclass, name="addclass"),
+    path('user/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
+    path('user/dept/<str:dept_name>/', views.dept, name="dept"),
+    path('user/addclass', views.addclass, name="addclass"),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
 ]
 
