@@ -3,7 +3,8 @@
 {% load bootstrap5 %}
 {% bootstrap_javascript %}
 
-{% if user.is_authenticated %}
+
+
 <style>
 	.page_style{
 		width: 300px;
@@ -44,13 +45,3 @@
 	  	</div>
 	</div>
 </div>
-
-{% else %}
-<div class="text-center" style="margin-top: 2%;">
-    <p>Not logged in</p>
-
-    <form action="/study_buddy_app/sign_in/">
-      <input type="submit" value="Sign In" />
-    </form>
-</div>
-{% endif %}

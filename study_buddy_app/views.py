@@ -156,20 +156,30 @@ def getMessages(request, room):
 
 
 def user(request):
-    user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+    try:
+        user_form = UserForm(instance=request.user)
+        return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 
 def edituser(request):
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        if user_form.is_valid():
-            user_form.save()
-    user_form = UserForm(instance=request.user)
+    try:
+        if request.method == 'POST':
+            user_form = UserForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+        user_form = UserForm(instance=request.user)
 
-    profile = Profile.objects.get(user=request.user)
-    classes = profile.classes.all()
-    return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
+        profile = Profile.objects.get(user=request.user)
+        classes = profile.classes.all()
+        return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 def addclass(request):
     profile = Profile.objects.get(user=request.user)
@@ -193,9 +203,13 @@ def addclass(request):
         })
         
 def publicProfile(request):
-    user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
-
+    try:
+        user_form = UserForm(instance=request.user)
+        return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 ##class viewProfiles(generic.ListView):
 ##    template_name = 'study_buddy_app/viewProfiles.html'
 ##    context_object_name = 'profile_list'
@@ -258,17 +272,35 @@ def accept_friend_request(request,pk):
 ##    def get_queryset(self):
 ##        return Profile.objects.all()
 
-class viewRequest(generic.ListView):
-    template_name = 'study_buddy_app/friendRequest.html'
-    context_object_name = 'request_list'
-    def get_queryset(self):
-        return FriendRequest.objects.filter(receiver = self.request.user)
-    
-class viewFriends(generic.ListView):
-    template_name = 'study_buddy_app/friends.html'
-    context_object_name = 'friend_list'
-    def get_queryset(self):
-        return Friends1.objects.filter(users1 = self.request.user)
+#class viewRequest(generic.ListView):
+#    template_name = 'study_buddy_app/friendRequest.html'
+#    context_object_name = 'request_list'
+#    def get_queryset(self):
+#        return FriendRequest.objects.filter(receiver = self.request.user)
+
+def viewRequest(request):
+    try:
+        object = FriendRequest.objects.filter(receiver = request.user)
+        return render(request, 'study_buddy_app/friendRequest.html', {"request_list": object})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
+
+#class viewFriends(generic.ListView):
+#    template_name = 'study_buddy_app/friends.html'
+#    context_object_name = 'friend_list'
+#    def get_queryset(self):
+#        return Friends1.objects.filter(users1 = self.request.user)
+
+def viewFriends(request):
+    try:
+        object = Friends1.objects.filter(users1 = request.user)
+        return render(request, 'study_buddy_app/friends.html', {"friend_list": object})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
     
 #new stuff
 class viewProfiles(generic.ListView):
