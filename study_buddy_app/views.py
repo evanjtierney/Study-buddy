@@ -140,12 +140,18 @@ def go_to_chat(request):
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
 
 def checkview(request):
-    room = request.POST['room_name']
+    room = ""
     sender = request.POST['username']
-    sendee = request.POST['dropdown'] 
-    array = [sender, sendee]
+    sendee = request.POST.getlist('dropdown[]')
+    array = [sender]
+
+    for i in sendee:
+        array.append(i)
     array.sort()
-    room = "".join([array[0], array[1]])
+
+    for i in array:
+        room = room + i
+
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
