@@ -41,7 +41,7 @@ body {
   border: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 20px;
-  max-width: 800px;
+  max-width: 55%;
 
 }
 
@@ -141,7 +141,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-
+    margin-top: 55%;
     }
 
     input[type=submit] {
@@ -153,13 +153,13 @@ body {
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 350px;
+    margin-top: 55%;
 
     }
 
     input[type=submit]:hover {
     background-color: #45a049;
-
+    margin-top: 55%;
     }
 
 
@@ -171,6 +171,7 @@ body {
         $(".chzn-select").chosen();
     });
     </script>
+  <br></br>
     <form id="post-form" method="POST" action="/study_buddy_app/home/checkview">
         {% csrf_token %}
       <select class="chzn-select" multiple="true" name="dropdown[]">
