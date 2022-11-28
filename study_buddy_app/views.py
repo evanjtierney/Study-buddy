@@ -285,10 +285,8 @@ def accept_friend_request(request,pk):
 
 def viewRequest(request):
     try:
-        template_name = 'study_buddy_app/friendRequest.html'
-        context_object_name = 'request_list'
-        def get_queryset(self):
-            return FriendRequest.objects.filter(receiver = self.request.user)
+        object = FriendRequest.objects.filter(receiver = request.user)
+        return render(request, 'study_buddy_app/friendRequest.html', {"request_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
@@ -297,10 +295,8 @@ def viewRequest(request):
 
 def viewFriends(request):
     try:
-        template_name = 'study_buddy_app/friends.html'
-        context_object_name = 'friend_list'
-        def get_queryset(self):
-            return Friends1.objects.filter(users1 = self.request.user)
+        object = Friends1.objects.filter(users1 = request.user)
+        return render(request, 'study_buddy_app/friends.html', {"friend_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
