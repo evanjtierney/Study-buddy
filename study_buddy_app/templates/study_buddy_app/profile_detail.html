@@ -4,6 +4,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
+
 {% if user.is_authenticated %}
 <header>
     <!-- Navbar -->
@@ -45,7 +46,34 @@
       </div>
     </nav>
   </header>
+  <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!--Bootstrap CSS-->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+                <!--{% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <div class="container-fluid p-0">
+                        <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="True">&times;</span>
+                            </button>
+                            {{ message }}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </ul>
+                {% endif %}-->
 
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
 <body class="d-flex flex-column min-vh-100">
 	<div class="container mx-auto text-center" style="margin-top: 2%;">
 		<div class="card p-4" style="margin-right: 30%; margin-left: 30%;">
@@ -61,24 +89,25 @@
 						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
 							<p><li>{{ c }}</li></p>
 						{% endfor %}
-                <p> request friend</p>
-                <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
-				{% load static %}
-				<p> Rate me as a Study Buddy!</p>
-				{% ratings object.user %}
-				<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
-				<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-        <form method="post" >
-          {% csrf_token %}
-          {{ form.as_p }}
-          <!-- <input
-            type="hidden"
-            name="username"
-            id="username"
-            value="{{object.user.username}}"
-          /> -->
-          <input type="submit" value="Send message">
-        </form>
+                <p>request friend</p>
+                <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
+                <h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
+                {% if friends %}
+                {% for each in friends %}
+                {% if object.user == each.current_user %}
+                {% load static %}
+                <p> Rate me as a Study Buddy!</p>
+                {% ratings object.user %}
+                <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+                <form method="post" >
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="Send message">
+                </form>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
       </div>
 		</div>
 	</div>

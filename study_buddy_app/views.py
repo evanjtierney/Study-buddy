@@ -14,7 +14,9 @@ from django.views import View
 
 from django.shortcuts import render
 import requests
+from django import template
 
+register = template.Library()
 from .models import Profile, Class
 from .forms import UserForm
 from django import forms
@@ -33,7 +35,7 @@ from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
-
+from django.contrib import messages
 from .models import *
 from .utils import Calendar
 from datetime import datetime
@@ -203,11 +205,14 @@ def publicProfile(request):
 ##        return Profile.objects.all()
     
 def send_friend_request(request,slug):
+    #user = request.POST.get('username', False)
     sender = request.user
+    x = sender.username
     recipient = User.objects.get(username = slug)
     model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
-    return HttpResponse('friend request sent or already sent')
-    return redirect ('/study_buddy_app/publicProfile/'+user)
+    #return HttpResponse('friend request sent or already sent')
+    messages.success(request, "Friend Request Sent or already Sent!")
+    return redirect ('/study_buddy_app/publicProfile/'+slug)
     #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
 
 def delete_request(request, pk):
@@ -229,17 +234,7 @@ def remove_friend(request, pk):
     Friends1.lose_friend(new_friend, request.user)
     #return HttpResponse('friend removed')
     return redirect('/study_buddy_app/user/friends/')
-##def add_or_remove_friend(request,operation,pk):
-##    new_friend = User.objects.get(id=pk)
-##    if operation == 'add':
-##        fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
-##        Friends1.make_friend(request.user, new_friend)
-##        Friends1.make_friend(new_friend, request.user)
-##        fq.delete()
-##    elif operation == 'remove':
-##        Friends1.lose_friend(request.user, new_friend)
-##        Friends1.lose_friend(new_friend, request.user)
-##    return redirect('/studdy_buddy_app/user')
+
 
 def accept_friend_request(request,pk):
     new_friend = User.objects.get(username = pk)
@@ -251,12 +246,6 @@ def accept_friend_request(request,pk):
     #return HttpResponse('friend request accepted')
     return redirect('/study_buddy_app/user/friend_request/')
 
-##
-##class viewProfiles(generic.ListView):
-##    template_name = 'study_buddy_app/viewProfiles.html'
-##    context_object_name = 'profile_list'
-##    def get_queryset(self):
-##        return Profile.objects.all()
 
 class viewRequest(generic.ListView):
     template_name = 'study_buddy_app/friendRequest.html'
@@ -269,7 +258,7 @@ class viewFriends(generic.ListView):
     context_object_name = 'friend_list'
     def get_queryset(self):
         return Friends1.objects.filter(users1 = self.request.user)
-    
+
 #new stuff
 class viewProfiles(generic.ListView):
     template_name = 'study_buddy_app/viewProfiles.html'
@@ -295,8 +284,10 @@ class seeProfile(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
         context['form'] = DateForm()
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user)
         return context
 
+    
 class ProfileMeeting(SingleObjectMixin, FormView):
     template_name = 'study_buddy_app/profile_detail.html'
     form_class = DateForm
@@ -391,11 +382,12 @@ class ProfileDetail(View):
     template_name = 'study_buddy_app/profile_detail.html'
     def get(self, request, *args, **kwargs):
         view = seeProfile.as_view()
-        return view(request, *args, **kwargs)
+        return view(request,*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         view = ProfileMeeting.as_view()
         return view(request, *args, **kwargs)
+
 
 def user_redirect(request):
     user = request.POST['username']
