@@ -141,20 +141,14 @@ def checkview(request):
     room = ""
     sender = request.POST['username']
     sendee = request.POST.getlist('dropdown[]')
-    print(sendee)
     array = [sender]
 
     for i in sendee:
         array.append(i)
     array.sort()
 
-    print(array)
-
-
     for i in array:
         room = room + i
-
-    print(room)
 
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
