@@ -81,7 +81,7 @@
 
 <body class="d-flex flex-column min-vh-100">
   <h1 class="text-center">{{dept_name}} Classes</h1>
-  <form action="/study_buddy_app/user/edituser/addclass" method="post">
+  <form action="/study_buddy_app/user/addclass" method="post">
     {% csrf_token %}
     <fieldset>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
