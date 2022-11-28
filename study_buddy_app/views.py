@@ -14,7 +14,9 @@ from django.views import View
 
 from django.shortcuts import render
 import requests
+from django import template
 
+register = template.Library()
 from .models import Profile, Class
 from .forms import UserForm
 from django import forms
@@ -33,11 +35,12 @@ from django.views import generic
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 import calendar
-
+from django.contrib import messages
 from .models import *
 from .utils import Calendar
 from datetime import datetime
 from pytz import timezone
+from allauth.socialaccount.models import SocialAccount
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -89,11 +92,11 @@ def home(request):
     users = User.objects.all()
     return render(request, 'study_buddy_app/chat.html', {'users': users})
 
-
-def deptlist(request):
+# addclass API
+def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
-
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response})
+# "
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
@@ -104,6 +107,17 @@ def dept(request, dept_name):
         cur_classes.append(tmp)
     return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
+# display only API
+def deptlist(request):
+    response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
+    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+
+# "
+def dept_display_only(request, dept_name):
+    classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
+    response = classes.json()
+    return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name})
+
 def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
@@ -113,14 +127,33 @@ def room(request, room):
         'room_details': room_details
     })
 
-
-def checkview(request):
-    room = request.POST['room_name']
-    sender = request.POST['username']
-    sendee = request.POST['dropdown'] 
+def go_to_chat(request):
+    print('here!')
+    sender = request.user.username
+    sendee = request.POST['username'] 
     array = [sender, sendee]
     array.sort()
     room = "".join([array[0], array[1]])
+    if Room.objects.filter(name=room).exists():
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
+    else:
+        new_room = Room.objects.create(name=room)
+        new_room.save()
+        return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
+
+def checkview(request):
+    room = ""
+    sender = request.POST['username']
+    sendee = request.POST.getlist('dropdown[]')
+    array = [sender]
+
+    for i in sendee:
+        array.append(i)
+    array.sort()
+
+    for i in array:
+        room = room + i
+
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
@@ -147,20 +180,30 @@ def getMessages(request, room):
 
 
 def user(request):
-    user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+    try:
+        user_form = UserForm(instance=request.user)
+        profile = Profile.objects.get(user=request.user)
+        classes = profile.classes.all()
+        return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form, 'classes':classes})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 
 def edituser(request):
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        if user_form.is_valid():
-            user_form.save()
-    user_form = UserForm(instance=request.user)
+    try:
+        if request.method == 'POST':
+            user_form = UserForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+        user_form = UserForm(instance=request.user)
 
-    profile = Profile.objects.get(user=request.user)
-    classes = profile.classes.all()
-    return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
+        return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form})
+    except: 
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 def addclass(request):
     profile = Profile.objects.get(user=request.user)
@@ -176,7 +219,7 @@ def addclass(request):
             profile.classes.add(selected_class)
             profile.save()
 
-        return edituser(request)
+        return user(request)
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {
             'profile': profile,
@@ -184,9 +227,13 @@ def addclass(request):
         })
         
 def publicProfile(request):
-    user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
-
+    try:
+        user_form = UserForm(instance=request.user)
+        return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
 ##class viewProfiles(generic.ListView):
 ##    template_name = 'study_buddy_app/viewProfiles.html'
 ##    context_object_name = 'profile_list'
@@ -194,11 +241,14 @@ def publicProfile(request):
 ##        return Profile.objects.all()
     
 def send_friend_request(request,slug):
+    #user = request.POST.get('username', False)
     sender = request.user
+    x = sender.username
     recipient = User.objects.get(username = slug)
     model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
-    return HttpResponse('friend request sent or already sent')
-    return redirect ('/study_buddy_app/publicProfile/'+user)
+    #return HttpResponse('friend request sent or already sent')
+    messages.success(request, "Friend Request Sent or already Sent!")
+    return redirect ('/study_buddy_app/publicProfile/'+slug)
     #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
 
 def delete_request(request, pk):
@@ -220,17 +270,7 @@ def remove_friend(request, pk):
     Friends1.lose_friend(new_friend, request.user)
     #return HttpResponse('friend removed')
     return redirect('/study_buddy_app/user/friends/')
-##def add_or_remove_friend(request,operation,pk):
-##    new_friend = User.objects.get(id=pk)
-##    if operation == 'add':
-##        fq = FriendRequest.objects.get(sender=new_friend, recievers=request.user)
-##        Friends1.make_friend(request.user, new_friend)
-##        Friends1.make_friend(new_friend, request.user)
-##        fq.delete()
-##    elif operation == 'remove':
-##        Friends1.lose_friend(request.user, new_friend)
-##        Friends1.lose_friend(new_friend, request.user)
-##    return redirect('/studdy_buddy_app/user')
+
 
 def accept_friend_request(request,pk):
     new_friend = User.objects.get(username = pk)
@@ -242,24 +282,25 @@ def accept_friend_request(request,pk):
     #return HttpResponse('friend request accepted')
     return redirect('/study_buddy_app/user/friend_request/')
 
-##
-##class viewProfiles(generic.ListView):
-##    template_name = 'study_buddy_app/viewProfiles.html'
-##    context_object_name = 'profile_list'
-##    def get_queryset(self):
-##        return Profile.objects.all()
 
-class viewRequest(generic.ListView):
-    template_name = 'study_buddy_app/friendRequest.html'
-    context_object_name = 'request_list'
-    def get_queryset(self):
-        return FriendRequest.objects.filter(receiver = self.request.user)
-    
-class viewFriends(generic.ListView):
-    template_name = 'study_buddy_app/friends.html'
-    context_object_name = 'friend_list'
-    def get_queryset(self):
-        return Friends1.objects.filter(users1 = self.request.user)
+def viewRequest(request):
+    try:
+        object = FriendRequest.objects.filter(receiver = request.user)
+        return render(request, 'study_buddy_app/friendRequest.html', {"request_list": object})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
+
+
+def viewFriends(request):
+    try:
+        object = Friends1.objects.filter(users1 = request.user)
+        return render(request, 'study_buddy_app/friends.html', {"friend_list": object})
+    except:
+        User = get_user_model()
+        users = User.objects.all()
+        return render(request, 'study_buddy_app/chat.html', {'users': users})
     
 #new stuff
 class viewProfiles(generic.ListView):
@@ -286,8 +327,10 @@ class seeProfile(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
         context['form'] = DateForm()
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user)
         return context
 
+    
 class ProfileMeeting(SingleObjectMixin, FormView):
     template_name = 'study_buddy_app/profile_detail.html'
     form_class = DateForm
@@ -364,11 +407,17 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             
             profile_user.event_set.add(copy)
             print("profile_user events", profile_user.event_set.all())
-        service = generate_credentials()
-
+        
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
-
-        create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        
+        googleSet = SocialAccount.objects.filter(provider="google")
+        requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
+        
+        profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
+        
+        if requestUser_isGoogle and profileUser_isGoogle:
+            service = generate_credentials()
+            create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
         add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
     
@@ -382,15 +431,18 @@ class ProfileDetail(View):
     template_name = 'study_buddy_app/profile_detail.html'
     def get(self, request, *args, **kwargs):
         view = seeProfile.as_view()
-        return view(request, *args, **kwargs)
+        return view(request,*args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         view = ProfileMeeting.as_view()
         return view(request, *args, **kwargs)
 
+
 def user_redirect(request):
     user = request.POST['username']
-
+    user_obj = User.objects.get(username=user)
+    if user_obj.username == request.user.username:
+        return redirect('/study_buddy_app/user/')
     return redirect('/study_buddy_app/publicProfile/'+user)
 
 class CalendarView(generic.ListView):

@@ -61,22 +61,22 @@ class ChatTest(TestCase):
         new_message.save()
         self.assertIs(Message.objects.filter(value="hello world", user="john", room="this_is_a_test_room").exists(), True)
 
-    def test_blank_message(self):
-        user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
-        user.last_name = 'Lennon'
-        user.save()
+    # def test_blank_message(self):
+    #     user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+    #     user.last_name = 'Lennon'
+    #     user.save()
 
-        room = "this_is_a_test_room"
-        new_room = Room.objects.create(name=room)
-        new_room.save()
+    #     room = "this_is_a_test_room"
+    #     new_room = Room.objects.create(name=room)
+    #     new_room.save()
 
-        fakeMessage = ""
-        #this is what i do in view
-        if fakeMessage:    
-            new_message = Message.objects.create(value=fakeMessage, user="john", room="this_is_a_test_room")
-            new_message.save()
-        self.assertIs(Message.objects.filter(value="", user="john", room="this_is_a_test_room").exists(), False)
-        self.assertIs(len(Message.objects.all()) == 0, True)
+    #     fakeMessage = ""
+    #     #this is what i do in view
+    #     if fakeMessage:    
+    #         new_message = Message.objects.create(value=fakeMessage, user="john", room="this_is_a_test_room")
+    #         new_message.save()
+    #     self.assertIs(Message.objects.filter(value="", user="john", room="this_is_a_test_room").exists(), False)
+    #     self.assertIs(len(Message.objects.all()) == 0, True)
 
 
 class FriendRequestTest(TestCase):
@@ -116,14 +116,6 @@ class ClassModelTests(TestCase):
         new_class = Class(subject='CS', catalog_number='3240', course_section='002')
         new_class.save()
         self.assertEqual(str(new_class), 'CS 3240 -- Section 002')
-
-# class ClassesInProfileTests(TestCase):
-#     def test_adding_class(self):
-#         my_user = User.objects.create_user('John', 'john@example.com', 'password123')
-#         my_user.save()
-#         my_profile = Profile.objects.get(user=my_user)
-#         new_class = Class.objects.create('CS', '3240', '002')
-        
         
 class SearchFeatureTest(TestCase):
     def test_search_name1(self):

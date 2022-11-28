@@ -82,7 +82,7 @@
 <body class="d-flex flex-column min-vh-100">
     <h1 class="text-center">UVA Departments</h1>
     {% for i in response %}
-        <li class="text-center"><a href = "/study_buddy_app/dept/{{ i.subject }}">{{i.subject}}</a></li>
+        <li class="text-center"><a href = "/study_buddy_app/deptdisplay/{{ i.subject }}">{{i.subject}}</a></li>
     <br>
     {% endfor %}
 </body>
