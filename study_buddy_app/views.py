@@ -90,11 +90,11 @@ def home(request):
     users = User.objects.all()
     return render(request, 'study_buddy_app/chat.html', {'users': users})
 
-
+# addclass API
 def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response})
-
+# "
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
@@ -105,10 +105,12 @@ def dept(request, dept_name):
         cur_classes.append(tmp)
     return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
+# display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     return render(request, 'study_buddy_app/deptlist.html', {'response':response})
 
+# "
 def dept_display_only(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
@@ -171,7 +173,10 @@ def getMessages(request, room):
 
 def user(request):
     user_form = UserForm(instance=request.user)
-    return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form})
+
+    profile = Profile.objects.get(user=request.user)
+    classes = profile.classes.all()
+    return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form, 'classes':classes})
 
 
 def edituser(request):
@@ -181,9 +186,9 @@ def edituser(request):
             user_form.save()
     user_form = UserForm(instance=request.user)
 
-    profile = Profile.objects.get(user=request.user)
-    classes = profile.classes.all()
-    return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form, 'classes':classes})
+    # profile = Profile.objects.get(user=request.user)
+    # classes = profile.classes.all()
+    return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form})#, 'classes':classes})
 
 def addclass(request):
     profile = Profile.objects.get(user=request.user)
@@ -199,7 +204,7 @@ def addclass(request):
             profile.classes.add(selected_class)
             profile.save()
 
-        return edituser(request)
+        return user(request)
     except(KeyError, Class.DoesNotExist):
         return render(request, 'study_buddy_app/dept.html', {
             'profile': profile,

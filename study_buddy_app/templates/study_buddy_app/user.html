@@ -76,10 +76,16 @@
 					<p>{{ user.username }}</p>
 					<p class="text-muted mb-0" style="font-size: 12px">Name:</p>
 					<p>{{ user.first_name }} {{ user.last_name }}</p>
+					<p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
+					{% for c in classes %}
+						<p><li>{{ c }}</li></p>
+					{% endfor %}
 					<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 					<p>{{ user.email }} </p>
 					<div class="text-right">
 						<a href="/study_buddy_app/user/edituser/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button></a>
+						<a href="/study_buddy_app/user/deptlist/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Add Class</button></a>
+
 						<a href="/study_buddy_app/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Back</button></a>
 					
 	

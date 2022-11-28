@@ -41,9 +41,9 @@ urlpatterns = [
     path('user/friend_request/accept_friend_request/<str:pk>/', views.accept_friend_request, name='accept friend request'),
 
 
-    path('user/edituser/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
-    path('user/edituser/dept/<str:dept_name>/', views.dept, name="dept"),
-    path('user/edituser/addclass', views.addclass, name="addclass"),
+    path('user/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
+    path('user/dept/<str:dept_name>/', views.dept, name="dept"),
+    path('user/addclass', views.addclass, name="addclass"),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
 ]
 
