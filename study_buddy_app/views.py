@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 from django.db.models import Q # new
 from django.views import generic
@@ -95,7 +96,10 @@ def home(request):
 # addclass API
 def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response})
+    paginator = Paginator(response, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response, 'page_obj': page_obj})
 # "
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
@@ -110,7 +114,10 @@ def dept(request, dept_name):
 # display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+    paginator = Paginator(response, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'study_buddy_app/deptlist.html', {'response': response, 'page_obj': page_obj})
 
 # "
 def dept_display_only(request, dept_name):
