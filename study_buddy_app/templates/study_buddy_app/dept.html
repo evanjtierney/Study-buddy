@@ -81,22 +81,23 @@
 
 <body class="d-flex flex-column min-vh-100">
   <h1 class="text-center">{{dept_name}} Classes</h1>
+  <br>
   <form action="/study_buddy_app/user/addclass" method="post">
     {% csrf_token %}
     <fieldset>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-      {% for class in response %}
-          <li class="text-center">
-            <input type="radio" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
-            <label for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
-            <br>
-          </li>
-      <br>
-      {% endfor %}
+      {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      <div class="list-group col-4 mx-auto">
+        {% for class in response %}        
+          <input type="radio" class="btn-check" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
+          <label class="btn btn-outline-primary" for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
+        {% endfor %}
+      </div>
     </fieldset>
-    {% if user.is_authenticated %}
-    <input type="submit" value="Add Class">
-    {% endif %}
+    <div class="text-center">
+      {% if user.is_authenticated %}
+        <input type="submit" value="Add Class">
+      {% endif %}
+    </div>
   </form>
 </body>
 

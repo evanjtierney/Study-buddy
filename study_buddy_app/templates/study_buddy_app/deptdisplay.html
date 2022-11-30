@@ -81,17 +81,32 @@
 
 <body class="d-flex flex-column min-vh-100">
   <h1 class="text-center">{{dept_name}} Classes</h1>
-    {% csrf_token %}
-    <fieldset>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-      {% for class in response %}
-          <li class="text-center">
-            {{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}
-            <br>
-          </li>
+  <br>
+  <div class="list-group mx-auto">
+    {% for class in page_obj %}
+      {{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}
       <br>
-      {% endfor %}
-    </fieldset>
+      <br>
+    {% endfor %}
+  </div>
+
+  <div class="pagination mx-auto">
+    <span class="step-links">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
