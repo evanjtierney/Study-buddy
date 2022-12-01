@@ -81,12 +81,16 @@
 
 <body class="d-flex flex-column min-vh-100">
     <h1 class="text-center">UVA Departments</h1>
-    <div class="list-group gap-2 col-4 mx-auto">
+    <br>
+
+    <!-- List of classes -->
+    <div class="list-group gap-2 col-2 mx-auto">
       {% for dept in page_obj %}
         <a href="/study_buddy_app/user/dept/{{ dept.subject }}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{dept.subject}}</a>
       {% endfor %}
     </div>
   
+    <!-- Pagination -->
     <div class="pagination mx-auto">
       <span class="step-links">
         {% if page_obj.has_previous %}
@@ -105,6 +109,7 @@
       </span>
     </div>
 </body>
+
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
     <div class="text-center p-3 me-5 d-none d-lg-block">
       <span>Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and Holden Present</span>

@@ -86,13 +86,16 @@
     {% csrf_token %}
     <fieldset>
       {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-      <div class="list-group col-4 mx-auto">
+      <!-- List of classes -->
+      <div class="list-group col-3 mx-auto">
         {% for class in response %}        
           <input type="radio" class="btn-check" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
           <label class="btn btn-outline-primary" for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
         {% endfor %}
       </div>
     </fieldset>
+
+    <!-- "Add Class" button -->
     <div class="text-center">
       {% if user.is_authenticated %}
         <input type="submit" value="Add Class">
