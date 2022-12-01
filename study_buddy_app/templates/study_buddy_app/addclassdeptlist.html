@@ -80,34 +80,31 @@
 {% endif %}
 
 <body class="d-flex flex-column min-vh-100">
-    <h1 class="text-center">UVA Departments</h1>
-    <br>
+  <h1 class="text-center">UVA Departments</h1>
+  <br>
 
-    <!-- List of classes -->
-    <div class="list-group gap-2 col-2 mx-auto">
-      {% for dept in page_obj %}
-        <a href="/study_buddy_app/user/dept/{{ dept.subject }}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{dept.subject}}</a>
-      {% endfor %}
-    </div>
-  
-    <!-- Pagination -->
-    <div class="pagination mx-auto">
-      <span class="step-links">
-        {% if page_obj.has_previous %}
-          <a href="?page=1">&laquo; first</a>
-          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-        {% endif %}
-  
-        <span class="current">
-          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-        </span>
-  
-        {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">next</a>
-          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-        {% endif %}
-      </span>
-    </div>
+  <!-- List of classes -->
+  <div class="list-group gap-2 col-2 mx-auto">
+    {% for dept in page_obj %}
+      <a href="/study_buddy_app/user/dept/{{ dept.subject }}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{dept.subject}}</a>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <br>
+  <nav aria-label="deptlist paginator">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% endif %}
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+      </li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">

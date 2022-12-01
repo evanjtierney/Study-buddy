@@ -96,7 +96,7 @@ def home(request):
 # addclass API
 def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    paginator = Paginator(response, 10)
+    paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response, 'page_obj': page_obj})
@@ -114,7 +114,7 @@ def dept(request, dept_name):
 # display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    paginator = Paginator(response, 10)
+    paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'study_buddy_app/deptlist.html', {'response': response, 'page_obj': page_obj})
@@ -123,7 +123,7 @@ def deptlist(request):
 def dept_display_only(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
-    paginator = Paginator(response, 10)
+    paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name, 'page_obj': page_obj})
