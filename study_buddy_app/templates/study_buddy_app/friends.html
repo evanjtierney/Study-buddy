@@ -47,17 +47,30 @@
   </header>
 
 <body class="d-flex flex-column min-vh-100">
+<!--<p class="text-center" style="margin-top: 2%;">Friends</p>-->
+<h1 class="text-center" style="margin-top: 2%;">Friends</h1>
+
 {% if friend_list %}
     {% for each in friend_list %}
         {% if each.current_user != user %}
-            <p class="text-center" style="margin-top: 2%;">Friends</p>
-            <div class="text-center" style="margin-top: 2%;">
-            <p>{{ each.current_user }}</p>
+            <!--<div class="text-center" style="margin-top: 2%;">-->
+            <!--<p>{{ each.current_user }}</p>
                 <a href="publicProfile/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">View Profile</button></a>
-                <a href="remove_friend/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Remove Friend</button></a>
+                <a href="remove_friend/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Remove Friend</button></a>-->
+                <div class="card" style="margin: 10px">
+                <!--<div class="card">-->
+                    <div class="card-header">
+                        Friend
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ each.current_user.username }}</h5>
+                        <a href="publicProfile/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">View Profile</button></a>
+                        <a href="remove_friend/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Remove Friend</button></a>
+                    </div>
+                </div>
         {% endif %}
     {% endfor %}
-            </div>
+            <!--</div>-->
 {% else %}
     <p class="text-center" style="margin-top: 2%;"> No Friends </p>
 

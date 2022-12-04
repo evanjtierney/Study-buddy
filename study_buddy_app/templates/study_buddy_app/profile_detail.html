@@ -89,10 +89,13 @@
 						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
 							<p><li>{{ c }}</li></p>
 						{% endfor %}
+                <p>   </p>
                 {% if not friends %}
-                <p>request friend</p>
+                <!--<p>request friend</p>-->
                 <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
-                <h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
+                <!--<h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
+                <h1></h1><a href="study_buddy_app/send_friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Send Friend Request</button></a>
+
                 {% endif %}
                 {% if friends %}
                 {% load static %}
@@ -118,6 +121,8 @@
           {{ form.as_p }}
           <input type="submit" value="Send message">
         </form> -->
+        <p>   </p>
+
         <form method="post" action="/study_buddy_app/home/go_to_chat">
           <input
             type="hidden"

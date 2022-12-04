@@ -207,8 +207,8 @@ def edituser(request):
             user_form = UserForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
+                messages.success(request, "Changes Saved!")
         user_form = UserForm(instance=request.user)
-
         return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form})
     except: 
         User = get_user_model()
