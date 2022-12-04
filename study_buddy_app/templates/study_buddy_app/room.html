@@ -10,6 +10,7 @@
 body {
   margin: 0 auto;
   max-height: 300px;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .container {
@@ -22,7 +23,7 @@ body {
 
 .darker {
   border-color: #ccc;
-  background-color: #ddd;
+  background-color: #FFFFFF;
 }
 
 .container::after {
@@ -54,13 +55,25 @@ body {
   float: left;
   color: #999;
 }
+
+.room {
+  font-family: arial;
+  font-size: 10px;
+  height: 100px;
+  text-align: center;
+  padding: 2%;
+  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
 </style>
 <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
 </head>
 
 <header>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0);">
     <div class="container-fluid">
     <button
       class="navbar-toggler"
@@ -98,6 +111,12 @@ body {
     </div>
   </nav>
   </header>
+  <header class="bg-white shadow">
+    <div class="room">
+      <h2 class="tracking-tight text-gray-900"><strong>{{room}}</strong></h2>
+    </div>
+  </header>
+<br></br>
 
 <body class="d-flex flex-column min-vh-100">
 
@@ -109,6 +128,8 @@ body {
 </div> -->
 
 </div>
+
+
 
 <script>
 $(document).ready(function(){
@@ -163,6 +184,7 @@ setInterval(function(){
 
 
     </style>
+
 
         <form id="post-form">
         {% csrf_token %}
