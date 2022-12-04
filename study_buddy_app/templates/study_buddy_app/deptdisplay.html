@@ -82,11 +82,11 @@
 <body class="d-flex flex-column min-vh-100">
   <h1 class="text-center">{{dept_name}} Classes</h1>
   <br>
-  <div class="list-group mx-auto">
+  <h4 class="text-center">Click on a class to find other users in the class</h4>
+  <br>
+  <div class="list-group gap-2 col-2 mx-auto">
     {% for class in page_obj %}
-      {{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}
-      <br>
-      <br>
+      <a href="/study_buddy_app/searchResults/?q={{class.subject}}+{{class.catalog_number}}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</a>
     {% endfor %}
   </div>
 
