@@ -111,6 +111,12 @@ def dept(request, dept_name):
         cur_classes.append(tmp)
     return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
+# deleteclass API
+def myclasses(request):
+    profile = Profile.objects.get(user=request.user)
+    classes = profile.classes.all()
+    return render(request = request, template_name ="study_buddy_app/deleteclass.html", context = {"user":request.user, 'classes':classes})
+
 # display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
@@ -153,13 +159,16 @@ def go_to_chat(request):
 
 def checkview(request):
     room = ""
-    sender = request.POST['username']
+    sender = request.POST['username'] + " "
     sendee = request.POST.getlist('dropdown[]')
     array = [sender]
 
     for i in sendee:
+        i = i + " "
         array.append(i)
     array.sort()
+
+    array[-1] = array[-1].strip(" ")
 
     for i in array:
         room = room + i
@@ -235,6 +244,20 @@ def addclass(request):
             'profile': profile,
             'error_message': "You didn't select a class.",
         })
+
+def deleteclass(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+        selected_class = Class.objects.get(pk=request.POST['class'])
+        profile.classes.remove(selected_class)
+        profile.save()
+        return user(request)
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/deleteclass.html', {
+            'profile': profile,
+            'error_message': "You didn't select a class.",
+        })
+ 
         
 def publicProfile(request):
     try:
