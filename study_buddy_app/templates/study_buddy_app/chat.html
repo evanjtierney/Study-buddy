@@ -83,6 +83,8 @@ body {
   float: left;
   color: #999;
 }
+
+
 </style>
 </head>
 
@@ -139,8 +141,8 @@ body {
     <style>
     input[type=text], select {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
+    padding: 20px 40px;
+    margin: 20px 0;
     border-radius: 4px;
     box-sizing: border-box;
     margin-top: 55%;
@@ -170,23 +172,26 @@ body {
 
 
   <br></br>
-
     <form id="post-form" method="POST" action="/study_buddy_app/home/checkview">
         {% csrf_token %}
-      <select class="select" multiple name="dropdown[]" >
+
+      <select id="select" multiple name="dropdown[]" >
           {% for user in users %}
             <option value="{{user}}">{{user}}</option>
           {% endfor %}
       </select>
-        <input type="hidden" name="room_name" id="room_name" width="100px" value="{{user.username}}"/>
-        <input type="hidden" name="username" id="username" width="100px" value="{{user.username}}"/>
+        <input type="hidden" name="room_name" id="room_name"  value="{{user.username}}"/>
+        <input type="hidden" name="username" id="username"  value="{{user.username}}"/>
         <input type="submit" value="Enter Room">
     </form>
+
 <script>
   $(function() {
-    $('select').multipleSelect({
-    })
+    $('#select').multipleSelect({
+    placeholder: 'Select Users',
   })
+  });
+
 </script>
 </div>
 
