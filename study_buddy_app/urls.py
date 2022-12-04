@@ -46,6 +46,8 @@ urlpatterns = [
     path('user/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
     path('user/dept/<str:dept_name>/', views.dept, name="dept"),
     path('user/addclass', views.addclass, name="addclass"),
+    path('user/deleteclass/', views.myclasses, name="myclasses"),
+    path('user/dc', views.deleteclass, name="deleteclass"),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
 ]
 
