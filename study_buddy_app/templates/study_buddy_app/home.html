@@ -2,268 +2,244 @@
 {% load bootstrap5 %} 
 {% bootstrap_css %} 
 {%bootstrap_javascript %}
-<!--
+
 <html>
-  <head>
-    <title>Study Buddy Finder</title>
-  </head>
-
-  {% if user.is_authenticated %}
-  <header>
-    
-    <nav
-      class="navbar navbar-expand-lg navbar-light"
-      style="background-color: rgba(0, 0, 0, 0.1)"
-    >
-      <div class="container-fluid">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#navbarExample01"
-          aria-controls="navbarExample01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarExample01">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/">Home</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/home/">Chat</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/deptlist/"
-                >Course List</a
-              >
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/user/">User Info</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/searchResults/"
-                >Search Users</a
-              >
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/calendar/">Calendar</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-  {% else %}
-  <header>
-  
-    <nav
-      class="navbar navbar-expand-lg navbar-light"
-      style="background-color: rgba(0, 0, 0, 0.1)"
-    >
-      <div class="container-fluid">
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-mdb-toggle="collapse"
-          data-mdb-target="#navbarExample01"
-          aria-controls="navbarExample01"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarExample01">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/">Home</a>
-            </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="/study_buddy_app/deptlist/"
-                >Course List</a
-              >
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-  {% endif %}
-
-  <body class="d-flex flex-column min-vh-100">
-    <h1 class="text-center">Welcome to the Home Page</h1>
-
-    {% if user.is_authenticated %}
-    <p class="text-center">Welcome, {{ user.username }} !</p>
-    <div class="text-center">
-      <form action="/study_buddy_app/logout">
-        <input type="submit" value="Logout" />
-      </form>
-    </div>
-    {% else %}
-    <div class="text-center">
-      <a href="{% provider_login_url 'google' %}">Login with Google</a>
-    </div>
-    {% endif %}
-  </body>
-
-  <footer class="text-center text-lg-start bg-light text-muted mt-auto">
-    <div class="text-center p-3 me-5 d-none d-lg-block">
-      <span
-        >Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and
-        Holden Present</span
-      >
-    </div>
-    <div class="text-center p-2" style="background-color: rgba(0, 0, 0, 0.05)">
-      © 2022 Copyright: None
-    </div>
-  </footer>
-</html> -->
-
-
-<html lang="en" class="h-100"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.104.2">
-  <title>Study Buddy App</title>
-
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/cover/">
-
-  
-
-  
-
-<link href="/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
-  <!-- Favicons -->
-<link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-<link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
-<link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-<link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
-<meta name="theme-color" content="#712cf9">
-
-
-  <style>
-
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      user-select: none;
-    }
-
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
-      }
-    }
-
-    .b-example-divider {
-      height: 3rem;
-      background-color: rgba(0, 0, 0, .1);
-      border: solid rgba(0, 0, 0, .15);
-      border-width: 1px 0;
-      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-    }
-
-    .b-example-vr {
-      flex-shrink: 0;
-      width: 1.5rem;
-      height: 100vh;
-    }
-
-    .bi {
-      vertical-align: -.125em;
-      fill: currentColor;
-    }
-
-    .nav-scroller {
-      position: relative;
-      z-index: 2;
-      height: 2.75rem;
-      overflow-y: hidden;
-    }
-
-    .nav-scroller .nav {
-      display: flex;
-      flex-wrap: nowrap;
-      padding-bottom: 1rem;
-      margin-top: -1px;
-      overflow-x: auto;
-      text-align: center;
-      white-space: nowrap;
-      -webkit-overflow-scrolling: touch;
-    }
-
-
-    .overlay{
-        background-color: black;
-        opacity: .5;
-        
-    }
-  </style>
-
-  
-  <!-- Custom styles for this template -->
-  <link href="cover.css" rel="stylesheet">
-
-  <link href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
-<script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
-
+<head>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-{% load static %}
-
-<link rel="stylesheet" href="{% static 'study_buddy_app/style.css' %}">
-
-<body class="d-flex h-100 text-center text-bg-dark">
-<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-
-<header class="mb-auto">
-  <div>
-    <nav class="nav nav-masthead  float-md-start bg-dark navbar-dark">
-      {% if user.is_authenticated %}
-      <a class="nav-link fw-bold active" style="color: white;" href="/study_buddy_app/">Home</a>
-      <a class="nav-link fw-bold" style="color: white;" href="/study_buddy_app/home/">Chat</a>
-      <a class="nav-link fw-bold" style="color: white;" href="/study_buddy_app/deptlist/">Course List</a>
-      <a class="nav-link fw-bold" style="color: white;" href="/study_buddy_app/user/">User Info</a>
-      <a class="nav-link fw-bold" style="color: white;" href="/study_buddy_app/searchResults/">Search Users</a>
-      <a class="nav-link fw-bold" style="color: white;" href="/study_buddy_app/calendar/">Calendar</a>
-      {% endif %}
-    </nav>
+{% if user.is_authenticated %}
+<!-- This example requires Tailwind CSS v3.0+ -->
+<div class="isolate bg-white">
+  <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
+    <svg class="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)" fill-opacity=".3" d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z" />
+      <defs>
+        <linearGradient id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533" x1="1155.49" x2="-78.208" y1=".177" y2="474.645" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#3dadfc"></stop>
+          <stop offset="1" stop-color="#43f7ee"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
   </div>
-</header>
+  <div class="px-6 pt-6 lg:px-8">
+    <div>
+      <nav class="flex h-9 items-center justify-between" aria-label="Global">
+        <div class="flex lg:min-w-0 lg:flex-1" aria-label="Global">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            
+          </a>
+        </div>
+        <div class="flex lg:hidden">
+          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+            <span class="sr-only">Open main menu</span>
+            <!-- Heroicon name: outline/bars-3 -->
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+        <div class="hidden lg:flex lg:min-w-0 lg:flex-auto lg:justify-center lg:gap-x-12">
+          <a href="/study_buddy_app/" class="font-semibold text-gray-900 hover:text-gray-900">Home</a>
 
+          <a href="/study_buddy_app/home/" class="font-semibold text-gray-900 hover:text-gray-900">Chat</a>
 
-<main class="px-3">
-  <h1 style="color: white; margin-left: 37%; margin-right: 37%;">Study Buddy Finder</h1>
-  {% if user.is_authenticated %}
-  <p class="lead">
-    <a href="/study_buddy_app/logout" class="btn btn-lg btn-secondary fw-bold border-white bg-white" style="color: black;">Logout</a>
-  </p>
-  {% else %}
-  <p class="lead">
-    <a href="{% provider_login_url 'google' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white" style="color: black;">Sign In</a>
-  </p>
-  {% endif %}
-</main>
+          <a href="/study_buddy_app/deptlist/" class="font-semibold text-gray-900 hover:text-gray-900">Course List</a>
 
-<footer class="mt-auto">
-</footer>
+          <a href="/study_buddy_app/user/" class="font-semibold text-gray-900 hover:text-gray-900">User Info</a>
+
+          <a href="/study_buddy_app/searchResults/" class="font-semibold text-gray-900 hover:text-gray-900">Search Users</a>
+
+          <a href="/study_buddy_app/calendar/" class="font-semibold text-gray-900 hover:text-gray-900">Calendar</a>
+
+        </div>
+        <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
+          <a href="/study_buddy_app/logout" class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log out</a>
+        </div>
+      </nav>
+      <!-- Mobile menu, show/hide based on menu open state. -->
+      <div role="dialog" aria-modal="true">
+        <div focus="true" class="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
+          <div class="flex h-9 items-center justify-between">
+            <div class="flex">
+              <a href="#" class="-m-1.5 p-1.5">
+                <span class="sr-only">Your Company</span>
+                <img class="h-8" src="" alt="">
+              </a>
+            </div>
+            <div class="flex">
+              <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Close menu</span>
+                <!-- Heroicon name: outline/x-mark -->
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="mt-6 flow-root">
+            <div class="-my-6 divide-y divide-gray-500/10">
+              <div class="space-y-2 py-6">
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Product</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Features</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Marketplace</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Company</a>
+              </div>
+              <div class="py-6">
+                <a href="#" class="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10">Log in</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div class="relative px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+        <div>
+          <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+            
+          </div>
+          <div>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Studdy Buddy Finder</h1>
+            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">The # 1 way to find other students in your classes to study with</p>
+          
+          </div>
+          <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+            <svg class="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)" fill-opacity=".3" d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z" />
+              <defs>
+                <linearGradient id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc" x1="1155.49" x2="-78.208" y1=".177" y2="474.645" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#43f7ee"></stop>
+                  <stop offset="1" stop-color="#3dadfc"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </div>
 
+{% else %}
 
-  
+<div class="isolate bg-white">
+  <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]">
+    <svg class="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill="url(#45de2b6b-92d5-4d68-a6a0-9b9b2abad533)" fill-opacity=".3" d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z" />
+      <defs>
+        <linearGradient id="45de2b6b-92d5-4d68-a6a0-9b9b2abad533" x1="1155.49" x2="-78.208" y1=".177" y2="474.645" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#3dadfc"></stop>
+          <stop offset="1" stop-color="#43f7ee"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  </div>
+  <div class="px-6 pt-6 lg:px-8">
+    <div>
+      <nav class="flex h-9 items-center justify-between" aria-label="Global">
+        <div class="flex lg:min-w-0 lg:flex-1" aria-label="Global">
+          <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Your Company</span>
+            
+          </a>
+        </div>
+        <div class="flex lg:hidden">
+          <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+            <span class="sr-only">Open main menu</span>
+            <!-- Heroicon name: outline/bars-3 -->
+            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            </svg>
+          </button>
+        </div>
+        <div class="hidden lg:flex lg:min-w-0 lg:flex-auto lg:justify-center lg:gap-x-12">
+          <a href="/study_buddy_app/" class="font-semibold text-gray-900 hover:text-gray-900">Home</a>
 
-</body>
+
+          <a href="/study_buddy_app/deptlist/" class="font-semibold text-gray-900 hover:text-gray-900">Course List</a>
+
+          
+
+        </div>
+        <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
+          <a href="{% provider_login_url 'google' %}" class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log in</a>
+        </div>
+      </nav>
+      <!-- Mobile menu, show/hide based on menu open state. -->
+      <div role="dialog" aria-modal="true">
+        <div focus="true" class="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
+          <div class="flex h-9 items-center justify-between">
+            <div class="flex">
+              <a href="#" class="-m-1.5 p-1.5">
+                <span class="sr-only">Your Company</span>
+                <img class="h-8" src="" alt="">
+              </a>
+            </div>
+            <div class="flex">
+              <button type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+                <span class="sr-only">Close menu</span>
+                <!-- Heroicon name: outline/x-mark -->
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="mt-6 flow-root">
+            <div class="-my-6 divide-y divide-gray-500/10">
+              <div class="space-y-2 py-6">
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Product</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Features</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Marketplace</a>
+
+                <a href="#" class="-mx-3 block rounded-lg py-2 px-3 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-400/10">Company</a>
+              </div>
+              <div class="py-6">
+                <a href="#" class="-mx-3 block rounded-lg py-2.5 px-3 text-base font-semibold leading-6 text-gray-900 hover:bg-gray-400/10">Log in</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <main>
+    <div class="relative px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+        <div>
+          <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+            
+          </div>
+          <div>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Studdy Buddy Finder</h1>
+            <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">Log in to access the features of this application.</p>
+          
+          </div>
+          <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+            <svg class="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)" fill-opacity=".3" d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z" />
+              <defs>
+                <linearGradient id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc" x1="1155.49" x2="-78.208" y1=".177" y2="474.645" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#43f7ee"></stop>
+                  <stop offset="1" stop-color="#3dadfc"></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+{% endif %}
 
 </html>
