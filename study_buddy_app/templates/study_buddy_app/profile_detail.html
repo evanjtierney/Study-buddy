@@ -89,12 +89,12 @@
 						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
 							<p><li>{{ c }}</li></p>
 						{% endfor %}
+                {% if not friends %}
                 <p>request friend</p>
                 <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
                 <h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
+                {% endif %}
                 {% if friends %}
-                {% for each in friends %}
-                {% if object.user == each.current_user %}
                 {% load static %}
                 <p> Rate me as a Study Buddy!</p>
                 {% ratings object.user %}
@@ -105,8 +105,6 @@
                     {{ form.as_p }}
                     <input type="submit" value="Send message">
                 </form>
-                {% endif %}
-                {% endfor %}
                 {% endif %}
                 <!-- <p> request friend</p>
                 <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>

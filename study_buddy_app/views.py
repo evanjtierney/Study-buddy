@@ -336,8 +336,10 @@ class seeProfile(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
+        a = kwargs['object']
+        b = a.user
         context['form'] = DateForm()
-        context['friends'] = Friends1.objects.filter(users1 = self.request.user)
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
         return context
 
     
