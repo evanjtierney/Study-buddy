@@ -153,13 +153,16 @@ def go_to_chat(request):
 
 def checkview(request):
     room = ""
-    sender = request.POST['username']
+    sender = request.POST['username'] + " "
     sendee = request.POST.getlist('dropdown[]')
     array = [sender]
 
     for i in sendee:
+        i = i + " "
         array.append(i)
     array.sort()
+
+    array[-1] = array[-1].strip(" ")
 
     for i in array:
         room = room + i
