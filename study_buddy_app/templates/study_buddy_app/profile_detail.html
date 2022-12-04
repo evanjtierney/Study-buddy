@@ -89,12 +89,15 @@
 						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
 							<p><li>{{ c }}</li></p>
 						{% endfor %}
-                <p>request friend</p>
+                <p>   </p>
+                {% if not friends %}
+                <!--<p>request friend</p>-->
                 <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
-                <h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
+                <!--<h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
+                <h1></h1><a href="study_buddy_app/send_friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Send Friend Request</button></a>
+
+                {% endif %}
                 {% if friends %}
-                {% for each in friends %}
-                {% if object.user == each.current_user %}
                 {% load static %}
                 <p> Rate me as a Study Buddy!</p>
                 {% ratings object.user %}
@@ -105,8 +108,6 @@
                     {{ form.as_p }}
                     <input type="submit" value="Send message">
                 </form>
-                {% endif %}
-                {% endfor %}
                 {% endif %}
                 <!-- <p> request friend</p>
                 <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
@@ -120,6 +121,8 @@
           {{ form.as_p }}
           <input type="submit" value="Send message">
         </form> -->
+        <p>   </p>
+
         <form method="post" action="/study_buddy_app/home/go_to_chat">
           <input
             type="hidden"

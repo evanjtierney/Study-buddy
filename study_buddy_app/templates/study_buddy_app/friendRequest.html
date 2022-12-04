@@ -47,12 +47,20 @@
   </header>
 
 <body class="d-flex flex-column min-vh-100">
+<h1 class="text-center" style="margin-top: 2%;">Friend Requests</h1>
 {% if request_list %}
     {% for each in request_list %}
-        <div class="text-center" style="margin-top: 2%;">
-            <p>{{ each.sender.username }}<p>
-              <a href="accept_friend_request/{{ each.sender.username }}/"> accept friend request</a>
-              <a href="delete_request/{{ each.sender.username }}/"> delete friend request</a>
+        <div class="card" style="margin: 10px">
+                <!--<div class="card">-->
+            <div class="card-header">
+                        Friend Request
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ each.sender.username }}</h5>
+                <a href="publicProfile/{{ each.sender.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">View Profile</button></a>
+                <a href="accept_friend_request/{{ each.sender.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Accept</button></a>
+                <a href="delete_request/{{ each.sender.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Delete</button></a>
+            </div>
         </div>
     {% endfor %}
 {% else %}

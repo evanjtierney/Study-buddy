@@ -216,8 +216,8 @@ def edituser(request):
             user_form = UserForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
+                messages.success(request, "Changes Saved!")
         user_form = UserForm(instance=request.user)
-
         return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form})
     except: 
         User = get_user_model()
@@ -359,8 +359,10 @@ class seeProfile(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
+        a = kwargs['object']
+        b = a.user
         context['form'] = DateForm()
-        context['friends'] = Friends1.objects.filter(users1 = self.request.user)
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
         return context
 
     
