@@ -201,6 +201,13 @@
       white-space: nowrap;
       -webkit-overflow-scrolling: touch;
     }
+
+
+    .overlay{
+        background-color: black;
+        opacity: .5;
+        
+    }
   </style>
 
   
@@ -219,7 +226,6 @@
 <link rel="stylesheet" href="{% static 'study_buddy_app/style.css' %}">
 
 <body class="d-flex h-100 text-center text-bg-dark">
-  
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 
 <header class="mb-auto">
@@ -239,13 +245,12 @@
 
 
 <main class="px-3">
-  <h1 style="color: black; background-color: white; margin-left: 37%; margin-right: 37%;">Study Buddy Finder</h1>
+  <h1 style="color: white; margin-left: 37%; margin-right: 37%;">Study Buddy Finder</h1>
   {% if user.is_authenticated %}
   <p class="lead">
     <a href="/study_buddy_app/logout" class="btn btn-lg btn-secondary fw-bold border-white bg-white" style="color: black;">Logout</a>
   </p>
   {% else %}
-  <p class="lead" style="color: black; background-color: white; margin-left: 26%; margin-right: 26%;">Click the button below to sign in and access the features of this application</p>
   <p class="lead">
     <a href="{% provider_login_url 'google' %}" class="btn btn-lg btn-secondary fw-bold border-white bg-white" style="color: black;">Sign In</a>
   </p>
@@ -259,5 +264,6 @@
 
   
 
+</body>
 
-</body></html>
+</html>
