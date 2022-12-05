@@ -44,12 +44,12 @@
         </div>
       </div>
     </nav> -->
-    {% include 'study_buddy_app/Nav_None.html' with first=first last=last%}
+    {% include 'study_buddy_app/Nav_None.html' with first=first last=last header="Friends"%}
   </header>
 
 <body class="d-flex flex-column min-vh-100">
 <!--<p class="text-center" style="margin-top: 2%;">Friends</p>-->
-<h1 class="text-center" style="margin-top: 2%;">Friends</h1>
+<!-- <h1 class="text-center" style="margin-top: 2%;">Friends</h1> -->
 
 {% if friend_list %}
     {% for each in friend_list %}

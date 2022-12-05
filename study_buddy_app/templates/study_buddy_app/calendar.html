@@ -60,7 +60,7 @@ a {
 <body>
   {% block content %}
 <div class="clearfix">
-  {% include 'study_buddy_app/Nav_Calendar.html' with first=user_firstname last=user_lastname%}
+  {% include 'study_buddy_app/Nav_Calendar.html' with first=user_firstname last=user_lastname header="Calendar"%}
 	<a class="left btn btn-info left" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
 	<a class="right btn btn-info right" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
 </div>

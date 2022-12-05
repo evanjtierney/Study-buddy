@@ -57,7 +57,7 @@
           <a href="/study_buddy_app/logout" class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log out</a>
         </div>
       </nav> -->
-      {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name%}
+      {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name header=""%}
       <!-- Mobile menu, show/hide based on menu open state. -->
       <div role="dialog" aria-modal="true">
         <div focus="true" class="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">

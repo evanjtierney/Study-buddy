@@ -129,7 +129,7 @@ body {
     </div>
     </div>
   </nav> -->
-    {% include 'study_buddy_app/Nav_Chat.html' with first=user_firstname last=user_lastname%}
+    {% include 'study_buddy_app/Nav_Chat.html' with first=user_firstname last=user_lastname header="Chat Room"%}
   </header>
   {% for message in messages %}
   <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -141,7 +141,7 @@ body {
 <body class="d-flex flex-column min-vh-100">
 
 <div align="center">
-    <h2>Chat Room</h2>
+    <!-- <h2>Chat Room</h2> -->
 </div>
 
 

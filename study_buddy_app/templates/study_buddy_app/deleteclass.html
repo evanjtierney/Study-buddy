@@ -45,7 +45,7 @@
         </div>
       </div>
     </nav> -->
-    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name%}
+    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name header="Delete Class"%}
 </header>
 
 {% else %}
@@ -81,7 +81,6 @@
   
 
 <body class="d-flex flex-column min-vh-100">
-  <h1 class="text-center">Delete A Class</h1>
   <br>
   <h5 class="text-center">Select a class and remove it from your profile</h5>
   <br>
