@@ -80,15 +80,14 @@ class SearchResultsView(generic.ListView):
             return any(char.isdigit() for char in inputString)
         flag1 = not query is None and not has_numbers(query)
         flag2 = not query is None and has_numbers(query)
-        
+        flag3 = not query is None and has_numbers(query[0])
 
         if flag1:
             users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
 
-        if flag2:
+        if flag2 and not flag3:
             copy = query
             copy = copy.replace(" ", "")
-            print(copy)
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
             arr = temp.match(copy).groups()
             if len(arr) == 2:
