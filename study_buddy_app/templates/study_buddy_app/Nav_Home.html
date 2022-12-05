@@ -1,4 +1,7 @@
 {% url 'index' as homepage %}
+{% url 'home' as chatpage %}
+{% url 'deptlist' as course_list %}
+{% url 'calendar' as calendar %}
 <!doctype html>
 <html>
 <head>
@@ -58,11 +61,11 @@
                   <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
                   <a href="{{ homepage }}" style= "text-decoration: none;" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
       
-                  <a href="#" style= "text-decoration: none;" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Chat</a>
+                  <a href="{{ chatpage }}" style= "text-decoration: none;" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">Chat</a>
       
-                  <a href="#" style= "text-decoration: none;" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Course List</a>
+                  <a href="{{ course_list }}" style= "text-decoration: none;" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Course List</a>
 
-                  <a href="#" style= "text-decoration: none;" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
+                  <a href="{{ calendar }}" style= "text-decoration: none;" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Calendar</a>
 
                 </div>
               </div>
