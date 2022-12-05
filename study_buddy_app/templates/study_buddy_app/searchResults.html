@@ -26,7 +26,7 @@
     }
 
     .bordershadow {
-      border:2px solid #dd;
+      border:1px solid #dd;
       border-radius: 3px;
       box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
       transition: all 200ms ease-out;
@@ -103,17 +103,6 @@
 </html>
 <div class="title">
   <h1>Users</h1>
-</div>
-<div class="search_bar">
-  <form
-    class="d-flex"
-    action="{% url 'search_results' %}"
-    method="get"
-    role="search"
-  >
-    <input name="q" type="text" placeholder="Search..." />
-    <button class="btn btn-outline-dark" type="submit">Search</button>
-  </form>
 </div>
 <ul>
   {% for user, queryset in search_results_list.combination %}
