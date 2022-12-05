@@ -45,6 +45,14 @@ from allauth.socialaccount.models import SocialAccount
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(SearchResultsView, self).get(request, *args, **kwargs)
+
     def get_queryset(self):
         """Return all the users."""
         query = self.request.GET.get("q")
@@ -343,12 +351,25 @@ def viewFriends(request):
 class viewProfiles(generic.ListView):
     template_name = 'study_buddy_app/viewProfiles.html'
     context_object_name = 'profile_list'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(viewProfiles, self).get(request, *args, **kwargs)
     def get_queryset(self):
         return Profile.objects.all()
 
 class listProfiles(generic.ListView):
     template_name = 'study_buddy_app/listProfiles.html'
     context_object_name = 'profile_list'
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(listProfiles, self).get(request, *args, **kwargs)
     def get_queryset(self):
         return Profile.objects.all()
     
@@ -360,7 +381,13 @@ class DateForm(forms.Form):
 class seeProfile(generic.DetailView):
 
     model = Profile
-
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(seeProfile, self).get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
         a = kwargs['object']
@@ -487,7 +514,13 @@ def user_redirect(request):
 class CalendarView(generic.ListView):
     model = Event
     template_name = 'study_buddy_app/calendar.html'
-
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(CalendarView, self).get(request, *args, **kwargs)
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
