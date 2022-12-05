@@ -52,6 +52,10 @@ class SearchResultsView(generic.ListView):
             template = loader.get_template('socialaccount/login.html')
             context = {}
             return redirect('/study_buddy_app/accounts/google/login/')
+        if not self.request.GET.get("q"):
+            template = loader.get_template('study_buddy_app/home.html')
+            context = {}
+            return redirect('/study_buddy_app/')
         return super(SearchResultsView, self).get(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -61,7 +65,6 @@ class SearchResultsView(generic.ListView):
         # search based on username
         users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
         cardResults = []
-        
         #search based on first name
         users |= User.objects.filter(Q(first_name__iexact=query) | Q(first_name__iexact=query))
 
