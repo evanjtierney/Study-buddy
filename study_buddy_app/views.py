@@ -45,6 +45,14 @@ from allauth.socialaccount.models import SocialAccount
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(SearchResultsView, self).get(request, *args, **kwargs)
+
     def get_queryset(self):
         """Return all the users."""
         query = self.request.GET.get("q")
@@ -73,7 +81,7 @@ class SearchResultsView(generic.ListView):
                 cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=arr[0]) & Q(catalog_number__iexact=arr[1])))
         print ("cardResults", cardResults)
         combination = zip(users, cardResults)
-        return {'combination': combination}
+        return {'combination': combination, 'user': self.request.user}
     
     
 
@@ -89,21 +97,34 @@ def sign_in(request):
     context = {}
     return HttpResponse(template.render(context, request))
 def home(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     User = get_user_model()
     users = User.objects.all()
-
+    print(dir(request.user))
+    print(request.user.first_name)
     object = Friends1.objects.filter(users1=request.user)
-    return render(request, 'study_buddy_app/chat.html', {'users': users,"friend_list": object})
+    return render(request, 'study_buddy_app/chat.html', {'user_firstname': request.user.first_name, 'user_lastname': request.user.last_name,'users': users, "friend_list": object})
 
 # addclass API
 def addclass_deptlist(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response, 'page_obj': page_obj})
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'first': request.user.first_name,'last': request.user.last_name,'response':response, 'page_obj': page_obj})
 # "
 def dept(request, dept_name):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
     cur_classes = []
@@ -111,24 +132,36 @@ def dept(request, dept_name):
         tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
         tmp.save()
         cur_classes.append(tmp)
-    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
+    return render(request, 'study_buddy_app/dept.html', {"first": request.user.first_name, "last": request.user.last_name, 'response':cur_classes, 'dept_name':dept_name})
 
 # deleteclass API
 def myclasses(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     profile = Profile.objects.get(user=request.user)
     classes = profile.classes.all()
     return render(request = request, template_name ="study_buddy_app/deleteclass.html", context = {"user":request.user, 'classes':classes})
 
 # display only API
 def deptlist(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
     paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'study_buddy_app/deptlist.html', {'response': response, 'page_obj': page_obj})
+    return render(request, 'study_buddy_app/deptlist.html', {"first": request.user.first_name, "last": request.user.last_name, 'response': response, 'page_obj': page_obj})
 
 # "
 def dept_display_only(request, dept_name):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
     paginator = Paginator(response, 50)
@@ -137,15 +170,26 @@ def dept_display_only(request, dept_name):
     return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name, 'page_obj': page_obj})
 
 def room(request, room):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
     return render(request, 'study_buddy_app/room.html', {
+        'first': request.user.first_name,
+        'last': request.user.last_name,
         'username': username,
         'room': room,
         'room_details': room_details
     })
 
 def go_to_chat(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
+    print('here!')
     sender = request.user.username
     sendee = request.POST['username'] 
     array = [sender, sendee]
@@ -161,6 +205,10 @@ def go_to_chat(request):
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
 
 def checkview(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     room = ""
     sender = request.POST['username'] + " "
     sendee = request.POST.getlist('dropdown[]')
@@ -187,6 +235,10 @@ def checkview(request):
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
 
 def send(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     message = request.POST['message']
     if not message:
         return
@@ -198,6 +250,10 @@ def send(request):
     return HttpResponse('Message sent successfully')
 
 def getMessages(request, room):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     room_details = Room.objects.get(name=room)
 
     messages = Message.objects.filter(room=room_details.id)
@@ -205,6 +261,10 @@ def getMessages(request, room):
 
 
 def user(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         user_form = UserForm(instance=request.user)
         profile = Profile.objects.get(user=request.user)
@@ -217,6 +277,10 @@ def user(request):
 
 
 def edituser(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         if request.method == 'POST':
             user_form = UserForm(request.POST, instance=request.user)
@@ -231,6 +295,10 @@ def edituser(request):
         return render(request, 'study_buddy_app/chat.html', {'users': users})
 
 def addclass(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     profile = Profile.objects.get(user=request.user)
     try:
         selected_class = Class.objects.get(pk=request.POST['class'])
@@ -252,6 +320,10 @@ def addclass(request):
         })
 
 def deleteclass(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         profile = Profile.objects.get(user=request.user)
         selected_class = Class.objects.get(pk=request.POST['class'])
@@ -266,6 +338,10 @@ def deleteclass(request):
  
         
 def publicProfile(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         user_form = UserForm(instance=request.user)
         return render(request = request, template_name ="study_buddy_app/publicProfile.html", context = {"user":request.user, "user_form": user_form})
@@ -280,6 +356,10 @@ def publicProfile(request):
 ##        return Profile.objects.all()
     
 def send_friend_request(request,slug):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     #user = request.POST.get('username', False)
     sender = request.user
     x = sender.username
@@ -291,6 +371,10 @@ def send_friend_request(request,slug):
     #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
 
 def delete_request(request, pk):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     client1 = User.objects.get(username=pk)
     #print(client1)
     #if operation == 'Sender_deleting':
@@ -304,6 +388,10 @@ def delete_request(request, pk):
 
 
 def remove_friend(request, pk):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     new_friend = User.objects.get(username=pk)
     Friends1.lose_friend(request.user, new_friend)
     Friends1.lose_friend(new_friend, request.user)
@@ -312,6 +400,10 @@ def remove_friend(request, pk):
 
 
 def accept_friend_request(request,pk):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     new_friend = User.objects.get(username = pk)
     fq = FriendRequest.objects.get(sender=new_friend, receiver=request.user)
     Friends1.make_friend(request.user, new_friend)
@@ -323,9 +415,13 @@ def accept_friend_request(request,pk):
 
 
 def viewRequest(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         object = FriendRequest.objects.filter(receiver = request.user)
-        return render(request, 'study_buddy_app/friendRequest.html', {"request_list": object})
+        return render(request, 'study_buddy_app/friendRequest.html', {"first": request.user.first_name,"last": request.user.last_name,"request_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
@@ -333,9 +429,13 @@ def viewRequest(request):
 
 
 def viewFriends(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     try:
         object = Friends1.objects.filter(users1 = request.user)
-        return render(request, 'study_buddy_app/friends.html', {"friend_list": object})
+        return render(request, 'study_buddy_app/friends.html', {"first": request.user.first_name, "last": request.user.last_name, "friend_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
@@ -345,12 +445,25 @@ def viewFriends(request):
 class viewProfiles(generic.ListView):
     template_name = 'study_buddy_app/viewProfiles.html'
     context_object_name = 'profile_list'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(viewProfiles, self).get(request, *args, **kwargs)
     def get_queryset(self):
         return Profile.objects.all()
 
 class listProfiles(generic.ListView):
     template_name = 'study_buddy_app/listProfiles.html'
     context_object_name = 'profile_list'
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(listProfiles, self).get(request, *args, **kwargs)
     def get_queryset(self):
         return Profile.objects.all()
     
@@ -362,13 +475,21 @@ class DateForm(forms.Form):
 class seeProfile(generic.DetailView):
 
     model = Profile
-
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(seeProfile, self).get(request, *args, **kwargs)
+    
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
         a = kwargs['object']
         b = a.user
         context['form'] = DateForm()
         context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
+        context['first']=self.request.user.first_name
+        context['last']= self.request.user.last_name
         return context
 
     
@@ -480,6 +601,10 @@ class ProfileDetail(View):
 
 
 def user_redirect(request):
+    if not request.user.is_authenticated:
+        template = loader.get_template('socialaccount/login.html')
+        context = {}
+        return redirect('/study_buddy_app/accounts/google/login/')
     user = request.POST['username']
     user_obj = User.objects.get(username=user)
     if user_obj.username == request.user.username:
@@ -489,7 +614,13 @@ def user_redirect(request):
 class CalendarView(generic.ListView):
     model = Event
     template_name = 'study_buddy_app/calendar.html'
-
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(CalendarView, self).get(request, *args, **kwargs)
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         d = get_date(self.request.GET.get('month', None))
@@ -498,6 +629,9 @@ class CalendarView(generic.ListView):
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+        context['user_firstname'] = self.request.user.first_name
+        context['user_lastname'] = self.request.user.last_name
+        # context['user_lastname'] = self.request.user.last_name
         return context
 
 def get_date(req_month):

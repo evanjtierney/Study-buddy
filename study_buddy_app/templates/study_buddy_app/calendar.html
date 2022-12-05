@@ -47,7 +47,7 @@ a {
 {% block content %}
 <div class="clearfix">
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+  <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
     <div class="container-fluid">
       <button
         class="navbar-toggler"
@@ -83,7 +83,8 @@ a {
         </ul>
       </div>
     </div>
-  </nav>
+  </nav> -->
+  {% include 'study_buddy_app/Nav_Calendar.html' with first=user_firstname last=user_lastname%}
 	<a class="btn btn-info left" href="{% url 'calendar' %}?{{ prev_month }}"> Previous Month </a>
 	<a class="btn btn-info right" href="{% url 'calendar' %}?{{ next_month }}"> Next Month </a>
 </div>
