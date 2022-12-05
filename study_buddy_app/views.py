@@ -140,6 +140,8 @@ def room(request, room):
     username = request.GET.get('username')
     room_details = Room.objects.get(name=room)
     return render(request, 'study_buddy_app/room.html', {
+        'first': request.user.first_name,
+        'last': request.user.last_name,
         'username': username,
         'room': room,
         'room_details': room_details
