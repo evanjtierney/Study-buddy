@@ -4,6 +4,7 @@
 {% url 'calendar' as calendar %}
 {% url 'user' as personal_profile %}
 {% url 'new_friends' as friends_page %}
+{% url 'logout' as logout %}
 <!doctype html>
 <html>
 <head>
@@ -113,6 +114,7 @@
                   <li><span class="dropdown-item-text"><b>{{ first }} {{ last }}</b></span></li>
                   <li><a class="dropdown-item" href="{{ personal_profile }}">Profile</a></li>
                   <li><a class="dropdown-item" href="{{ friends_page }}">Friends</a></li>
+                  <a class="dropdown-item" href="{{ logout }}">Logout</a>
                 </ul>
               </div>
             </div>

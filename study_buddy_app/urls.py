@@ -10,7 +10,7 @@ urlpatterns = [
     path('home/', views.home, name='home'),
     path('sign_in/', views.sign_in, name='sign_in'),
     path("accounts/", include("allauth.urls")),
-    path('logout', LogoutView.as_view()),
+    path('logout', LogoutView.as_view(), name='logout'),
 
     path('deptlist/', views.deptlist, name="deptlist"),
     path('deptdisplay/<str:dept_name>/', views.dept_display_only, name="deptdisplay"),
