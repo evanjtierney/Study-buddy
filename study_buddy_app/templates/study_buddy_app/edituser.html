@@ -4,6 +4,20 @@
 {% bootstrap_javascript %}
 
 
+<head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <!--Bootstrap CSS-->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+
+                {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
 
 <style>
 	.page_style{
@@ -25,12 +39,6 @@
 			        <h5 class="modal-title">Edit Profile</h5>
 		        </div>
 		        <div class="modal-body">
-					<!-- <h4>My Classes:</h4>
-					<a href="/study_buddy_app/user/edituser/deptlist"><button>Add a Class</button></a>
-					{% for c in classes %}
-						<li>{{ c }}</li>
-					{% endfor %}
-					<br> -->
 			        <form method="post">
 			          	{% csrf_token %}
 			          	{{ user_form|crispy }}

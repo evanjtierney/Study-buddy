@@ -4,6 +4,7 @@ from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.template import loader
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 from django.db.models import Q # new
 from django.views import generic
@@ -97,7 +98,10 @@ def home(request):
 # addclass API
 def addclass_deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response})
+    paginator = Paginator(response, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response, 'page_obj': page_obj})
 # "
 def dept(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
@@ -109,16 +113,28 @@ def dept(request, dept_name):
         cur_classes.append(tmp)
     return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
 
+# deleteclass API
+def myclasses(request):
+    profile = Profile.objects.get(user=request.user)
+    classes = profile.classes.all()
+    return render(request = request, template_name ="study_buddy_app/deleteclass.html", context = {"user":request.user, 'classes':classes})
+
 # display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/deptlist.html', {'user_firstname': request.user.first_name, 'user_lastname': request.user.last_name,'response':response})
+    paginator = Paginator(response, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'study_buddy_app/deptlist.html', {'response': response, 'page_obj': page_obj})
 
 # "
 def dept_display_only(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
-    return render(request, 'study_buddy_app/deptdisplay.html', {'user': request.user, 'response':response, 'dept_name':dept_name})
+    paginator = Paginator(response, 50)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name, 'page_obj': page_obj})
 
 def room(request, room):
     username = request.GET.get('username')
@@ -145,13 +161,16 @@ def go_to_chat(request):
 
 def checkview(request):
     room = ""
-    sender = request.POST['username']
+    sender = request.POST['username'] + " "
     sendee = request.POST.getlist('dropdown[]')
     array = [sender]
 
     for i in sendee:
+        i = i + " "
         array.append(i)
     array.sort()
+
+    array[-1] = array[-1].strip(" ")
 
     for i in array:
         room = room + i
@@ -199,8 +218,8 @@ def edituser(request):
             user_form = UserForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
+                messages.success(request, "Changes Saved!")
         user_form = UserForm(instance=request.user)
-
         return render(request, 'study_buddy_app/edituser.html', context={'user':request.user, 'user_form':user_form})
     except: 
         User = get_user_model()
@@ -227,6 +246,20 @@ def addclass(request):
             'profile': profile,
             'error_message': "You didn't select a class.",
         })
+
+def deleteclass(request):
+    try:
+        profile = Profile.objects.get(user=request.user)
+        selected_class = Class.objects.get(pk=request.POST['class'])
+        profile.classes.remove(selected_class)
+        profile.save()
+        return user(request)
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/deleteclass.html', {
+            'profile': profile,
+            'error_message': "You didn't select a class.",
+        })
+ 
         
 def publicProfile(request):
     try:
@@ -328,8 +361,10 @@ class seeProfile(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(seeProfile, self).get_context_data(**kwargs)
+        a = kwargs['object']
+        b = a.user
         context['form'] = DateForm()
-        context['friends'] = Friends1.objects.filter(users1 = self.request.user)
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
         return context
 
     

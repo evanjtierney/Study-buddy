@@ -4,3 +4,8 @@ Title: django-chat-app
 Author: Tomi Tokko
 Date: 10/15/2022
 URL: https://github.com/tomitokko/django-chat-app
+
+Multiple Chat Function Citation
+
+Date: 11/29/2022
+URL: https://multiple-select.wenzhixin.net.cn/

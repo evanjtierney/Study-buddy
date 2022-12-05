@@ -29,6 +29,9 @@ urlpatterns = [
     path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
 
     path('publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
+    path('user/friends/publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
+    path('user/friend_request/publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
+
 
     path('publicProfile/<slug:slug>/study_buddy_app/send_friend_request/', views.send_friend_request,name='send friend request'),
     
@@ -46,6 +49,8 @@ urlpatterns = [
     path('user/deptlist/', views.addclass_deptlist, name="addclass_deptlist"),
     path('user/dept/<str:dept_name>/', views.dept, name="dept"),
     path('user/addclass', views.addclass, name="addclass"),
+    path('user/deleteclass/', views.myclasses, name="myclasses"),
+    path('user/dc', views.deleteclass, name="deleteclass"),
     path('calendar/', views.CalendarView.as_view(), name='calendar'),
 ]
 

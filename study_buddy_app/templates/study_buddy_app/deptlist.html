@@ -81,12 +81,34 @@
 {% endif %}
 
 <body class="d-flex flex-column min-vh-100">
-    <h1 class="text-center">UVA Departments</h1>
-    {% for i in response %}
-        <li class="text-center"><a href = "/study_buddy_app/deptdisplay/{{ i.subject }}">{{i.subject}}</a></li>
-    <br>
+  <h1 class="text-center">UVA Departments</h1>
+  <br>
+
+  <!-- List of Departments -->
+  <div class="list-group gap-2 col-2 mx-auto">
+    {% for dept in page_obj %}
+      <a href="/study_buddy_app/deptdisplay/{{ dept.subject }}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{dept.subject}}</a>
     {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <br>
+  <nav aria-label="deptlist paginator">
+    <ul class="pagination justify-content-center">
+      {% for pg in page_obj.paginator %}
+        <li class="page-item"><a class="page-link" href="?page={{ pg.number }}">{{ pg.number }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+  <nav aria-label="current page indicator">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+      </li>
+    </ul>
+  </nav>
 </body>
+
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
     <div class="text-center p-3 me-5 d-none d-lg-block">
       <span>Page Authors: Ana Borges, Bao Nguyen, Evan Tierney, Natasha Mathew, and Holden Present</span>
