@@ -153,7 +153,7 @@ def deptlist(request):
     paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'study_buddy_app/deptlist.html', {'response': response, 'page_obj': page_obj})
+    return render(request, 'study_buddy_app/deptlist.html', {"first": request.user.first_name, "last": request.user.last_name, 'response': response, 'page_obj': page_obj})
 
 # "
 def dept_display_only(request, dept_name):
