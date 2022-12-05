@@ -73,7 +73,7 @@ class SearchResultsView(generic.ListView):
                 cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=arr[0]) & Q(catalog_number__iexact=arr[1])))
         print ("cardResults", cardResults)
         combination = zip(users, cardResults)
-        return {'combination': combination}
+        return {'combination': combination, 'user': self.request.user}
     
     
 
