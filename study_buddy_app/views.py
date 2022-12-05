@@ -459,6 +459,9 @@ class CalendarView(generic.ListView):
         context['calendar'] = mark_safe(html_cal)
         context['prev_month'] = prev_month(d)
         context['next_month'] = next_month(d)
+        context['user_firstname'] = self.request.user.first_name
+        context['user_lastname'] = self.request.user.last_name
+        # context['user_lastname'] = self.request.user.last_name
         return context
 
 def get_date(req_month):
