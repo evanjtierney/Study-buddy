@@ -117,7 +117,7 @@ def addclass_deptlist(request):
     paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'study_buddy_app/addclassdeptlist.html', {'response':response, 'page_obj': page_obj})
+    return render(request, 'study_buddy_app/addclassdeptlist.html', {'first': request.user.first_name,'last': request.user.last_name,'response':response, 'page_obj': page_obj})
 # "
 def dept(request, dept_name):
     if not request.user.is_authenticated:
@@ -131,7 +131,7 @@ def dept(request, dept_name):
         tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
         tmp.save()
         cur_classes.append(tmp)
-    return render(request, 'study_buddy_app/dept.html', {'response':cur_classes, 'dept_name':dept_name})
+    return render(request, 'study_buddy_app/dept.html', {"first": request.user.first_name, "last": request.user.last_name, 'response':cur_classes, 'dept_name':dept_name})
 
 # deleteclass API
 def myclasses(request):
@@ -415,7 +415,7 @@ def viewRequest(request):
         return redirect('/study_buddy_app/accounts/google/login/')
     try:
         object = FriendRequest.objects.filter(receiver = request.user)
-        return render(request, 'study_buddy_app/friendRequest.html', {"request_list": object})
+        return render(request, 'study_buddy_app/friendRequest.html', {"first": request.user.first_name,"last": request.user.last_name,"request_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
@@ -429,7 +429,7 @@ def viewFriends(request):
         return redirect('/study_buddy_app/accounts/google/login/')
     try:
         object = Friends1.objects.filter(users1 = request.user)
-        return render(request, 'study_buddy_app/friends.html', {"friend_list": object})
+        return render(request, 'study_buddy_app/friends.html', {"first": request.user.first_name, "last": request.user.last_name, "friend_list": object})
     except:
         User = get_user_model()
         users = User.objects.all()
@@ -482,6 +482,8 @@ class seeProfile(generic.DetailView):
         b = a.user
         context['form'] = DateForm()
         context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
+        context['first']=self.request.user.first_name
+        context['last']= self.request.user.last_name
         return context
 
     
