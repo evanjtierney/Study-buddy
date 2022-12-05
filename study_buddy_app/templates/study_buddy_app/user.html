@@ -87,9 +87,12 @@
 					<p class="text-muted mb-0" style="font-size: 12px">Name:</p>
 					<p>{{ user.first_name }} {{ user.last_name }}</p>
 					<p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
-					{% for c in classes %}
+					{% if no_classes %}
+						<p>No classes yet</p>
+				    {% endif %}
+				    {% for c in classes %}
 						<p><li>{{ c }}</li></p>
-					{% endfor %}
+				    {% endfor %}
 					<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
 					<p>{{ user.email }} </p>
 					<div class="text-right">
