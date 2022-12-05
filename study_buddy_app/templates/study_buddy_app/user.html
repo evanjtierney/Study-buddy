@@ -20,11 +20,15 @@
 		margin-left: 35%;
 		margin-right: 35%;
 	}
+
+	.text-right{
+		margin-right:20%;
+	}
 </style>
 
 	<header>
 		<!-- Navbar -->
-		<nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+		<!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
 		  <div class="container-fluid">
 			<button
 			  class="navbar-toggler"
@@ -60,7 +64,8 @@
 			  </ul>
 			</div>
 		  </div>
-		</nav>
+		</nav> -->
+		{% include 'study_buddy_app/Nav_None.html'%}
 	  </header>
 
 
@@ -86,7 +91,7 @@
 						<a href="/study_buddy_app/user/edituser/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Edit Profile</button></a>
 						<a href="/study_buddy_app/user/deptlist/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Add Class</button></a>
 
-						<a href="/study_buddy_app/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Back</button></a>
+						<!-- <a href="/study_buddy_app/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Back</button></a> -->
 					
 	
 						<!--<p> Friend Requests</p>-->
