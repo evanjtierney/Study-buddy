@@ -3,9 +3,8 @@
 {% bootstrap_javascript %}
 <html>
 <head>
-    <title>UVA Departments</title>
+    <title>{{ dept_name }}</title>
 </head>
-
 {% if user.is_authenticated %}
 <header>
     <!-- Navbar -->
@@ -46,8 +45,8 @@
         </div>
       </div>
     </nav> -->
-    {% include 'study_buddy_app/Nav_Course_List.html' with first=first last=last header="UVA Departments"%}
-  </header>
+    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name header="Delete Class"%}
+</header>
 
 {% else %}
 <header>
@@ -79,36 +78,33 @@
   </nav>
 </header>
 {% endif %}
+  
 
 <body class="d-flex flex-column min-vh-100">
-  <!-- <h1 class="text-center">UVA Departments</h1> -->
   <br>
-  <h5 class="text-center">Select a department to view classes within it</h5>
+  <h5 class="text-center">Select a class and remove it from your profile</h5>
   <br>
+  <form action="/study_buddy_app/user/dc" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      <!-- List of classes -->
+      <div class="list-group col-3 mx-auto">
+        {% for class in classes %}        
+          <input type="radio" class="btn-check" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
+          <label class="btn btn-outline-primary" for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
+        {% endfor %}
+      </div>
+    </fieldset>
 
-  <!-- List of Departments -->
-  <div class="list-group gap-2 col-2 mx-auto">
-    {% for dept in page_obj %}
-      <a href="/study_buddy_app/deptdisplay/{{ dept.subject }}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{dept.subject}}</a>
-    {% endfor %}
-  </div>
-
-  <!-- Pagination -->
-  <br>
-  <nav aria-label="deptlist paginator">
-    <ul class="pagination justify-content-center">
-      {% for pg in page_obj.paginator %}
-        <li class="page-item"><a class="page-link" href="?page={{ pg.number }}">{{ pg.number }}</a></li>
-      {% endfor %}
-    </ul>
-  </nav>
-  <nav aria-label="current page indicator">
-    <ul class="pagination justify-content-center">
-      <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
-      </li>
-    </ul>
-  </nav>
+    <!-- "Delete Class" button -->
+    <div class="text-center">
+      <a class="btn btn-primary" href="/study_buddy_app/user" role="button">Back</a>
+      {% if user.is_authenticated %}
+        <input class="btn btn-secondary" type="submit" value="Delete Class">
+      {% endif %}
+    </div>
+  </form>
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
@@ -119,6 +115,4 @@
     © 2022 Copyright: None
   </div>
 </footer>
-
-
 </html>

@@ -7,7 +7,7 @@
 
 <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
       <div class="container-fluid">
         <button
           class="navbar-toggler"
@@ -43,19 +43,35 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->
+    {% include 'study_buddy_app/Nav_None.html' with first=first last=last header="Friends"%}
   </header>
 
 <body class="d-flex flex-column min-vh-100">
+<!--<p class="text-center" style="margin-top: 2%;">Friends</p>-->
+<!-- <h1 class="text-center" style="margin-top: 2%;">Friends</h1> -->
+
 {% if friend_list %}
     {% for each in friend_list %}
         {% if each.current_user != user %}
-            <p class="text-center" style="margin-top: 2%;">Friends</p>
-            <p>{{ each.current_user }}</p>
-                <a href="remove_friend/{{ each.current_user.username }}/"> remove friend</a>
+            <!--<div class="text-center" style="margin-top: 2%;">-->
+            <!--<p>{{ each.current_user }}</p>
+                <a href="publicProfile/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">View Profile</button></a>
+                <a href="remove_friend/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Remove Friend</button></a>-->
+                <div class="card" style="margin: 10px">
+                <!--<div class="card">-->
+                    <div class="card-header">
+                        Friend
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ each.current_user.username }}</h5>
+                        <a href="publicProfile/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">View Profile</button></a>
+                        <a href="remove_friend/{{ each.current_user.username }}/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Remove Friend</button></a>
+                    </div>
+                </div>
         {% endif %}
     {% endfor %}
-
+            <!--</div>-->
 {% else %}
     <p class="text-center" style="margin-top: 2%;"> No Friends </p>
 

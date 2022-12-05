@@ -1,6 +1,7 @@
 {% load bootstrap5 %}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
+{% load socialaccount %}
 <!doctype html>
 {% if user.is_authenticated %}
 <html lang="en">
@@ -17,14 +18,19 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.jquery.min.js"></script>
-    <link href="https://cdn.rawgit.com/harvesthq/chosen/gh-pages/chosen.min.css" rel="stylesheet"/>
 
-    <title>Hello, world!</title>
+    <link rel="stylesheet" href="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="multiple-select.min.js"></script>
+
+
   </head>
-  <body>
 
-  </body>
+
+
 </html>
 {% load socialaccount %}
 <!DOCTYPE html>
@@ -34,14 +40,14 @@
 <style>
 body {
   margin: 0 auto;
+  max-height: auto;
 
 }
 
 .container {
-  border: 2px solid #dedede;
   background-color: #f1f1f1;
   border-radius: 20px;
-  max-width: 800px;
+  max-width: 55%;
 
 }
 
@@ -79,12 +85,14 @@ body {
   float: left;
   color: #999;
 }
+
+
 </style>
 </head>
 
 <header>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+  <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
     <div class="container-fluid">
     <button
       class="navbar-toggler"
@@ -120,71 +128,83 @@ body {
       </ul>
     </div>
     </div>
-  </nav>
+  </nav> -->
+    {% include 'study_buddy_app/Nav_Chat.html' with first=user_firstname last=user_lastname header="Chat Room"%}
   </header>
-
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
 
 <body class="d-flex flex-column min-vh-100">
 
 <div align="center">
-    <h2>Chat Room</h2>
+    <!-- <h2>Chat Room</h2> -->
 </div>
 
-
+<p></p>
+<p></p>
 <div class="container">
     <style>
     input[type=text], select {
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
+    padding: 20px 40px;
+    margin: 20px 0;
     border-radius: 4px;
     box-sizing: border-box;
-
+    margin-top: 55%;
     }
 
     input[type=submit] {
     width: 100%;
-    background-color: #4CAF50;
+    background-color: #0275d8;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-top: 350px;
+    margin-top: 55%;
 
     }
 
     input[type=submit]:hover {
-    background-color: #45a049;
-
+    background-color: #05036b;
+    margin-top: 55%;
     }
 
 
     </style>
 
 
-    <script type="text/javascript">
-    $(function() {
-        $(".chzn-select").chosen();
-    });
-    </script>
+
+  <br></br>
     <form id="post-form" method="POST" action="/study_buddy_app/home/checkview">
         {% csrf_token %}
-      <select class="chzn-select" multiple="true" name="dropdown[]">
-          <option selected="selected" disabled>Choose a user to chat with</option>
-          {% for user in users %}
 
-            <option value="{{user}}">{{user}}</option>
-          {% endfor %}
+      <select id="select" multiple name="dropdown[]" >
+            {% for each in friend_list %}
+            <option value="{{ each.current_user.username }}">{{ each.current_user.username }}</option>
+    {% endfor %}
       </select>
-        <input type="hidden" name="room_name" id="room_name" width="100px" value="{{user.username}}"/>
-        <input type="hidden" name="username" id="username" width="100px" value="{{user.username}}"/>
+        <input type="hidden" name="room_name" id="room_name"  value="{{user.username}}"/>
+        <input type="hidden" name="username" id="username"  value="{{user.username}}"/>
         <input type="submit" value="Enter Room">
     </form>
+
+<script>
+  $(function() {
+    $('#select').multipleSelect({
+    placeholder: 'Select Users',
+  })
+  });
+
+</script>
 </div>
+
+
 
 
 </body>

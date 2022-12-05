@@ -4,3 +4,21 @@ Title: django-chat-app
 Author: Tomi Tokko
 Date: 10/15/2022
 URL: https://github.com/tomitokko/django-chat-app
+
+Displaying API Data
+
+Title: How to display API data in Django Template
+Author: Jay Gupta
+Date: 10/20/2022
+URL: https://studygyaan.com/django/how-to-display-api-response-in-html-using-django-template
+
+Handling API Data
+
+Title: Consume Rest API in Django Web Application
+Date: 10/23/2022
+URL: https://medium.com/@nutanbhogendrasharma/consume-rest-api-in-django-web-application-130c0daa6f70
+
+Multiple Chat Function Citation
+
+Date: 11/29/2022
+URL: https://multiple-select.wenzhixin.net.cn/

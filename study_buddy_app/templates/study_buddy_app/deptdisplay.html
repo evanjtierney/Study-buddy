@@ -8,7 +8,7 @@
 {% if user.is_authenticated %}
 <header>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(0, 0, 0, 0.1);">
       <div class="container-fluid">
         <button
           class="navbar-toggler"
@@ -44,7 +44,8 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->
+    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name dept_name=dept_name header="Classes"%}
 </header>
 
 {% else %}
@@ -80,18 +81,32 @@
   
 
 <body class="d-flex flex-column min-vh-100">
-  <h1 class="text-center">{{dept_name}} Classes</h1>
-    {% csrf_token %}
-    <fieldset>
-    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-      {% for class in response %}
-          <li class="text-center">
-            {{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}
-            <br>
-          </li>
-      <br>
+  <!-- <h1 class="text-center">{{dept_name}} Classes</h1> -->
+  <br>
+  <h5 class="text-center">Click on a class to find other users in the class</h5>
+  <br>
+  <div class="list-group gap-2 col-2 mx-auto">
+    {% for class in page_obj %}
+      <a href="/study_buddy_app/searchResults/?q={{class.subject}}+{{class.catalog_number}}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</a>
+    {% endfor %}
+  </div>
+
+  <!-- Pagination -->
+  <br>
+  <nav aria-label="deptlist paginator">
+    <ul class="pagination justify-content-center">
+      {% for pg in page_obj.paginator %}
+        <li class="page-item"><a class="page-link" href="?page={{ pg.number }}">{{ pg.number }}</a></li>
       {% endfor %}
-    </fieldset>
+    </ul>
+  </nav>
+  <nav aria-label="current page indicator">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+      </li>
+    </ul>
+  </nav>
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
