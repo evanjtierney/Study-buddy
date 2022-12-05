@@ -63,7 +63,6 @@ class SearchResultsView(generic.ListView):
         cardResults = []
         if not query or query is "":
             combination = zip(users, cardResults) 
-            print("**************combination", combination)
             return {'combination': combination, 'user': self.request.user}
         #search based on first name
         users |= User.objects.filter(Q(first_name__iexact=query) | Q(first_name__iexact=query))
