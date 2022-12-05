@@ -82,6 +82,8 @@
 <body class="d-flex flex-column min-vh-100">
   <h1 class="text-center">{{dept_name}} Classes</h1>
   <br>
+  <h5 class="text-center">Select a class and add it to your profile</h5>
+  <br>
   <form action="/study_buddy_app/user/addclass" method="post">
     {% csrf_token %}
     <fieldset>
@@ -97,8 +99,9 @@
 
     <!-- "Add Class" button -->
     <div class="text-center">
+      <a class="btn btn-primary" href="/study_buddy_app/user" role="button">Back</a>
       {% if user.is_authenticated %}
-        <input type="submit" value="Add Class">
+        <button class="btn btn-primary" type="submit">Add Class</button>
       {% endif %}
     </div>
   </form>

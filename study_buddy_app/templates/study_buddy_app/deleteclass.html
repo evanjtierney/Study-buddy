@@ -80,7 +80,9 @@
   
 
 <body class="d-flex flex-column min-vh-100">
-  <h1 class="text-center">My Classes</h1>
+  <h1 class="text-center">Delete A Class</h1>
+  <br>
+  <h5 class="text-center">Select a class and remove it from your profile</h5>
   <br>
   <form action="/study_buddy_app/user/dc" method="post">
     {% csrf_token %}
@@ -97,8 +99,9 @@
 
     <!-- "Delete Class" button -->
     <div class="text-center">
+      <a class="btn btn-primary" href="/study_buddy_app/user" role="button">Back</a>
       {% if user.is_authenticated %}
-        <input type="submit" value="Delete Class">
+        <button class="btn btn-primary" type="submit">Delete Class</button>
       {% endif %}
     </div>
   </form>
