@@ -58,8 +58,24 @@ class SearchResultsView(generic.ListView):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        users = User.objects.filter(Q(username__icontains=query) | Q(username__icontains=query))
+        # search based on username
+        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
         cardResults = []
+        
+        #search based on first name
+        users |= User.objects.filter(Q(first_name__iexact=query) | Q(first_name__iexact=query))
+
+        # search based on last name only
+        users |= User.objects.filter(Q(last_name__iexact=query) | Q(last_name__iexact=query))
+
+        #search based on first and last name
+        copy = query
+        firstLastArr = copy.split(' ', 2)
+        if len(firstLastArr) > 1: 
+            users |= User.objects.filter(Q(first_name__iexact=firstLastArr[0]) & Q(last_name__iexact=firstLastArr[1]))
+
+
+        # searcj based on class
         def has_numbers(inputString):
             return any(char.isdigit() for char in inputString)
         flag1 = not query is None and not has_numbers(query)
@@ -70,8 +86,11 @@ class SearchResultsView(generic.ListView):
             users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
 
         if flag2:
+            copy = query
+            copy = copy.replace(" ", "")
+            print(copy)
             temp = re.compile("([a-zA-Z]+)([0-9]+)")
-            arr = temp.match(query).groups()
+            arr = temp.match(copy).groups()
             if len(arr) == 2:
                 users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
         users = users.distinct()
