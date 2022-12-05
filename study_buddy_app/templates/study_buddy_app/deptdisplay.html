@@ -45,7 +45,7 @@
         </div>
       </div>
     </nav> -->
-    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name header="{{dept_name}} Classes"%}
+    {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name dept_name=dept_name header="Classes"%}
 </header>
 
 {% else %}
