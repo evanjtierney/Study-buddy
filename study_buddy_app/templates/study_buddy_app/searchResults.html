@@ -122,7 +122,11 @@
       <div
         onclick="javascript:this.parentNode.submit()"
         class="card bordershadow"
+        style="margin: 10px"
       >
+      <div class="card-header">
+        {{ user.first_name }} {{ user.last_name }}
+      </div>
         <div class="card-body">
           <h5 class="card-title">{{ user.username }}</h5>
           <b class="card-text">
