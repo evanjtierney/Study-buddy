@@ -57,7 +57,7 @@
           <a href="/study_buddy_app/logout" class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log out</a>
         </div>
       </nav> -->
-      {% include 'study_buddy_app/Nav_None.html'%}
+      {% include 'study_buddy_app/Nav_None.html' with first=user.first_name last=user.last_name%}
       <!-- Mobile menu, show/hide based on menu open state. -->
       <div role="dialog" aria-modal="true">
         <div focus="true" class="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
@@ -106,7 +106,7 @@
             
           </div>
           <div>
-            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Studdy Buddy Finder</h1>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Study Buddy Finder</h1>
             <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">The # 1 way to find other students in your classes to study with</p>
           
           </div>
@@ -159,7 +159,7 @@
             </svg>
           </button>
         </div>
-        <div class="hidden lg:flex lg:min-w-0 lg:flex-auto lg:justify-center lg:gap-x-12">
+        <!-- <div class="hidden lg:flex lg:min-w-0 lg:flex-auto lg:justify-center lg:gap-x-12">
           <a href="/study_buddy_app/" class="font-semibold text-gray-900 hover:text-gray-900">Home</a>
 
 
@@ -167,10 +167,10 @@
 
           
 
-        </div>
-        <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
+        </div> -->
+        <!-- <div class="hidden lg:flex lg:min-w-0 lg:flex-1 lg:justify-end">
           <a href="{% provider_login_url 'google' %}" class="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20">Log in</a>
-        </div>
+        </div> -->
       </nav>
       <!-- Mobile menu, show/hide based on menu open state. -->
       <div role="dialog" aria-modal="true">
@@ -220,9 +220,14 @@
             
           </div>
           <div>
-            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Studdy Buddy Finder</h1>
+            <h1 class="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">Study Buddy Finder</h1>
             <p class="mt-6 text-lg leading-8 text-gray-600 sm:text-center">Log in to access the features of this application.</p>
-          
+            <div class="mt-8 flex gap-x-4 sm:justify-center">
+              <a href="{% provider_login_url 'google' %}" class="inline-block rounded-lg bg-blue-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700">
+                Login
+                <span class="text-indigo-200" aria-hidden="true">&rarr;</span>
+              </a>
+            </div>
           </div>
           <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
             <svg class="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]" viewBox="0 0 1155 678" fill="none" xmlns="http://www.w3.org/2000/svg">
