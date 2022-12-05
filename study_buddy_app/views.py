@@ -42,6 +42,7 @@ from .utils import Calendar
 from datetime import datetime
 from pytz import timezone
 from allauth.socialaccount.models import SocialAccount
+import re
 class SearchResultsView(generic.ListView):
     template_name = 'study_buddy_app/searchResults.html'
     context_object_name = 'search_results_list'
@@ -57,7 +58,7 @@ class SearchResultsView(generic.ListView):
         """Return all the users."""
         query = self.request.GET.get("q")
         User = get_user_model()
-        users = User.objects.filter(Q(username__iexact=query) | Q(username__iexact=query))
+        users = User.objects.filter(Q(username__icontains=query) | Q(username__icontains=query))
         cardResults = []
         def has_numbers(inputString):
             return any(char.isdigit() for char in inputString)
@@ -69,11 +70,11 @@ class SearchResultsView(generic.ListView):
             users |= User.objects.filter(Q(profile__classes__subject__iexact=query))
 
         if flag2:
-            arr = query.split()
+            temp = re.compile("([a-zA-Z]+)([0-9]+)")
+            arr = temp.match(query).groups()
             if len(arr) == 2:
                 users |= User.objects.filter(Q(profile__classes__subject__iexact=arr[0]) & Q(profile__classes__catalog_number__iexact=arr[1]))
         users = users.distinct()
-        
         for user in users: 
             if flag1:
                 cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=query)))
