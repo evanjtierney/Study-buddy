@@ -91,7 +91,9 @@ def sign_in(request):
 def home(request):
     User = get_user_model()
     users = User.objects.all()
-    return render(request, 'study_buddy_app/chat.html', {'users': users})
+
+    object = Friends1.objects.filter(users1=request.user)
+    return render(request, 'study_buddy_app/chat.html', {'users': users,"friend_list": object})
 
 # addclass API
 def addclass_deptlist(request):
@@ -144,12 +146,13 @@ def room(request, room):
     })
 
 def go_to_chat(request):
-    print('here!')
     sender = request.user.username
     sendee = request.POST['username'] 
     array = [sender, sendee]
     array.sort()
     room = "".join([array[0], array[1]])
+
+
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
@@ -172,8 +175,11 @@ def checkview(request):
 
     for i in array:
         room = room + i
+    if room == array[0] and len(array) == 1:
+        messages.success(request, "You must choose someone to talk to!")
+        return redirect('/study_buddy_app/home/')
 
-    if Room.objects.filter(name=room).exists():
+    elif Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
     else:
         new_room = Room.objects.create(name=room)
