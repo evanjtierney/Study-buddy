@@ -90,7 +90,9 @@ def sign_in(request):
 def home(request):
     User = get_user_model()
     users = User.objects.all()
-    return render(request, 'study_buddy_app/chat.html', {'users': users})
+    print(dir(request.user))
+    print(request.user.first_name)
+    return render(request, 'study_buddy_app/chat.html', {'user_firstname': request.user.first_name, 'user_lastname': request.user.last_name,'users': users})
 
 # addclass API
 def addclass_deptlist(request):
