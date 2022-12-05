@@ -112,7 +112,7 @@ def dept(request, dept_name):
 # display only API
 def deptlist(request):
     response = requests.get('http://luthers-list.herokuapp.com/api/deptlist/?format=json').json()
-    return render(request, 'study_buddy_app/deptlist.html', {'response':response})
+    return render(request, 'study_buddy_app/deptlist.html', {'user_firstname': request.user.first_name, 'user_lastname': request.user.last_name,'response':response})
 
 # "
 def dept_display_only(request, dept_name):
