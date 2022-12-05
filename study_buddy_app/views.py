@@ -118,7 +118,7 @@ def deptlist(request):
 def dept_display_only(request, dept_name):
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
-    return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name})
+    return render(request, 'study_buddy_app/deptdisplay.html', {'user': request.user, 'response':response, 'dept_name':dept_name})
 
 def room(request, room):
     username = request.GET.get('username')
