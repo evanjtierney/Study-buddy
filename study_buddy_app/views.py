@@ -98,7 +98,6 @@ class SearchResultsView(generic.ListView):
                 cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=query)))
             if flag2:
                 cardResults.append(user.profile.classes.all().filter(Q(subject__iexact=arr[0]) & Q(catalog_number__iexact=arr[1])))
-        print ("cardResults", cardResults)
         combination = zip(users, cardResults)
         return {'combination': combination, 'user': self.request.user}
     
@@ -122,8 +121,6 @@ def home(request):
         return redirect('/study_buddy_app/accounts/google/login/')
     User = get_user_model()
     users = User.objects.all()
-    print(dir(request.user))
-    print(request.user.first_name)
     object = Friends1.objects.filter(users1=request.user)
     return render(request, 'study_buddy_app/chat.html', {'user_firstname': request.user.first_name, 'user_lastname': request.user.last_name,'users': users, "friend_list": object})
 
@@ -208,7 +205,6 @@ def go_to_chat(request):
         template = loader.get_template('socialaccount/login.html')
         context = {}
         return redirect('/study_buddy_app/accounts/google/login/')
-    print('here!')
     sender = request.user.username
     sendee = request.POST['username'] 
     array = [sender, sendee]
@@ -570,24 +566,25 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             eastern = timezone('US/Eastern')
             start_datetime = datetime.combine(date, start_time, eastern)
             end_datetime = datetime.combine(date, end_time, eastern)
+            start_str = start_datetime.strftime("%-H:%M")
+            end_str = end_datetime.strftime("%-H:%M")
 
-            event = Event(title="Meeting w/"+profile_user.username,
+            event = Event(title="Meeting: "+profile_user.username,
                             description="Meeting with "+profile_user.first_name+" "+profile_user.last_name,
                             start_time=start_datetime,
                             end_time=end_datetime)
             event.save()
+            
 
             self.request.user.event_set.add(event)
-            print("self.request.user events", self.request.user.event_set.all())
            
-            copy = Event(title="Meeting w/"+self.request.user.username,
+            copy = Event(title="Meeting: "+self.request.user.username,
                             description="Meeting with "+self.request.user.first_name+" "+self.request.user.last_name,
                             start_time=start_datetime,
                             end_time=end_datetime)
             copy.save()
             
             profile_user.event_set.add(copy)
-            print("profile_user events", profile_user.event_set.all())
         
         profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
         
