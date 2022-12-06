@@ -22,3 +22,21 @@ Multiple Chat Function Citation
 
 Date: 11/29/2022
 URL: https://multiple-select.wenzhixin.net.cn/
+
+
+Friends Function
+Title: Step by Step guide to add friends with Django
+Date: 11/10/2022
+URL: https://medium.com/analytics-vidhya/add-friends-with-689a2fa4e41d
+
+Friends Function
+Title: How to Create a Friend Request Model in Django
+Date: 11/10/22
+URL: https://python.plainenglish.io/creating-a-friend-request-model-in-django-640257b2c67f
+
+Profile Function
+Title: Django Custom user profile
+Date: 10/20/2022
+URL: https://ordinarycoders.com/django-custom-user-profile
+
+

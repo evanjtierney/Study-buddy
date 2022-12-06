@@ -383,6 +383,10 @@ def send_friend_request(request,slug):
     recipient = User.objects.get(username = slug)
     model = FriendRequest.objects.get_or_create(sender=request.user,receiver=recipient)
     #return HttpResponse('friend request sent or already sent')
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        # This iteration is necessary
+        pass
     messages.success(request, "Friend Request Sent or already Sent!")
     return redirect ('/study_buddy_app/publicProfile/'+slug)
     #return redirct('/study_buddy_app/search_resulsts/publicProfile/<slug:slug>/')
