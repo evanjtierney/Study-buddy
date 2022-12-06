@@ -46,6 +46,13 @@
       </div>
     </nav> -->
     {% include 'study_buddy_app/Nav_None.html' with first=first last=last header=""%}
+
+{% if successful_submit %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <div>You've scheduled an event</div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
   </header>
   <head>
       <!-- Required meta tags -->
@@ -83,23 +90,26 @@
                         {% endfor %}
                 <hr>
                 <p>   </p>
-                {% if not friends %}
 
+                {% load static %}
+                <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
+                {% if not friends %}
+                <p> How good of a Study Buddy am I?</p>
+                {% ratings object.user icon_height icon_width%}
+                <!--<p>request friend</p>-->
+                <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
+                <!--<h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
                 <h1></h1><a href="study_buddy_app/send_friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Send Friend Request</button></a>
 
                 {% endif %}
 
                 {% if friends %}
-                {% load static %}
                 <p> Rate me as a Study Buddy!</p>
-                {% ratings object.user %}
-                <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
-                <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-                <hr>
+                {% ratings object.user%}
                 <form method="post" >
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <!--<input type="submit" value="Send message">-->
                     <button type="submit" class="btn btn-primary">Set Study Session</button>
                 </form>
                 <hr>

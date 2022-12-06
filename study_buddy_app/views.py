@@ -207,12 +207,28 @@ def go_to_chat(request):
         template = loader.get_template('socialaccount/login.html')
         context = {}
         return redirect('/study_buddy_app/accounts/google/login/')
-    sender = request.user.username
-    sendee = request.POST['username'] 
+    sender = request.user.username + " "
+    sendee = request.POST['username']
     array = [sender, sendee]
     array.sort()
     room = "".join([array[0], array[1]])
 
+    object = Friends1.objects.filter(users1=request.user)
+
+    friends = []
+
+
+    for i in object:
+        friends.append(str(i.current_user))
+
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        # This iteration is necessary
+        pass
+
+
+    if str(sendee) not in friends:
+        messages.success(request, "You are not friends with this person! Add them as a friend to chat with them again!")
 
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
@@ -240,6 +256,12 @@ def checkview(request):
 
     for i in array:
         room = room + i
+
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        # This iteration is necessary
+        pass
+
     if room == array[0] and len(array) == 1:
         messages.success(request, "You must choose someone to talk to!")
         return redirect('/study_buddy_app/home/')
@@ -518,7 +540,6 @@ class ProfileMeeting(SingleObjectMixin, FormView):
     template_name = 'study_buddy_app/profile_detail.html'
     form_class = DateForm
     model = Profile
-
     def form_valid(self, form):
         self.process_user_input(form.cleaned_data)
         return super(ProfileMeeting, self).form_valid(form)
@@ -572,8 +593,8 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             eastern = timezone('US/Eastern')
             start_datetime = datetime.combine(date, start_time, eastern)
             end_datetime = datetime.combine(date, end_time, eastern)
-            start_str = start_datetime.strftime("%-H:%M")
-            end_str = end_datetime.strftime("%-H:%M")
+            start_str = start_datetime.strftime("%I:%M %p")
+            end_str = end_datetime.strftime("%I:%M %p")
 
             event = Event(title="Meeting: "+profile_user.username,
                             description="Meeting with "+profile_user.first_name+" "+profile_user.last_name,
@@ -592,19 +613,29 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             
             profile_user.event_set.add(copy)
         
-        profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
-        
-        googleSet = SocialAccount.objects.filter(provider="google")
-        requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
-        
-        profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
-        
-        if requestUser_isGoogle and profileUser_isGoogle:
-            service = generate_credentials()
-            create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        eastern = timezone('US/Eastern')
+        start_datetime = datetime.combine(valid_data['date'], valid_data['start_time'], eastern)
+        end_datetime = datetime.combine(valid_data['date'], valid_data['end_time'], eastern)
+        if start_datetime < end_datetime: 
+            profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
+            
+            googleSet = SocialAccount.objects.filter(provider="google")
+            requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
+            
+            profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
+            
+            if requestUser_isGoogle and profileUser_isGoogle:
+                service = generate_credentials()
+                create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
-        add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
-    
+            add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        else:
+            system_messages = messages.get_messages(self.request)
+            for message in system_messages:
+                # This iteration is necessary
+                pass
+            messages.success(self.request, "Your meeting start time must be before end time.")
+            return redirect('/study_buddy_app/')
         pass
 
     def get_success_url(self):
@@ -621,6 +652,36 @@ class ProfileDetail(View):
         view = ProfileMeeting.as_view()
         return view(request, *args, **kwargs)
 
+class ProfileDetailSuccess(View):
+    template_name = 'study_buddy_app/profile_detail.html'
+    def get(self, request, *args, **kwargs):
+        view = seeProfileSuccess.as_view()
+        return view(request,*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ProfileMeeting.as_view()
+        return view(request, *args, **kwargs)
+
+class seeProfileSuccess(generic.DetailView):
+
+    model = Profile
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(seeProfileSuccess, self).get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(seeProfileSuccess, self).get_context_data(**kwargs)
+        a = kwargs['object']
+        b = a.user
+        context['form'] = DateForm()
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
+        context['first']=self.request.user.first_name
+        context['last']= self.request.user.last_name
+        context['successful_submit'] = True
+        return context
 
 def user_redirect(request):
     if not request.user.is_authenticated:
