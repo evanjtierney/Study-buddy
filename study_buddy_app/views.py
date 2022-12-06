@@ -568,8 +568,8 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             eastern = timezone('US/Eastern')
             start_datetime = datetime.combine(date, start_time, eastern)
             end_datetime = datetime.combine(date, end_time, eastern)
-            start_str = start_datetime.strftime("%-H:%M")
-            end_str = end_datetime.strftime("%-H:%M")
+            start_str = start_datetime.strftime("%I:%M %p")
+            end_str = end_datetime.strftime("%I:%M %p")
 
             event = Event(title="Meeting: "+profile_user.username,
                             description="Meeting with "+profile_user.first_name+" "+profile_user.last_name,
