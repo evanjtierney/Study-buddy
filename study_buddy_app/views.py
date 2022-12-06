@@ -207,12 +207,28 @@ def go_to_chat(request):
         template = loader.get_template('socialaccount/login.html')
         context = {}
         return redirect('/study_buddy_app/accounts/google/login/')
-    sender = request.user.username
-    sendee = request.POST['username'] 
+    sender = request.user.username + " "
+    sendee = request.POST['username']
     array = [sender, sendee]
     array.sort()
     room = "".join([array[0], array[1]])
 
+    object = Friends1.objects.filter(users1=request.user)
+
+    friends = []
+
+
+    for i in object:
+        friends.append(str(i.current_user))
+
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        # This iteration is necessary
+        pass
+
+
+    if str(sendee) not in friends:
+        messages.success(request, "You are not friends with this person! Add them as a friend to chat with them again!")
 
     if Room.objects.filter(name=room).exists():
         return redirect('/study_buddy_app/home/'+room+'/?username='+sender)
@@ -240,6 +256,12 @@ def checkview(request):
 
     for i in array:
         room = room + i
+
+    system_messages = messages.get_messages(request)
+    for message in system_messages:
+        # This iteration is necessary
+        pass
+
     if room == array[0] and len(array) == 1:
         messages.success(request, "You must choose someone to talk to!")
         return redirect('/study_buddy_app/home/')

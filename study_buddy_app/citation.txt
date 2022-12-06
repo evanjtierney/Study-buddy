@@ -5,6 +5,12 @@ Author: Tomi Tokko
 Date: 10/15/2022
 URL: https://github.com/tomitokko/django-chat-app
 
+Rating
+Title: Django-Star-Rating
+Author: WildFish
+Date: 10/13/2022
+URL: https://django-star-ratings.readthedocs.io/en/stable/
+
 Displaying API Data
 
 Title: How to display API data in Django Template
@@ -22,3 +28,10 @@ Multiple Chat Function Citation
 
 Date: 11/29/2022
 URL: https://multiple-select.wenzhixin.net.cn/
+
+Messages Help
+
+Title: Deleting/Clearing django.contrib.messages
+Author: Avukonke Peter
+Date: 12/06/2022
+URL: https://stackoverflow.com/questions/42546006/deleting-clearing-django-contrib-messages
