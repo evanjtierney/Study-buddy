@@ -588,18 +588,22 @@ class ProfileMeeting(SingleObjectMixin, FormView):
             
             profile_user.event_set.add(copy)
         
-        profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
-        
-        googleSet = SocialAccount.objects.filter(provider="google")
-        requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
-        
-        profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
-        
-        if requestUser_isGoogle and profileUser_isGoogle:
-            service = generate_credentials()
-            create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+        eastern = timezone('US/Eastern')
+        start_datetime = datetime.combine(valid_data['date'], valid_data['start_time'], eastern)
+        end_datetime = datetime.combine(valid_data['date'], valid_data['end_time'], eastern)
+        if start_datetime < end_datetime: 
+            profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
+            
+            googleSet = SocialAccount.objects.filter(provider="google")
+            requestUser_isGoogle = len(googleSet.filter(user=self.request.user)) > 0
+            
+            profileUser_isGoogle = len(googleSet.filter(user=profile_user)) > 0
+            
+            if requestUser_isGoogle and profileUser_isGoogle:
+                service = generate_credentials()
+                create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
-        add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+            add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
     
         pass
 
