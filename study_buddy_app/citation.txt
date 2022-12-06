@@ -28,3 +28,10 @@ Multiple Chat Function Citation
 
 Date: 11/29/2022
 URL: https://multiple-select.wenzhixin.net.cn/
+
+Messages Help
+
+Title: Deleting/Clearing django.contrib.messages
+Author: Avukonke Peter
+Date: 12/06/2022
+URL: https://stackoverflow.com/questions/42546006/deleting-clearing-django-contrib-messages
