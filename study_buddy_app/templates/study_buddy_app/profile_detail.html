@@ -46,6 +46,13 @@
       </div>
     </nav> -->
     {% include 'study_buddy_app/Nav_None.html' with first=first last=last header=""%}
+
+{% if successful_submit %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <div>You've scheduled an event</div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
   </header>
   <head>
       <!-- Required meta tags -->
@@ -107,7 +114,7 @@
                 <form method="post" >
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <input type="submit" value="Send message">
+                    <input type="submit" class="btn btn-primary" value="Send message">
                 </form>
                 {% endif %}
                 <!-- <p> request friend</p>

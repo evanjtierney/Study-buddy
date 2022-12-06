@@ -605,7 +605,7 @@ class ProfileMeeting(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         self.object = self.get_object()
-        return reverse('profile-detail', kwargs={'slug': self.object.slug})
+        return reverse('profile-detail-success', kwargs={'slug': self.object.slug})
 
 class ProfileDetail(View):
     template_name = 'study_buddy_app/profile_detail.html'
@@ -617,6 +617,36 @@ class ProfileDetail(View):
         view = ProfileMeeting.as_view()
         return view(request, *args, **kwargs)
 
+class ProfileDetailSuccess(View):
+    template_name = 'study_buddy_app/profile_detail.html'
+    def get(self, request, *args, **kwargs):
+        view = seeProfileSuccess.as_view()
+        return view(request,*args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ProfileMeeting.as_view()
+        return view(request, *args, **kwargs)
+
+class seeProfileSuccess(generic.DetailView):
+
+    model = Profile
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            template = loader.get_template('socialaccount/login.html')
+            context = {}
+            return redirect('/study_buddy_app/accounts/google/login/')
+        return super(seeProfileSuccess, self).get(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(seeProfileSuccess, self).get_context_data(**kwargs)
+        a = kwargs['object']
+        b = a.user
+        context['form'] = DateForm()
+        context['friends'] = Friends1.objects.filter(users1 = self.request.user, current_user = b)
+        context['first']=self.request.user.first_name
+        context['last']= self.request.user.last_name
+        context['successful_submit'] = True
+        return context
 
 def user_redirect(request):
     if not request.user.is_authenticated:
