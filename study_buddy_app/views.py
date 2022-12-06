@@ -514,7 +514,6 @@ class ProfileMeeting(SingleObjectMixin, FormView):
     template_name = 'study_buddy_app/profile_detail.html'
     form_class = DateForm
     model = Profile
-
     def form_valid(self, form):
         self.process_user_input(form.cleaned_data)
         return super(ProfileMeeting, self).form_valid(form)
@@ -604,12 +603,18 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
             add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
-    
+        else:
+            system_messages = messages.get_messages(self.request)
+            for message in system_messages:
+                # This iteration is necessary
+                pass
+            messages.success(self.request, "Your meeting start time must be before end time.")
+            return redirect('/study_buddy_app/')
         pass
 
     def get_success_url(self):
         self.object = self.get_object()
-        return reverse('profile-detail-success', kwargs={'slug': self.object.slug})
+        return reverse('profile-detail', kwargs={'slug': self.object.slug})
 
 class ProfileDetail(View):
     template_name = 'study_buddy_app/profile_detail.html'
