@@ -22,3 +22,8 @@ Multiple Chat Function Citation
 
 Date: 11/29/2022
 URL: https://multiple-select.wenzhixin.net.cn/
+
+Landing page template
+Author: Unknown
+Date: 12/4/2022
+URL: https://tailwindui.com/components/preview
