@@ -291,13 +291,14 @@ def user(request):
         user_form = UserForm(instance=request.user)
         profile = Profile.objects.get(user=request.user)
         classes = profile.classes.all()
-        no_classes = classes.len() <= 0
-        return render(request = request, template_name ="study_buddy_app/user.html", context = {
-            "user":request.user, 
-            "user_form": user_form, 
-            'classes':classes, 
-            'no_classes': no_classes,
-        })
+        return render(request = request, template_name ="study_buddy_app/user.html", context = {"user":request.user, "user_form": user_form, 'classes':classes})
+        # no_classes = classes.len() <= 0
+        # return render(request = request, template_name ="study_buddy_app/user.html", context = {
+        #     "user":request.user, 
+        #     "user_form": user_form, 
+        #     'classes':classes, 
+        #     'no_classes': no_classes,
+        # })
     except:
         User = get_user_model()
         users = User.objects.all()
