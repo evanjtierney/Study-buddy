@@ -5,6 +5,12 @@ Author: Tomi Tokko
 Date: 10/15/2022
 URL: https://github.com/tomitokko/django-chat-app
 
+Rating
+Title: Django-Star-Rating
+Author: WildFish
+Date: 10/13/2022
+URL: https://django-star-ratings.readthedocs.io/en/stable/
+
 Displaying API Data
 
 Title: How to display API data in Django Template
