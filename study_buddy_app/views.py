@@ -182,10 +182,15 @@ def dept_display_only(request, dept_name):
         return redirect('/study_buddy_app/accounts/google/login/')
     classes = requests.get('http://luthers-list.herokuapp.com/api/dept/%s?format=json' %dept_name)
     response = classes.json()
+    cur_classes = []
+    for i in response:
+        tmp = Class(subject=dept_name, catalog_number=i['catalog_number'], course_section=i['course_section'])
+        tmp.save()
+        cur_classes.append(tmp)
     paginator = Paginator(response, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'study_buddy_app/deptdisplay.html', {'response':response, 'dept_name':dept_name, 'page_obj': page_obj})
+    return render(request, 'study_buddy_app/deptdisplay.html', {'response':cur_classes, 'dept_name':dept_name, 'page_obj': page_obj})
 
 def room(request, room):
     if not request.user.is_authenticated:
@@ -341,6 +346,49 @@ def addclass(request):
             'profile': profile,
             'error_message': "You didn't select a class.",
         })
+
+def class_lookup(request, dept_name):
+    try:
+        selected_class = Class.objects.get(pk=request.POST['class'])
+
+        subj = selected_class.subject
+        cat_num = selected_class.catalog_number
+        return redirect('/study_buddy_app/searchResults/?q=' + subj + "+" + cat_num + "/")
+    except(KeyError, Class.DoesNotExist):
+        return render(request, 'study_buddy_app/deptdisplay.html', {
+            'error_message': "You didn't select a class.",
+        })
+
+# def courselist_actions(request):
+#     try:
+#         selected_class = Class.objects.get(pk=request.POST['class'])
+
+#         if 'addclass' in request.POST:
+#             if not request.user.is_authenticated:
+#                 template = loader.get_template('socialaccount/login.html')
+#                 context = {}
+#                 return redirect('/study_buddy_app/accounts/google/login/')
+#             profile = Profile.objects.get(user=request.user)
+
+#             # only add class to profile if it's not already there
+#             already_exists = False
+#             for c in profile.classes.all():
+#                 if selected_class.subject == c.subject and selected_class.catalog_number == c.catalog_number and selected_class.course_section == c.course_section:
+#                     already_exists = True
+#             if not already_exists:
+#                 profile.classes.add(selected_class)
+#                 profile.save()
+
+#             return user(request)
+#         else:
+#             subj = selected_class.subject
+#             cat_num = selected_class.catalog_number
+#             return redirect('/study_buddy_app/searchResults/?q=' + subj + "+" + cat_num)
+#     except(KeyError, Class.DoesNotExist):
+#         return render(request, 'study_buddy_app/dept.html', {
+#             'profile': profile,
+#             'error_message': "You didn't select a class.",
+#         })
 
 def deleteclass(request):
     if not request.user.is_authenticated:

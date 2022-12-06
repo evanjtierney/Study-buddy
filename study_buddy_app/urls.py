@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('deptlist/', views.deptlist, name="deptlist"),
     path('deptdisplay/<str:dept_name>/', views.dept_display_only, name="deptdisplay"),
+    path('deptdisplay/<str:dept_name>/classlookup/', views.class_lookup, name="classlookup"),
     
     path('home/<str:room>/', views.room, name='room'),
     path('home/go_to_chat', views.go_to_chat, name='go_to_chat'),

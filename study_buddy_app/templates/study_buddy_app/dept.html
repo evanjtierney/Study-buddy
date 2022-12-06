@@ -81,7 +81,6 @@
   
 
 <body class="d-flex flex-column min-vh-100">
-  <!-- <h1 class="text-center">{{dept_name}} Classes</h1> -->
   <br>
   <h5 class="text-center">Select a class and add it to your profile</h5>
   <br>
@@ -102,7 +101,7 @@
     <div class="text-center">
       <a class="btn btn-primary" href="/study_buddy_app/user" role="button">Back</a>
       {% if user.is_authenticated %}
-        <input class="btn btn-secondary" type="submit" value="Add Class">
+        <input class="btn btn-primary" type="submit" value="Add Class">
       {% endif %}
     </div>
   </form>

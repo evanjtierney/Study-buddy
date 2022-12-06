@@ -81,18 +81,43 @@
   
 
 <body class="d-flex flex-column min-vh-100">
-  <!-- <h1 class="text-center">{{dept_name}} Classes</h1> -->
-  <br>
+  <!-- <br>
   <h5 class="text-center">Click on a class to find other users in the class</h5>
   <br>
-  <div class="list-group gap-2 col-2 mx-auto">
+  <div class="list-group gap-2 col-3 mx-auto">
     {% for class in page_obj %}
       <a href="/study_buddy_app/searchResults/?q={{class.subject}}+{{class.catalog_number}}" class="text-center list-group-item list-group-item-action list-group-item-primary">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</a>
     {% endfor %}
-  </div>
+  </div> -->
+  <br>
+  <h5 class="text-center">Select a class to find other users in the class or add it to your profile</h5>
+  <br>
+  <form action="/study_buddy_app/user/addclass" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+      <!-- List of classes -->
+      <div class="list-group col-3 mx-auto">
+        {% for class in response %}        
+          <input type="radio" class="btn-check" name="class" id="class{{ forloop.counter }}" value="{{ class.pk }}">
+          <label class="btn btn-outline-primary" for="class{{ forloop.counter }}">{{ class.subject }} {{ class.catalog_number }} -- Section {{ class.course_section }}</label><br>
+        {% endfor %}
+      </div>
+    </fieldset>
+
+    <!-- Buttons -->
+    <div class="text-center">
+      <!-- "Add Class" button -->
+      {% if user.is_authenticated %}
+        <input class="btn btn-primary" type="submit" value="Add Class">
+      {% endif %}
+      <!-- "Find Users" button -->
+      <input class="btn btn-primary" type="submit" value="Find Users" formaction="classlookup/">
+    </div>
+  </form>
 
   <!-- Pagination -->
-  <br>
+  <!-- <br>
   <nav aria-label="deptlist paginator">
     <ul class="pagination justify-content-center">
       {% for pg in page_obj.paginator %}
@@ -106,7 +131,7 @@
         <a class="page-link" href="#" tabindex="-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
       </li>
     </ul>
-  </nav>
+  </nav> -->
 </body>
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
