@@ -213,25 +213,33 @@ def go_to_chat(request):
         context = {}
         return redirect('/study_buddy_app/accounts/google/login/')
     sender = request.user.username + " "
-    sendee = request.POST['username']
+    sendee = request.POST['username'] + " "
     array = [sender, sendee]
     array.sort()
-    room = "".join([array[0], array[1]])
+    room = ""
+
+
+    array.sort()
+
+    array[-1] = array[-1].strip(" ")
+
+    for i in array:
+        room = room + i
 
     object = Friends1.objects.filter(users1=request.user)
 
     friends = []
 
-
     for i in object:
         friends.append(str(i.current_user))
+    print(friends)
 
     system_messages = messages.get_messages(request)
     for message in system_messages:
         # This iteration is necessary
         pass
 
-
+    sendee = sendee.strip(" ")
     if str(sendee) not in friends:
         messages.success(request, "You are not friends with this person! Add them as a friend to chat with them again!")
 
