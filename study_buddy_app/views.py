@@ -679,6 +679,9 @@ class ProfileMeeting(SingleObjectMixin, FormView):
         eastern = timezone('US/Eastern')
         start_datetime = datetime.combine(valid_data['date'], valid_data['start_time'], eastern)
         end_datetime = datetime.combine(valid_data['date'], valid_data['end_time'], eastern)
+        system_messages = messages.get_messages(self.request)
+        for message in system_messages:
+            pass
         if start_datetime < end_datetime: 
             profile_user = User.objects.get(profile__slug=self.kwargs['slug'])
             
@@ -692,11 +695,10 @@ class ProfileMeeting(SingleObjectMixin, FormView):
                 create_google_calendar_event(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
 
             add_event_to_calendar(valid_data['date'], valid_data['start_time'], valid_data['end_time'], profile_user)
+            system_messages = messages.get_messages(self.request)
+            messages.success(self.request, "Successfully created event in calendar.")
         else:
             system_messages = messages.get_messages(self.request)
-            for message in system_messages:
-                # This iteration is necessary
-                pass
             messages.success(self.request, "Your meeting start time must be before end time.")
             return redirect('/study_buddy_app/')
         pass
