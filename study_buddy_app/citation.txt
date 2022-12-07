@@ -84,3 +84,8 @@ Title: Use Google API with a token [Django & AllAuth]
 Author: ayrunn
 Date: Nov 1, 2020
 https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
+
+Title: Navbars
+Author: None
+Date: None
+https://tailwindui.com/components/application-ui/navigation/navbars
