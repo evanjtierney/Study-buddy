@@ -59,3 +59,8 @@ Title: HOW TO CREATE A CALENDAR USING DJANGO
 Author: Hui Wen
 Date: 7/24/2018
 URL: https://www.huiwenteo.com/normal/2018/07/24/django-calendar.html
+
+Landing page template
+Author: Unknown
+Date: 12/4/2022
+URL: https://tailwindui.com/components/preview
