@@ -30,6 +30,7 @@ urlpatterns = [
     path('publicProfile/user_redirect/', views.user_redirect, name='user_redirect'),
 
     path('publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
+    path('publicProfile/<slug:slug>/success', views.ProfileDetailSuccess.as_view(), name="profile-detail-success"),
     path('user/friends/publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
     path('user/friend_request/publicProfile/<slug:slug>/', views.ProfileDetail.as_view(), name='profile-detail'),
 

@@ -46,6 +46,13 @@
       </div>
     </nav> -->
     {% include 'study_buddy_app/Nav_None.html' with first=first last=last header=""%}
+
+{% if successful_submit %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <div>You've scheduled an event</div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
   </header>
   <head>
       <!-- Required meta tags -->
@@ -54,20 +61,7 @@
       <!--Bootstrap CSS-->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     </head>
-                <!--{% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <div class="container-fluid p-0">
-                        <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="True">&times;</span>
-                            </button>
-                            {{ message }}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </ul>
-                {% endif %}-->
+
 
                 {% for message in messages %}
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -75,48 +69,59 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endfor %}
+
 <body class="d-flex flex-column min-vh-100">
 	<div class="container mx-auto text-center" style="margin-top: 2%;">
-		<div class="card p-4" style="margin-right: 30%; margin-left: 30%;">
+		<div class="card p-4" style="margin-right: 25%; margin-left: 25%;">
+            <h4 class="card-title font-weight-bold text-center">{{ object.user.username|title }}</h4>
             <hr>
-			<div class="card-text">
-			    <p class="text-muted mb-0" style="font-size: 12px">Username:</p>
-			    <p>{{ object.user.username }}</p>
-			    <p class="text-muted mb-0" style="font-size: 12px">Name:</p>
-				<p>{{ object.user.first_name }} {{ object.last_name }}</p>
-				<p class="text-muted mb-0" style="font-size: 12px">Email:</p>
-				<p>{{ object.user.email }} </p>
+            <div class="card-text">
+                <p class="text-muted mb-0" style="font-size: 12px">Username:</p>
+                <p>{{ object.user.username }}</p>
+                <p class="text-muted mb-0" style="font-size: 12px">Name:</p>
+                <p>{{ object.user.first_name }} {{ object.last_name }}</p>
+                <p class="text-muted mb-0" style="font-size: 12px">Email:</p>
+                <p>{{ object.user.email }} </p>
+                <hr>
+
         <p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
-						{% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
-							<p><li>{{ c }}</li></p>
-						{% endfor %}
+                        {% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
+                            <p><li>{{ c }}</li></p>
+                        {% endfor %}
+                <hr>
                 <p>   </p>
+
+                {% load static %}
+                <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
+                <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
                 {% if not friends %}
+                <p> How good of a Study Buddy am I?</p>
+                {% ratings object.user icon_height icon_width%}
                 <!--<p>request friend</p>-->
                 <!--<h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
                 <!--<h1><a href="study_buddy_app/send_friend_request/">send friend request</a></h1>-->
                 <h1></h1><a href="study_buddy_app/send_friend_request/"><button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#profileModal">Send Friend Request</button></a>
 
                 {% endif %}
+
                 {% if friends %}
+                <p> Rate me as a Study Buddy!</p>
+                {% ratings object.user%}
+                <form method="post" >
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary">Set Study Session</button>
+                </form>
+                <hr>
+                {% endif %}
+
+                <!-- <p> request friend</p>
+                <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
                 {% load static %}
                 <p> Rate me as a Study Buddy!</p>
                 {% ratings object.user %}
                 <link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
                 <script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
-                <form method="post" >
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <input type="submit" value="Send message">
-                </form>
-                {% endif %}
-                <!-- <p> request friend</p>
-                <h1>{{ object.user }} <a href="study_buddy_app/send_friend_request/">send friend request</a></h1>
-				{% load static %}
-				<p> Rate me as a Study Buddy!</p>
-				{% ratings object.user %}
-				<link rel="stylesheet" href="{% static 'star-ratings/css/star-ratings.css' %}">
-				<script type="text/javascript" src="{% static 'star-ratings/js/dist/star-ratings.min.js' %}"></script>
         <form method="post" >
           {% csrf_token %}
           {{ form.as_p }}
@@ -143,9 +148,12 @@
           </button>
       </form>
       </div>
-		</div>
+    </div>
 	</div>
 </body>
+
+
+
 
 <footer class="text-center text-lg-start bg-light text-muted mt-auto">
     <div class="text-center p-3 me-5 d-none d-lg-block">
