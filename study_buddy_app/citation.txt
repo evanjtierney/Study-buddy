@@ -64,3 +64,23 @@ Landing page template
 Author: Unknown
 Date: 12/4/2022
 URL: https://tailwindui.com/components/preview
+
+Title: Using mixins with class-based views
+Author: Unknown
+Date: none
+URL: https://docs.djangoproject.com/en/4.1/topics/class-based-views/mixins/
+
+Title: Making queries
+Author: Unknown
+Date: none
+https://docs.djangoproject.com/en/4.1/topics/db/queries/
+
+Title: Python quickstart
+Author: Unknown
+Date: none
+https://developers.google.com/calendar/api/quickstart/python
+
+Title: Use Google API with a token [Django & AllAuth]
+Author: ayrunn
+Date: Nov 1, 2020
+https://stackoverflow.com/questions/51575127/use-google-api-with-a-token-django-allauth
