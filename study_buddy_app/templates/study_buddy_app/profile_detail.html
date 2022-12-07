@@ -83,10 +83,11 @@
                 <p class="text-muted mb-0" style="font-size: 12px">Email:</p>
                 <p>{{ object.user.email }} </p>
                 <hr>
-
         <p class="text-muted mb-0" style="font-size: 12px">Classes:</p>
                         {% for c in object.classes.all %} <!-- need to get a classes dict or some other way to iterate -->
                             <p><li>{{ c }}</li></p>
+                        {% empty %}
+                            <p>No classes yet</p>
                         {% endfor %}
                 <hr>
                 <p>   </p>
@@ -107,11 +108,15 @@
                 {% if friends %}
                 <p> Rate me as a Study Buddy!</p>
                 {% ratings object.user%}
+                <hr>
+                <p class="text-muted mb-0" style="font-size: 12px">Set a study session meeting:</p>
+                <p></p>
                 <form method="post" >
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary">Set Study Session</button>
                 </form>
+                 </hr>
                 <hr>
                 {% endif %}
 
@@ -128,7 +133,8 @@
           <input type="submit" value="Send message">
         </form> -->
         <p>   </p>
-
+        <p class="text-muted mb-0" style="font-size: 12px">Start a chat:</p>
+        <p></p>
         <form method="post" action="/study_buddy_app/home/go_to_chat">
           <input
             type="hidden"
